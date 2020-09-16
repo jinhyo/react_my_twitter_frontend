@@ -13,7 +13,7 @@ class MyDocument extends Document {
           <Main />
           {/* 인터넷 익스플로러의 경우 Map, Set, Promise와 같은 것은 지원이 안되니 polyfill(polyfill.io)을 사용해서 문제를 해결 */}
           {/* 최신 문법은 babel인 변환해 주지만 Map, Set, Promise같은건 변환을 해주지 못함 */}
-          <script src="https://polyfill.io/v3/polyfill.min.js?features=default%2Ces2015%2Ces2019%2Ces2018%2Ces2017%2Ces2016" />
+          {/* <script src="https://polyfill.io/v3/polyfill.min.js?features=default%2Ces2015%2Ces2019%2Ces2018%2Ces2017%2Ces2016" /> */}
           {/* <NextScript /> 보다 script가 위에 있어야함 */}
           <NextScript />
         </body>
