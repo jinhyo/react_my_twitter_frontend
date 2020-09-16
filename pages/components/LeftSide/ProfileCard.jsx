@@ -5,7 +5,7 @@ function ProfileCard(props) {
   return (
     <Card>
       <Card.Content>
-        <Image floated="left" size="small" />
+        <Image floated="left" size="small" src="../../../images/123.jpg" />
         <Card.Header>JJ</Card.Header>
         <Card.Meta>서울</Card.Meta>
         <Card.Meta>Friends of Elliot</Card.Meta>

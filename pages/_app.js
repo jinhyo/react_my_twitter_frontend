@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Head from "next/head";
 import wrapper from "../store/configureStore";
 import Layout from "./components/Layout/Layout";
+import { ToastContainer } from "react-toastify";
 
 import "semantic-ui-css/semantic.min.css";
 import "./App.css";
@@ -18,6 +19,7 @@ function Root({ Component }) {
       </Head>
       {/* <div>공통매뉴</div> */}
       <Layout>
+        <ToastContainer autoClose={3000} />
         <Component />
       </Layout>
     </>
