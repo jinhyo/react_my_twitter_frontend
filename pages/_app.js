@@ -1,7 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import wrapper from "../store/configureStore";
-import Layout from "./components/Layout/Layout";
+import Layout from "../components/Layout/Layout";
 import { ToastContainer } from "react-toastify";
 
 import "semantic-ui-css/semantic.min.css";

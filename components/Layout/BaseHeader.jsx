@@ -3,21 +3,14 @@ import { Menu, Icon, Image, Header, Dropdown, Input } from "semantic-ui-react";
 import Link from "next/link";
 
 import { useSelector, useDispatch } from "react-redux";
-import { userSelector } from "../../../features/userSlice";
+import { userSelector } from "../../features/userSlice";
 
 function BaseHeader() {
   const dispatch = useDispatch();
   const currentUser = useSelector(userSelector.currentUser);
 
   return (
-    <Menu
-      className="baseHeader"
-      style={
-        {
-          // marginTop: "10px",
-        }
-      }
-    >
+    <Menu className="baseHeader">
       <Menu.Item>
         <Link href="/">
           <a>

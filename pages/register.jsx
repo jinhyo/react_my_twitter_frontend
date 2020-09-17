@@ -11,7 +11,6 @@ import {
   TextArea,
   Checkbox
 } from "semantic-ui-react";
-import Layout from "./components/Layout/Layout";
 import Router from "next/router";
 import validateRegisterForm from "../lib/validateRegisterForm";
 import useFormInput from "../hooks/useFormInput";

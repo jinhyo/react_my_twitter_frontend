@@ -27,13 +27,13 @@ function TweetCard() {
       </Card.Content>
       <Card.Content extra>
         <Button basic color="green">
-          <Icon name="comment outline" />
+          <Icon name="comment outline" /> 9
         </Button>
         <Button basic color="green">
-          <Icon name="retweet" />
+          <Icon name="retweet" /> 3
         </Button>
         <Button basic color="green">
-          <Icon name="heart outline" />
+          <Icon name="heart outline" /> 4
         </Button>
       </Card.Content>
     </Card>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Image, Button } from "semantic-ui-react";
+import { Card, Image, Button, Icon } from "semantic-ui-react";
 
 function ProfileCard(props) {
   return (
@@ -7,8 +7,11 @@ function ProfileCard(props) {
       <Card.Content>
         <Image floated="left" size="small" src="../../../images/123.jpg" />
         <Card.Header>JJ</Card.Header>
-        <Card.Meta>서울</Card.Meta>
-        <Card.Meta>Friends of Elliot</Card.Meta>
+        <Card.Meta>@Jin </Card.Meta>
+        <Card.Meta>
+          <Icon name="map marker alternate" />
+          서울
+        </Card.Meta>
         <Card.Description>자기소개</Card.Description>
       </Card.Content>
 
