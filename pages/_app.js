@@ -5,6 +5,7 @@ import Layout from "./components/Layout/Layout";
 import { ToastContainer } from "react-toastify";
 
 import "semantic-ui-css/semantic.min.css";
+import "emoji-mart/css/emoji-mart.css";
 import "./App.css";
 
 function Root({ Component }) {
