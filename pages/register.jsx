@@ -30,8 +30,8 @@ function Register(props) {
   // const isLogin = useSelector(userSelector.isLogin);
   const [isLogin, setIsLogin] = useState(false);
 
-  const [privateEmail, setPrivateEmail] = useState(false);
-  const [checkLoading, setCheckLoading] = useState(false);
+  const [IDcheckLoading, setIDcheckLoading] = useState(false);
+  const [emailCheckLoading, setemailCheckLoading] = useState(false);
   const {
     values,
     handleChange,
@@ -60,27 +60,37 @@ function Register(props) {
     setIsSubmitting(false);
   }
 
-  const handleEmailCheck = useCallback(() => {
-    setPrivateEmail(prev => !prev);
-  }, []);
-
   const checkUniqueNickname = useCallback(async () => {
-    setCheckLoading(true);
+    setIDcheckLoading(true);
     // const isAvailable = await firebase.checkUniqueNickname(values.nickname);
 
     // TO DO
 
     if (isAvailable) {
       toast.success("사용 가능한 닉네임 입니다.");
-      setCheckLoading(false);
+      setIDcheckLoading(false);
     } else {
       setErrors({ ...errors, nickname: "사용할 수 없는 닉네임 입니다." });
-      setCheckLoading(false);
+      setIDcheckLoading(false);
     }
   }, [values.nickname]);
 
-  if (isLogin) return null;
+  const checkUniqueEmail = useCallback(async () => {
+    setemailCheckLoading(true);
+    // const isAvailable = await firebase.checkUniqueNickname(values.nickname);
 
+    // TO DO
+
+    if (isAvailable) {
+      toast.success("사용 가능한 이메일 입니다.");
+      setemailCheckLoading(false);
+    } else {
+      setErrors({ ...errors, email: "사용할 수 없는 이메일 입니다." });
+      setemailCheckLoading(false);
+    }
+  }, [values.email]);
+
+  if (isLogin) return null;
   return (
     <Grid
       style={{ marginTop: 40 }}
@@ -103,7 +113,7 @@ function Register(props) {
                   <Button
                     onClick={checkUniqueNickname}
                     color="teal"
-                    loading={checkLoading}
+                    loading={IDcheckLoading}
                   >
                     중복확인
                   </Button>
@@ -125,12 +135,13 @@ function Register(props) {
                 fluid
                 name="email"
                 label={
-                  <Checkbox
-                    checked={privateEmail}
-                    onChange={handleEmailCheck}
+                  <Button
+                    onClick={checkUniqueNickname}
                     color="teal"
-                    label="비공개"
-                  />
+                    loading={emailCheckLoading}
+                  >
+                    중복확인
+                  </Button>
                 }
                 labelPosition="right"
                 icon="mail"
