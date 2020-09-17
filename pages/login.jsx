@@ -7,7 +7,8 @@ import {
   Segment,
   Button,
   Message,
-  Divider
+  Divider,
+  Image
 } from "semantic-ui-react";
 import { useSelector } from "react-redux";
 import Router from "next/router";
@@ -120,18 +121,11 @@ function Login() {
           </Segment>
         </Form>
         <Divider />
-
-        <Button
-          loading={googleLoginLoading}
-          style={{ marginTop: 30 }}
-          color="blue"
-          size="large"
-          compact
-          onClick={handleGoogleLogin}
-        >
-          <Icon name="google" />
-          구글 로그인
-        </Button>
+        <div className="ui three images">
+          <Image circular src="/naver.png" className="button__login" />
+          <Image circular src="/google.png" className="button__login" />
+          <Image circular src="/facebook.png" className="button__login" />
+        </div>
       </Grid.Column>
     </Grid>
   );

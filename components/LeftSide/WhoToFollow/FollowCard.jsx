@@ -1,10 +1,16 @@
 import React from "react";
-import { Comment, Icon, Button } from "semantic-ui-react";
+import { Comment, Icon, Button, Image } from "semantic-ui-react";
 
 function FollowCard({ user }) {
   return (
     <Comment>
-      <Comment.Avatar as="a" src="./123.jpg" />
+      <Image
+        floated="left"
+        width={40}
+        height={40}
+        src="/temp.jpg"
+        className="picture__circle"
+      />
       <Comment.Content>
         <Comment.Author as="a">{user.nickname}</Comment.Author>
         <Comment.Metadata>

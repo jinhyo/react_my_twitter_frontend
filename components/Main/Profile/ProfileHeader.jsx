@@ -7,10 +7,11 @@ function ProfileHeader(props) {
       <Card.Content>
         <Image
           floated="left"
-          size="large"
-          src="../../../images/123.jpg"
+          size="small"
+          src="/temp.jpg"
           width={200}
           height={200}
+          className="picture__circle"
         />
         <Button floated="right" primary size="small">
           프로필 수정

@@ -6,13 +6,16 @@ function ProfileCard(props) {
     <>
       <Card>
         <Card.Content>
-          <Image floated="left" size="small" src="../../../images/123.jpg" />
+          <Image
+            floated="left"
+            width={80}
+            height={80}
+            src="/temp.jpg"
+            className="picture__circle"
+          />
+          <Divider hidden />
           <Card.Header>JJ</Card.Header>
           <Card.Meta>@Jin </Card.Meta>
-          <Card.Meta>
-            <Icon name="map marker alternate" />
-            서울
-          </Card.Meta>
           <Card.Description>자기소개</Card.Description>
         </Card.Content>
 

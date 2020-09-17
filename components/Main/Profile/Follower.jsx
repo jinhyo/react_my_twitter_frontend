@@ -1,10 +1,16 @@
 import React from "react";
-import { Comment, Button, Divider } from "semantic-ui-react";
+import { Comment, Button, Divider, Image } from "semantic-ui-react";
 
 function Follower(props) {
   return (
     <Comment style={{ cursor: "pointer" }}>
-      <Comment.Avatar src="./" />
+      <Image
+        floated="left"
+        width={50}
+        height={50}
+        src="/temp.jpg"
+        className="picture__circle"
+      />
       <Button animated floated="right" primary>
         <Button.Content visible>팔로우중</Button.Content>
         <Button.Content hidden>언팔로우</Button.Content>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Button, Icon, Feed } from "semantic-ui-react";
+import { Card, Button, Icon, Feed, Image } from "semantic-ui-react";
 
 function TweetCard() {
   return (
@@ -8,9 +8,14 @@ function TweetCard() {
         <Card.Header>
           <Feed>
             <Feed.Event>
-              <Feed.Label>
-                <img src="/images/avatar/small/elliot.jpg" />
-              </Feed.Label>
+              <Image
+                floated="left"
+                width={50}
+                height={50}
+                src="/temp.jpg"
+                className="picture__circle"
+              />
+              {/* <img src="/temp.jpg" /> */}
               <Feed.Content>
                 <Feed.Summary>
                   <Feed.User>Elliot Fu</Feed.User>
