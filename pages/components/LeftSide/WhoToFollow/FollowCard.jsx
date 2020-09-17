@@ -4,7 +4,7 @@ import { Comment, Icon, Button } from "semantic-ui-react";
 function FollowCard({ user }) {
   return (
     <Comment>
-      <Comment.Avatar as="a" src="/images/avatar/small/matt.jpg" />
+      <Comment.Avatar as="a" src="./123.jpg" />
       <Comment.Content>
         <Comment.Author as="a">{user.nickname}</Comment.Author>
         <Comment.Metadata>

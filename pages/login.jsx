@@ -6,7 +6,8 @@ import {
   Form,
   Segment,
   Button,
-  Message
+  Message,
+  Divider
 } from "semantic-ui-react";
 import { useSelector } from "react-redux";
 import Router from "next/router";
@@ -118,6 +119,8 @@ function Login() {
             </Form.Field>
           </Segment>
         </Form>
+        <Divider />
+
         <Button
           loading={googleLoginLoading}
           style={{ marginTop: 30 }}

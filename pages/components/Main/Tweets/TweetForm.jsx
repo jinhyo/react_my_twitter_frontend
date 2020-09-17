@@ -1,6 +1,13 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Form, Input, Button, Segment, TextArea } from "semantic-ui-react";
+import {
+  Form,
+  Input,
+  Button,
+  Segment,
+  TextArea,
+  Divider
+} from "semantic-ui-react";
 import { Picker } from "emoji-mart";
 import PreviewImages from "./PreviewImages";
 import mime from "mime-types";
@@ -165,6 +172,7 @@ function MessageForm() {
         previewImages={previewImages}
         cancelPicture={cancelPicture}
       />
+      <Divider />
     </>
   );
 }
