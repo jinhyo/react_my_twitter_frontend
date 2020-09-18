@@ -139,7 +139,6 @@ function MessageForm() {
       )}
       <Form style={{ marginBottom: 5 }} onSubmit={handleSendMessage}>
         <TextArea
-          fluid
           ref={inputRef}
           name="message"
           type="text"

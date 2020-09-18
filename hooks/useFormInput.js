@@ -30,10 +30,19 @@ function useFormInput(initialState, validateFunc, cbFunc) {
 
   const handleChange = useCallback(e => {
     e.persist();
-    setValues(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
+    if (e.target.name === "selfIntro") {
+      if (e.target.value.length < 50) {
+        setValues(prev => ({
+          ...prev,
+          [e.target.name]: e.target.value
+        }));
+      }
+    } else {
+      setValues(prev => ({
+        ...prev,
+        [e.target.name]: e.target.value
+      }));
+    }
   }, []);
 
   return {

@@ -3,10 +3,14 @@ import Head from "next/head";
 import wrapper from "../store/configureStore";
 import Layout from "../components/Layout/Layout";
 import { ToastContainer } from "react-toastify";
+import axios from "axios";
 
 import "semantic-ui-css/semantic.min.css";
 import "emoji-mart/css/emoji-mart.css";
 import "./App.css";
+
+axios.defaults.baseURL = "http://localhost:3001";
+axios.defaults.withCredentials = true;
 
 function Root({ Component }) {
   return (

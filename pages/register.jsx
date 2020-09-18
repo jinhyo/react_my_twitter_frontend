@@ -15,6 +15,7 @@ import Router from "next/router";
 import validateRegisterForm from "../lib/validateRegisterForm";
 import useFormInput from "../hooks/useFormInput";
 import { toast } from "react-toastify";
+import authFunctions from "../lib/authFunctions";
 
 const INITIAL_VALUES = {
   nickname: "",
@@ -49,14 +50,33 @@ function Register(props) {
     }
   }, [isLogin]);
 
+  // 로그인
   async function createUser() {
     const { email, password, nickname, location, selfIntro } = values;
     setIsSubmitting(true);
-    const createdAt = new Date();
 
-    //  TODO
-
-    setIsSubmitting(false);
+    try {
+      await authFunctions.register(
+        email,
+        password,
+        nickname,
+        location,
+        selfIntro
+      );
+      setValues(INITIAL_VALUES);
+      Router.push("/");
+    } catch (error) {
+      // 중복 닉네임 & 이메일 에러처리
+      console.error(error);
+      const errorMessage = error.response.data;
+      if (errorMessage.includes("닉네임")) {
+        setErrors(prev => ({ ...prev, nickname: error.response.data }));
+      } else if (errorMessage.includes("이메일")) {
+        setErrors(prev => ({ ...prev, email: error.response.data }));
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   const checkUniqueNickname = useCallback(async () => {
