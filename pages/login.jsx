@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Grid,
   Header,
@@ -10,24 +11,29 @@ import {
   Divider,
   Image
 } from "semantic-ui-react";
-import { useSelector } from "react-redux";
 import Router from "next/router";
+import authFunctions from "../lib/authFunctions";
+import { userActions } from "../features/userSlice";
+
+const INITIAL_VALUE = { email: "", password: "" };
 
 function Login() {
+  const dispatch = useDispatch();
   // const isLogin = useSelector(userSelector.isLogin);
   // To DO
 
-  const [isLogin, setIsLogin] = useState(false);
+  // const [isLogin, setIsLogin] = useState(false);
+
   const [error, setError] = useState("");
-  const [initialState, setInitialState] = useState({ email: "", password: "" });
+  const [initialState, setInitialState] = useState(INITIAL_VALUE);
   const [loginLoading, setLoginLoading] = useState(false);
   const [googleLoginLoading, setGoogleLoginLoading] = useState(false);
 
-  useEffect(() => {
-    if (isLogin) {
-      Router.push("/");
-    }
-  }, [isLogin]);
+  // useEffect(() => {
+  //   if (isLogin) {
+  //     Router.push("/");
+  //   }
+  // }, [isLogin]);
 
   const handleInputChange = useCallback(e => {
     e.persist();
@@ -38,18 +44,21 @@ function Login() {
     }));
   }, []);
 
+  // 로컬 로그인
   const handleSubmit = useCallback(async () => {
     try {
       setLoginLoading(true);
-      // await firebaseApp.logIn(initialState.email, initialState.password);
-
-      // TO DO
+      const currentUser = await authFunctions.localLogin({
+        email: initialState.email,
+        password: initialState.password
+      });
+      dispatch(userActions.setCurrentUser(currentUser.data));
     } catch (error) {
-      if (error.code === "auth/wrong-password") {
-        setError("잘못된 비밀번호 입니다.");
-      }
+      console.error(error);
+      setError(error.response.data);
     } finally {
       setLoginLoading(false);
+      setInitialState(INITIAL_VALUE);
       Router.push("/");
     }
   }, [initialState]);
@@ -67,7 +76,7 @@ function Login() {
     }
   }, []);
 
-  if (isLogin) return null;
+  // if (isLogin) return null;
 
   return (
     <Grid

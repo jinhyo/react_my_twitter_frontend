@@ -50,7 +50,7 @@ function Register(props) {
     }
   }, [isLogin]);
 
-  // 로그인
+  // 회원가입
   async function createUser() {
     const { email, password, nickname, location, selfIntro } = values;
     setIsSubmitting(true);
