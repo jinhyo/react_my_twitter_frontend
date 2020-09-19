@@ -44,8 +44,26 @@ function Login() {
     }));
   }, []);
 
+  function checkInputError(initialState) {
+    if (initialState.email.length < 1) {
+      setError("이메일을 입력하세요");
+      return true;
+    } else if (initialState.password.length < 1) {
+      setError("비밀번호를 입력하세요.");
+      return true;
+    } else {
+      return false;
+    }
+  }
   // 로컬 로그인
   const handleSubmit = useCallback(async () => {
+    const hasError = checkInputError(initialState);
+    if (hasError) {
+      console.log("hasError", hasError);
+      return;
+    }
+    console.log("gasd");
+
     try {
       setLoginLoading(true);
       const currentUser = await authFunctions.localLogin({
