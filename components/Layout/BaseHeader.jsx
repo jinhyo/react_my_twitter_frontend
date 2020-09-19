@@ -2,7 +2,6 @@ import React, { useCallback } from "react";
 import { Menu, Icon, Image, Header, Dropdown, Input } from "semantic-ui-react";
 import Router from "next/router";
 import Link from "next/link";
-
 import { useSelector, useDispatch } from "react-redux";
 import { userSelector, userActions } from "../../features/userSlice";
 import authFunctions from "../../lib/authFunctions";
