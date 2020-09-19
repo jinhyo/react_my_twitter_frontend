@@ -14,6 +14,7 @@ import {
 import Router from "next/router";
 import authFunctions from "../lib/authFunctions";
 import { userActions } from "../features/userSlice";
+import { toast } from "react-toastify";
 
 const INITIAL_VALUE = { email: "", password: "" };
 
@@ -73,6 +74,7 @@ function Login() {
       dispatch(userActions.setCurrentUser(currentUser.data));
     } catch (error) {
       console.error(error);
+      toast.error(error.response.data);
       setError(error.response.data);
     } finally {
       setLoginLoading(false);

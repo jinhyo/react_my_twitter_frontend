@@ -20,6 +20,7 @@ function BaseHeader() {
         Router.push("/");
       } catch (error) {
         console.error(error);
+        toast.error(error.response.data);
       }
     }
   }, [currentUser]);
