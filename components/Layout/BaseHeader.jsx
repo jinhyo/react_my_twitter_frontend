@@ -44,12 +44,28 @@ function BaseHeader() {
 
       <Menu.Menu position="right">
         {currentUser ? (
-          <Menu.Item>
-            <Input
-              icon={{ name: "search", circular: true, link: true }}
-              placeholder="Search..."
-            />
-          </Menu.Item>
+          <>
+            <Menu.Item>
+              <Input
+                icon={{ name: "search", circular: true, link: true }}
+                placeholder="Search..."
+              />
+            </Menu.Item>
+            <Menu.Item>
+              <Dropdown size="large" icon="cog" className="icon">
+                <Dropdown.Menu>
+                  <Dropdown.Item>
+                    <Link href="/profile">
+                      <a>
+                        <span style={{ color: "black" }}>프로필</span>
+                      </a>
+                    </Link>
+                  </Dropdown.Item>
+                  <Dropdown.Item /* onClick={logout} */>로그아웃</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Menu.Item>
+          </>
         ) : (
           <>
             <Menu.Item>
