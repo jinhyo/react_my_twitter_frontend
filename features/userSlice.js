@@ -8,6 +8,9 @@ const userSlice = createSlice({
   reducers: {
     setCurrentUser: (state, { payload: user }) => {
       state.currentUser = user;
+    },
+    clearCurrentUser: state => {
+      state.currentUser = null;
     }
   }
 });

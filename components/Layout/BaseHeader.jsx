@@ -1,13 +1,28 @@
 import React, { useCallback } from "react";
 import { Menu, Icon, Image, Header, Dropdown, Input } from "semantic-ui-react";
+import Router from "next/router";
 import Link from "next/link";
 
 import { useSelector, useDispatch } from "react-redux";
-import { userSelector } from "../../features/userSlice";
+import { userSelector, userActions } from "../../features/userSlice";
+import authFunctions from "../../lib/authFunctions";
+import { toast } from "react-toastify";
 
 function BaseHeader() {
   const dispatch = useDispatch();
   const currentUser = useSelector(userSelector.currentUser);
+
+  const handleLogout = useCallback(async () => {
+    if (currentUser) {
+      try {
+        await authFunctions.logout();
+        dispatch(userActions.clearCurrentUser());
+        Router.push("/");
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }, [currentUser]);
 
   return (
     <Menu className="baseHeader">
@@ -61,7 +76,7 @@ function BaseHeader() {
                       </a>
                     </Link>
                   </Dropdown.Item>
-                  <Dropdown.Item /* onClick={logout} */>로그아웃</Dropdown.Item>
+                  <Dropdown.Item onClick={handleLogout}>로그아웃</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Menu.Item>
