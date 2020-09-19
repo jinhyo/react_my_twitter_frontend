@@ -133,7 +133,12 @@ function MessageForm() {
       {emoji && (
         <Picker
           set="apple"
-          style={{ position: "absolute", top: "130px", left: "10px" }}
+          style={{
+            position: "absolute",
+            top: "130px",
+            left: "10px",
+            zIndex: 10
+          }}
           onSelect={handleAddEmoji}
         />
       )}
