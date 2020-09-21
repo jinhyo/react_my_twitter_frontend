@@ -81,14 +81,21 @@ function Login() {
     }
   }, [initialState]);
 
+  // 구글 로그인
   const handleGoogleLogin = useCallback(async () => {
     try {
-      const user = await authFunctions.googleLogin();
-      console.log("~~user;", user);
+      await authFunctions.googleLogin();
     } catch (error) {
       console.error(error);
-    } finally {
-      // Router.push("/");
+    }
+  }, []);
+
+  // 페북 로그인
+  const handleFacebookLogin = useCallback(async () => {
+    try {
+      await authFunctions.facebookLogin();
+    } catch (error) {
+      console.error(error);
     }
   }, []);
 
@@ -154,7 +161,12 @@ function Login() {
             className="button__login"
             onClick={handleGoogleLogin}
           />
-          <Image circular src="/facebook.png" className="button__login" />
+          <Image
+            circular
+            src="/facebook.png"
+            className="button__login"
+            onClick={handleFacebookLogin}
+          />
         </div>
       </Grid.Column>
     </Grid>
