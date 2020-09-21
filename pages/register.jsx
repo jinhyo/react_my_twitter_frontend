@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useDispatch } from "react-redux";
 import {
   Grid,
   Header,
@@ -16,6 +17,7 @@ import validateRegisterForm from "../lib/validateRegisterForm";
 import useFormInput from "../hooks/useFormInput";
 import { toast } from "react-toastify";
 import authFunctions from "../lib/authFunctions";
+import { userActions } from "../features/userSlice";
 
 const INITIAL_VALUES = {
   nickname: "",
@@ -28,8 +30,9 @@ const INITIAL_VALUES = {
 
 function Register(props) {
   // const isLogin = useSelector(userSelector.isLogin);
-  const [isLogin, setIsLogin] = useState(false);
+  const dispatch = useDispatch();
 
+  const [isLogin, setIsLogin] = useState(false);
   const [IDcheckLoading, setIDcheckLoading] = useState(false);
   const [emailCheckLoading, setemailCheckLoading] = useState(false);
   const {
@@ -63,6 +66,7 @@ function Register(props) {
         location,
         selfIntro
       );
+
       setValues(INITIAL_VALUES);
       Router.push("/");
     } catch (error) {
@@ -74,7 +78,6 @@ function Register(props) {
       } else if (errorMessage.includes("이메일")) {
         setErrors(prev => ({ ...prev, email: error.response.data }));
       }
-    } finally {
       setIsSubmitting(false);
     }
   }
