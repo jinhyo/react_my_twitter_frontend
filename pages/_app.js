@@ -1,19 +1,39 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import Head from "next/head";
 import wrapper from "../store/configureStore";
 import Layout from "../components/Layout/Layout";
 import { ToastContainer } from "react-toastify";
 import axios from "axios";
+import useSWR from "swr";
 
 import "semantic-ui-css/semantic.min.css";
 import "emoji-mart/css/emoji-mart.css";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
+import authFunctions from "../lib/authFunctions";
+import { userActions } from "../features/userSlice";
 
 axios.defaults.baseURL = "http://localhost:3001";
 axios.defaults.withCredentials = true;
 
 function Root({ Component }) {
+  const dispatch = useDispatch();
+
+  const { data: currentUser, error } = useSWR(
+    "/auth/login-user",
+    authFunctions.getLoginUserInfo
+  );
+
+  useEffect(() => {
+    if (currentUser) {
+      console.log("currentUser", currentUser);
+      dispatch(userActions.setCurrentUser(currentUser));
+    } else if (error) {
+      console.error(error);
+    }
+  }, [currentUser, error]);
+
   return (
     // next에서는 <Provider store={store} >가 안 들어감
     //  wrapper.withRedux(NodeBird)에서 자동으로 provider를 제공

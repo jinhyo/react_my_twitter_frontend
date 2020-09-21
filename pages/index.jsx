@@ -7,10 +7,27 @@ import WhoToFollow from "../components/LeftSide/WhoToFollow/WhoToFollow";
 import TweetFrom from "../components/Main/Tweets/TweetForm";
 import TweetCard from "../components/Main/Tweets/TweetCard";
 import { userSelector } from "../features/userSlice";
+import useSWR from "swr";
+import authFunctions from "../lib/authFunctions";
 
 function Index(props) {
   const dispatch = useDispatch();
   const currentUser = useSelector(userSelector.currentUser);
+
+  // const { data, error } = useSWR(
+  //   "/auth/login-user",
+  //   authFunctions.getLoginUserInfo
+  // );
+
+  // useEffect(() => {
+  //   console.log("data~~", data);
+
+  //   if (data) {
+  //     console.log("data", data);
+  //   } else if (error) {
+  //     console.error(error);
+  //   }
+  // }, [data, error]);
 
   return (
     <Grid stackable padded relaxed>

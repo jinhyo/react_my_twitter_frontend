@@ -28,7 +28,6 @@ function Login() {
   const [error, setError] = useState("");
   const [initialState, setInitialState] = useState(INITIAL_VALUE);
   const [loginLoading, setLoginLoading] = useState(false);
-  const [googleLoginLoading, setGoogleLoginLoading] = useState(false);
 
   // useEffect(() => {
   //   if (isLogin) {
@@ -63,7 +62,6 @@ function Login() {
       console.log("hasError", hasError);
       return;
     }
-    console.log("gasd");
 
     try {
       setLoginLoading(true);
@@ -85,14 +83,12 @@ function Login() {
 
   const handleGoogleLogin = useCallback(async () => {
     try {
-      setGoogleLoginLoading(true);
-      // await firebaseApp.logInWithGoogle();
-      //  TO DO
+      const user = await authFunctions.googleLogin();
+      console.log("~~user;", user);
     } catch (error) {
       console.error(error);
     } finally {
-      setGoogleLoginLoading(false);
-      Router.push("/");
+      // Router.push("/");
     }
   }, []);
 
@@ -152,7 +148,12 @@ function Login() {
         <Divider />
         <div className="ui three images">
           <Image circular src="/naver.png" className="button__login" />
-          <Image circular src="/google.png" className="button__login" />
+          <Image
+            circular
+            src="/google.png"
+            className="button__login"
+            onClick={handleGoogleLogin}
+          />
           <Image circular src="/facebook.png" className="button__login" />
         </div>
       </Grid.Column>
