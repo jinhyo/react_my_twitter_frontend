@@ -82,33 +82,48 @@ function Register(props) {
     }
   }
 
+  // 중복 닉네임 확인
   const checkUniqueNickname = useCallback(async () => {
-    setIDcheckLoading(true);
-    // const isAvailable = await firebase.checkUniqueNickname(values.nickname);
-
-    // TO DO
-
-    if (isAvailable) {
-      toast.success("사용 가능한 닉네임 입니다.");
-      setIDcheckLoading(false);
+    if (values.nickname.length > 0) {
+      try {
+        setIDcheckLoading(true);
+        const isAvailable = await authFunctions.checkDuplicateNickname(
+          values.nickname
+        );
+        if (isAvailable) {
+          toast.success("사용 가능한 닉네임 입니다.");
+        } else {
+          toast.warn("이미 사용 중인 닉네임 입니다.");
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIDcheckLoading(false);
+      }
     } else {
-      setErrors({ ...errors, nickname: "사용할 수 없는 닉네임 입니다." });
-      setIDcheckLoading(false);
+      alert("닉네임을 입력하세요.");
     }
   }, [values.nickname]);
 
   const checkUniqueEmail = useCallback(async () => {
-    setemailCheckLoading(true);
-    // const isAvailable = await firebase.checkUniqueNickname(values.nickname);
-
-    // TO DO
-
-    if (isAvailable) {
-      toast.success("사용 가능한 이메일 입니다.");
-      setemailCheckLoading(false);
+    if (values.email.length > 0) {
+      try {
+        setemailCheckLoading(true);
+        const isAvailable = await authFunctions.checkDuplicateEmail(
+          values.email
+        );
+        if (isAvailable) {
+          toast.success("사용 가능한 이메일 입니다.");
+        } else {
+          toast.warn("이미 사용중인 이메일 입니다.");
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setemailCheckLoading(false);
+      }
     } else {
-      setErrors({ ...errors, email: "사용할 수 없는 이메일 입니다." });
-      setemailCheckLoading(false);
+      alert("이메일을 입력하세요.");
     }
   }, [values.email]);
 
@@ -158,7 +173,7 @@ function Register(props) {
                 name="email"
                 label={
                   <Button
-                    onClick={checkUniqueNickname}
+                    onClick={checkUniqueEmail}
                     color="teal"
                     loading={emailCheckLoading}
                   >

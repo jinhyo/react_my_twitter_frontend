@@ -21,17 +21,18 @@ function Root({ Component }) {
   const currentUser = useSelector(userSelector.currentUser);
   console.log("currentUser", currentUser);
 
+  // 로그인 시 유저정보 가져오기
   useEffect(() => {
     if (!currentUser) {
       try {
-        getCurrentUser();
+        getLoginUserInfo();
       } catch (error) {
         console.error(error);
       }
     }
   }, []);
 
-  async function getCurrentUser() {
+  async function getLoginUserInfo() {
     const user = await authFunctions.getLoginUserInfo();
     console.log("~~getCurrentUser()");
 
