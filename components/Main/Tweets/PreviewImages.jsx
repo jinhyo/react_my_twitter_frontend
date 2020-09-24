@@ -4,6 +4,7 @@ import { Image, Segment, Label, Button } from "semantic-ui-react";
 import { tweetActions } from "../../../features/tweetSlice";
 import TweetImageModal from "./TweetImageModal";
 
+// in <TweetForm />
 function PreviewImages({ previewImages, cancelPicture, setPreviewImages }) {
   const dispatch = useDispatch();
   console.log("previewImages", previewImages);

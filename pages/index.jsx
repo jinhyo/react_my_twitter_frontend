@@ -14,19 +14,19 @@ function Index(props) {
   const dispatch = useDispatch();
   const currentUser = useSelector(userSelector.currentUser);
 
-  const { data: user, error } = useSWR(
-    "/auth/login-user",
-    authFunctions.getLoginUserInfo
-  );
+  // const { data: user, error } = useSWR(
+  //   "/auth/login-user",
+  //   authFunctions.getLoginUserInfo
+  // );
 
-  useEffect(() => {
-    if (!currentUser && user) {
-      console.log("~~@user", user);
-      dispatch(userActions.setCurrentUser(user.data));
-    } else if (error) {
-      console.error(error);
-    }
-  }, [currentUser, error]);
+  // useEffect(() => {
+  //   if (!currentUser && user) {
+  //     console.log("~~@user", user);
+  //     dispatch(userActions.setCurrentUser(user.data));
+  //   } else if (error) {
+  //     console.error(error);
+  //   }
+  // }, [currentUser, error]);
 
   return (
     <Grid stackable padded relaxed>
