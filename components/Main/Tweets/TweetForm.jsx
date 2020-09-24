@@ -17,6 +17,7 @@ function MessageForm() {
   const fileRef = useRef();
 
   // const currentUser = useSelector(userSelector.currentUser);
+  // const previewImages =
   const [currentUser, setCurrentUser] = useState(""); // temp
 
   const [previewImages, setPreviewImages] = useState([]);
@@ -50,7 +51,7 @@ function MessageForm() {
 
     if (previewImages) {
       // 이미지 전송
-      handleSendImages();
+      sendImages();
     }
 
     setText("");
@@ -63,9 +64,8 @@ function MessageForm() {
     }
   }, []);
 
-  const handleSendImages = useCallback(async () => {
+  const sendImages = useCallback(async () => {
     const imageURLs = previewImages.map(async image => {
-      const metaData = { contentType: mime.lookup(image.name) };
       try {
         //   return await firebaseApp.sendImageFile(
         //     image,
@@ -78,26 +78,6 @@ function MessageForm() {
         console.error(error);
       }
     });
-
-    const createdBy = {
-      id: currentUser.id,
-      nickname: currentUser.nickname
-    };
-
-    try {
-      const totalImageURLs = await Promise.all(imageURLs);
-      console.log("totalImageURLs", totalImageURLs);
-
-      // await firebaseApp.sendImageMessage(
-      //   totalImageURLs,
-      //   createdBy,
-      //   currentRoom.id
-      // );
-      // scrollToBottom({bahavior:'smooth'});
-      setPreviewImages([]);
-    } catch (error) {
-      console.error(error);
-    }
   }, [previewImages, currentUser]);
 
   const handleClickFileInput = useCallback(() => {
@@ -122,10 +102,8 @@ function MessageForm() {
     return imageTypes.includes(mime.lookup(file.name));
   }
 
-  const cancelPicture = useCallback(lastModified => {
-    setPreviewImages(prev =>
-      prev.filter(image => image.lastModified !== lastModified)
-    );
+  const cancelPicture = useCallback(name => {
+    setPreviewImages(prev => prev.filter(image => image.name !== name));
   }, []);
 
   return (
@@ -142,7 +120,11 @@ function MessageForm() {
           onSelect={handleAddEmoji}
         />
       )}
-      <Form style={{ marginBottom: 5 }} onSubmit={handleSendMessage}>
+      <Form
+        style={{ marginBottom: 5 }}
+        onSubmit={handleSendMessage}
+        encType="multipart/form-data"
+      >
         <TextArea
           ref={inputRef}
           name="message"
@@ -171,10 +153,12 @@ function MessageForm() {
         ref={fileRef}
         onChange={handleFileInput}
       />
+      <Divider hidden />
 
       <PreviewImages
         previewImages={previewImages}
         cancelPicture={cancelPicture}
+        setPreviewImages={setPreviewImages}
       />
       <Divider />
     </>

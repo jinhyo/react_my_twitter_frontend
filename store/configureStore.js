@@ -1,7 +1,7 @@
 import { createWrapper, HYDRATE } from "next-redux-wrapper";
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { USER, userReducer } from "../features/userSlice";
-import { POST, postReducer } from "../features/postSlice";
+import { TWEET, tweetReducer } from "../features/tweetSlice";
 
 const rootReducer = (state, action) => {
   switch (action.type) {
@@ -11,7 +11,7 @@ const rootReducer = (state, action) => {
     default: {
       const combineReducer = combineReducers({
         [USER]: userReducer,
-        [POST]: postReducer
+        [TWEET]: tweetReducer
       });
       return combineReducer(state, action);
     }

@@ -11,3 +11,26 @@
 .button__login:hover {
   opacity: 0.7;
 }
+
+/* in <PreviewImages /> */
+.image__container {
+  position: relative;
+}
+
+.image__background {
+  display: inline-block;
+}
+
+.image__edit {
+  position: absolute;
+  left: 19px;
+  color: #fff;
+  padding: 1px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 20%;
+  font-size: 0.8rem;
+}
+
+.image__edit:hover {
+  opacity: 0.7;
+}

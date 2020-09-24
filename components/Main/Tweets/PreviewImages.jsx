@@ -1,26 +1,67 @@
-import React from "react";
-import { Image } from "semantic-ui-react";
+import React, { useCallback, useState } from "react";
+import { useDispatch } from "react-redux";
+import { Image, Segment, Label, Button } from "semantic-ui-react";
+import { tweetActions } from "../../../features/tweetSlice";
+import TweetImageModal from "./TweetImageModal";
 
-function PreviewImages({ previewImages, cancelPicture }) {
+function PreviewImages({ previewImages, cancelPicture, setPreviewImages }) {
+  const dispatch = useDispatch();
+  console.log("previewImages", previewImages);
+
+  const [modal, setModal] = useState(false);
+  const [targetImage, setTargetImage] = useState(false);
+  const closeModal = useCallback(() => {
+    setModal(false);
+  }, []);
+
+  const openModal = useCallback(() => {
+    setModal(true);
+  }, []);
+
+  const handleImageEdit = useCallback(image => {
+    setTargetImage(image);
+    openModal();
+  }, []);
+
   return (
     <Image.Group>
       {previewImages &&
-        previewImages.map(image => (
-          <Image
-            key={image.lastModified}
-            src={URL.createObjectURL(image)}
-            width={200}
-            height={200}
-            bordered
-            label={{
-              as: "a",
-              size: "mini",
-              floating: true,
-              icon: "cancel",
-              onClick: () => cancelPicture(image.lastModified)
-            }}
-          />
+        previewImages.map((image, index) => (
+          <span key={index} className="image__background">
+            <Segment basic compact className="image__container">
+              <Image
+                src={URL.createObjectURL(image)}
+                width={200}
+                height={200}
+                bordered
+                label={{
+                  as: "a",
+                  size: "mini",
+                  floating: true,
+                  icon: "cancel",
+                  color: "grey",
+                  onClick: () => cancelPicture(image.name)
+                }}
+              />
+              <Label
+                as="a"
+                color="grey"
+                attached="top left"
+                size="mini"
+                onClick={() => handleImageEdit(image)}
+              >
+                편집
+              </Label>
+            </Segment>
+          </span>
         ))}
+      <TweetImageModal
+        targetImage={targetImage}
+        modal={modal}
+        closeModal={closeModal}
+        setTargetImage={setTargetImage}
+        setPreviewImages={setPreviewImages}
+      />
     </Image.Group>
   );
 }
