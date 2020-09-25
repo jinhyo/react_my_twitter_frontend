@@ -1,10 +1,12 @@
 import React from "react";
 import { Card, Button, Icon, Feed, Image } from "semantic-ui-react";
+import moment from "moment";
+import TweetImages from "./TweetImages";
 
-function TweetCard() {
+function TweetCard({ tweet }) {
   return (
     <Card fluid>
-      <Card.Content>
+      <Card.Content style={{ paddingBottom: 0 }}>
         <Card.Header>
           <Feed>
             <Feed.Event>
@@ -12,33 +14,36 @@ function TweetCard() {
                 floated="left"
                 width={50}
                 height={50}
-                src="/temp.jpg"
+                src={tweet.user.avatarURL}
                 className="picture__circle"
               />
-              {/* <img src="/temp.jpg" /> */}
               <Feed.Content>
                 <Feed.Summary>
-                  <Feed.User>Elliot Fu</Feed.User>
-                  <Feed.Date>1 Hour Ago</Feed.Date>
+                  <Feed.User>{tweet.user.nickname}</Feed.User>
+                  <Feed.Date>{moment(tweet.createdAt).fromNow()}</Feed.Date>
                 </Feed.Summary>
-                @Elliot
+                @별명?
               </Feed.Content>
             </Feed.Event>
           </Feed>
         </Card.Header>
       </Card.Content>
       <Card.Content>
-        <Card.Description>asdfasdf</Card.Description>
+        <Card.Description>
+          <p>{tweet.contents}</p>
+          {tweet.hasMedia && <TweetImages images={tweet.images} />}
+        </Card.Description>
       </Card.Content>
       <Card.Content extra>
         <Button basic color="green">
-          <Icon name="comment outline" /> 9
+          <Icon name="comment outline" /> 0
         </Button>
         <Button basic color="green">
-          <Icon name="retweet" /> 3
+          <Icon name="retweet" />{" "}
+          {tweet.retweetOriginId ? tweet.retweets.length : 0}
         </Button>
         <Button basic color="green">
-          <Icon name="heart outline" /> 4
+          <Icon name="heart outline" /> {tweet.likers.length}
         </Button>
       </Card.Content>
     </Card>

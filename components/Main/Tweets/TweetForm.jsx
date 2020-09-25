@@ -14,7 +14,7 @@ import mime from "mime-types";
 import { toast } from "react-toastify";
 import tweetFunctions from "../../../lib/tweetFunctions";
 
-function MessageForm() {
+function TweetForm() {
   const inputRef = useRef();
   const fileRef = useRef();
 
@@ -38,7 +38,7 @@ function MessageForm() {
 
   // 트윗 전송
   const handleSendTweet = useCallback(async () => {
-    // 빈칸 금지
+    // empty tweet 제한
     if (!text.trim() && !previewImages) {
       return;
     }
@@ -167,4 +167,4 @@ function MessageForm() {
   );
 }
 
-export default MessageForm;
+export default TweetForm;
