@@ -24,6 +24,10 @@ function PreviewImages({ previewImages, cancelPicture, setPreviewImages }) {
     openModal();
   }, []);
 
+  const isGif = useCallback(image => {
+    return image.type === "image/gif";
+  }, []);
+
   return (
     <Image.Group>
       {previewImages &&
@@ -44,15 +48,19 @@ function PreviewImages({ previewImages, cancelPicture, setPreviewImages }) {
                   onClick: () => cancelPicture(image.name)
                 }}
               />
-              <Label
-                as="a"
-                color="grey"
-                attached="top left"
-                size="mini"
-                onClick={() => handleImageEdit(image)}
-              >
-                편집
-              </Label>
+
+              {/* gif파일은 편집버튼 없음 */}
+              {isGif(image) ? null : (
+                <Label
+                  as="a"
+                  color="grey"
+                  attached="top left"
+                  size="mini"
+                  onClick={() => handleImageEdit(image)}
+                >
+                  편집
+                </Label>
+              )}
             </Segment>
           </span>
         ))}
