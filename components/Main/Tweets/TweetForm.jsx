@@ -11,6 +11,7 @@ import {
 import { Picker } from "emoji-mart";
 import PreviewImages from "./PreviewImages";
 import mime from "mime-types";
+import { toast } from "react-toastify";
 
 function MessageForm() {
   const inputRef = useRef();
@@ -57,6 +58,7 @@ function MessageForm() {
     setText("");
   }, [text, currentUser]);
 
+  // 이모티콘 입력
   const handleAddEmoji = useCallback(emoji => {
     setText(prev => prev + emoji.native);
     if (inputRef.current) {
@@ -64,6 +66,7 @@ function MessageForm() {
     }
   }, []);
 
+  // 이미지 파일 전송
   const sendImages = useCallback(async () => {
     const imageURLs = previewImages.map(async image => {
       try {
@@ -80,15 +83,21 @@ function MessageForm() {
     });
   }, [previewImages, currentUser]);
 
+  // 이미지 버튼 클릭
   const handleClickFileInput = useCallback(() => {
     if (fileRef.current) {
       fileRef.current.click();
     }
   }, [fileRef]);
 
+  // 이미지 파일 선택
   const handleFileInput = useCallback(e => {
-    let files = [];
+    // 5개로 제한
+    if (e.target.files.length > 5) {
+      return toast.warn("최대 5개의 파일을 업로드 할 수 있습니다.");
+    }
 
+    let files = [];
     [].forEach.call(e.target.files, file => {
       if (isAuthorized(file, imageTypes)) {
         files.push(file);
