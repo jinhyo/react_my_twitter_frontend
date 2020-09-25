@@ -12,6 +12,7 @@ import { Picker } from "emoji-mart";
 import PreviewImages from "./PreviewImages";
 import mime from "mime-types";
 import { toast } from "react-toastify";
+import tweetFunctions from "../../../lib/tweetFunctions";
 
 function MessageForm() {
   const inputRef = useRef();
@@ -35,28 +36,19 @@ function MessageForm() {
     setText(e.target.value);
   }, []);
 
-  const handleSendMessage = useCallback(async () => {
-    if (!text) {
+  const handleSendTweet = useCallback(async () => {
+    if (!text.trim() && !previewImages) {
       return;
     }
-    // const createdBy = {
-    //   id: currentUser.id,
-    //   nickname: currentUser.nickname
-    // };
+
     try {
-      //   await firebaseApp.sendMessage(text, createdBy, currentRoom.id);
-      // TO Do sendMessage
+      tweetFunctions.sendTweet(text, previewImages);
     } catch (error) {
       console.error(error);
     }
 
-    if (previewImages) {
-      // 이미지 전송
-      sendImages();
-    }
-
     setText("");
-  }, [text, currentUser]);
+  }, [text, previewImages, currentUser]);
 
   // 이모티콘 입력
   const handleAddEmoji = useCallback(emoji => {
@@ -131,7 +123,7 @@ function MessageForm() {
       )}
       <Form
         style={{ marginBottom: 5 }}
-        onSubmit={handleSendMessage}
+        onSubmit={handleSendTweet}
         encType="multipart/form-data"
       >
         <TextArea
