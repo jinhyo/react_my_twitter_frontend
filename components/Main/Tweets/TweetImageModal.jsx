@@ -31,11 +31,10 @@ function TweetImageModal({
     }
   }, [modal]);
 
+  // <AvatarEdit />용으로 사진 변환
   useEffect(() => {
     if (targetImage) {
       const reader = new FileReader(targetImage);
-      console.log("!~targetImage", targetImage);
-
       reader.readAsDataURL(targetImage);
       reader.onload = () => {
         setTargetImagePreview(reader.result);
@@ -62,9 +61,9 @@ function TweetImageModal({
   const handleImageSave = useCallback(async () => {
     setPreviewImages(prev => {
       const index = prev.findIndex(image => image.name === targetImage.name);
-      console.log("~index", index);
-      console.log("~prev", prev);
-      prev[index] = blob;
+
+      // blob을 File로 변환(multer 용)
+      prev[index] = new File([blob], targetImage.name);
       return prev;
     });
     closeModal();

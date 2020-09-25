@@ -36,18 +36,35 @@ function MessageForm() {
     setText(e.target.value);
   }, []);
 
+  // 트윗 전송
   const handleSendTweet = useCallback(async () => {
+    // 빈칸 금지
     if (!text.trim() && !previewImages) {
       return;
     }
 
-    try {
-      tweetFunctions.sendTweet(text, previewImages);
-    } catch (error) {
-      console.error(error);
+    setUploadLoading(true);
+    const tweetFormData = new FormData();
+    tweetFormData.append("contents", text);
+
+    // 이미지 파일이 있을 경우
+    if (previewImages.length > 0) {
+      previewImages.forEach(image => {
+        tweetFormData.append("images", image);
+      });
     }
 
-    setText("");
+    // 트윗 전송
+    try {
+      const tweetWithOthers = await tweetFunctions.sendTweet(tweetFormData);
+      console.log("tweetWithOthers", tweetWithOthers);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setText("");
+      setPreviewImages([]);
+      setUploadLoading(false);
+    }
   }, [text, previewImages, currentUser]);
 
   // 이모티콘 입력
@@ -57,23 +74,6 @@ function MessageForm() {
       inputRef.current.focus();
     }
   }, []);
-
-  // 이미지 파일 전송
-  const sendImages = useCallback(async () => {
-    const imageURLs = previewImages.map(async image => {
-      try {
-        //   return await firebaseApp.sendImageFile(
-        //     image,
-        //     metaData,
-        //     currentRoom.id,
-        //     currentRoom
-        //   );
-        // TODO
-      } catch (error) {
-        console.error(error);
-      }
-    });
-  }, [previewImages, currentUser]);
 
   // 이미지 버튼 클릭
   const handleClickFileInput = useCallback(() => {
@@ -99,6 +99,7 @@ function MessageForm() {
     setPreviewImages(files);
   }, []);
 
+  // 이미지 파일 타입 검증
   function isAuthorized(file, imageTypes) {
     return imageTypes.includes(mime.lookup(file.name));
   }
