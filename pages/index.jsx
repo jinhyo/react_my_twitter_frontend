@@ -81,7 +81,7 @@ function Index(props) {
         <WhoToFollow />
       </Grid.Column>
       <Grid.Column tablet={10} computer={10}>
-        <TweetForm />
+        <TweetForm setTweets={setTweets} tweets={tweets} />
 
         {tweets.map(tweet => (
           <TweetCard key={tweet.id} tweet={tweet} />

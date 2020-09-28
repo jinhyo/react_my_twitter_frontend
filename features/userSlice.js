@@ -11,6 +11,9 @@ const userSlice = createSlice({
     },
     clearCurrentUser: state => {
       state.currentUser = null;
+    },
+    addMyTweet: (state, { payload: tweetId }) => {
+      state.currentUser.tweets.push({ id: tweetId });
     }
   }
 });

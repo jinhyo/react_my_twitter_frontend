@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Form,
   Input,
@@ -13,8 +13,10 @@ import PreviewImages from "./PreviewImages";
 import mime from "mime-types";
 import { toast } from "react-toastify";
 import tweetFunctions from "../../../lib/tweetFunctions";
+import { userActions } from "../../../features/userSlice";
 
-function TweetForm() {
+function TweetForm({ setTweets, tweets }) {
+  const dispatch = useDispatch();
   const inputRef = useRef();
   const fileRef = useRef();
 
@@ -58,6 +60,8 @@ function TweetForm() {
     try {
       const tweetWithOthers = await tweetFunctions.sendTweet(tweetFormData);
       console.log("tweetWithOthers", tweetWithOthers);
+      setTweets(prev => [tweetWithOthers, ...prev]);
+      dispatch(userActions.addMyTweet(tweetWithOthers.id));
     } catch (error) {
       console.error(error);
     } finally {
@@ -65,7 +69,7 @@ function TweetForm() {
       setPreviewImages([]);
       setUploadLoading(false);
     }
-  }, [text, previewImages, currentUser]);
+  }, [text, previewImages, currentUser, tweets]);
 
   // 이모티콘 입력
   const handleAddEmoji = useCallback(emoji => {
