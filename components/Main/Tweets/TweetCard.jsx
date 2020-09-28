@@ -2,6 +2,7 @@ import React from "react";
 import { Card, Button, Icon, Feed, Image } from "semantic-ui-react";
 import moment from "moment";
 import TweetImages from "./TweetImages";
+import TweetContents from "./TweetContents";
 
 function TweetCard({ tweet }) {
   return (
@@ -30,7 +31,7 @@ function TweetCard({ tweet }) {
       </Card.Content>
       <Card.Content>
         <Card.Description>
-          <p>{tweet.contents}</p>
+          <TweetContents contents={tweet.contents} />
           {tweet.hasMedia && <TweetImages images={tweet.images} />}
         </Card.Description>
       </Card.Content>
