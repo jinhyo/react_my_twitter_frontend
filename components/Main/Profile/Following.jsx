@@ -11,7 +11,7 @@ function Following(props) {
         src="/temp.jpg"
         className="picture__circle"
       />
-      <Button animated floated="right" color="green">
+      <Button animated floated="right" color="teal">
         <Button.Content visible>팔로윙중</Button.Content>
         <Button.Content hidden>언팔로윙</Button.Content>
       </Button>

@@ -11,7 +11,7 @@ function Follower(props) {
         src="/temp.jpg"
         className="picture__circle"
       />
-      <Button animated floated="right" primary>
+      <Button animated floated="right" color="teal">
         <Button.Content visible>팔로우중</Button.Content>
         <Button.Content hidden>언팔로우</Button.Content>
       </Button>
