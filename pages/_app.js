@@ -34,7 +34,7 @@ function Root({ Component }) {
 
   async function getLoginUserInfo() {
     const user = await authFunctions.getLoginUserInfo();
-    console.log("~~getCurrentUser()");
+    console.log("~~getCurrentUser()", user);
 
     dispatch(userActions.setCurrentUser(user));
   }

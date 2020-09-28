@@ -13,16 +13,16 @@ import PreviewImages from "./PreviewImages";
 import mime from "mime-types";
 import { toast } from "react-toastify";
 import tweetFunctions from "../../../lib/tweetFunctions";
-import { userActions } from "../../../features/userSlice";
+import { userActions, userSelector } from "../../../features/userSlice";
+import { tweetSelector, tweetActions } from "../../../features/tweetSlice";
 
-function TweetForm({ setTweets, tweets }) {
+function TweetForm() {
   const dispatch = useDispatch();
   const inputRef = useRef();
   const fileRef = useRef();
 
-  // const currentUser = useSelector(userSelector.currentUser);
-  // const previewImages =
-  const [currentUser, setCurrentUser] = useState(""); // temp
+  const currentUser = useSelector(userSelector.currentUser);
+  const tweets = useSelector(tweetSelector.tweets);
 
   const [previewImages, setPreviewImages] = useState([]);
   const [imageTypes] = useState(["image/jpeg", "image/png", "image/gif"]);
@@ -59,8 +59,7 @@ function TweetForm({ setTweets, tweets }) {
     // 트윗 전송
     try {
       const tweetWithOthers = await tweetFunctions.sendTweet(tweetFormData);
-      console.log("tweetWithOthers", tweetWithOthers);
-      setTweets(prev => [tweetWithOthers, ...prev]);
+      dispatch(tweetActions.addTweet(tweetWithOthers));
       dispatch(userActions.addMyTweet(tweetWithOthers.id));
     } catch (error) {
       console.error(error);

@@ -7,7 +7,24 @@ const tweetSlice = createSlice({
   },
   reducers: {
     setTweets: (state, { payload: tweets }) => {
-      state.tweets = tweets;
+      state.tweets.push(...tweets);
+    },
+    addTweet: (state, { payload: tweet }) => {
+      state.tweets.unshift(tweet);
+    },
+    changeTweet: (state, { payload: newTweet }) => {
+      const index = state.tweets.findIndex(tweet => tweet.id === newTweet.id);
+      state.tweets[index] = newTweet;
+    },
+    likeTweet: (state, { payload: { myId, tweetId } }) => {
+      const targetTweet = state.tweets.find(tweet => tweet.id === tweetId);
+      targetTweet.likers.push({ id: myId });
+    },
+    unlikeTweet: (state, { payload: { myId, tweetId } }) => {
+      const targetTweet = state.tweets.find(tweet => tweet.id === tweetId);
+      targetTweet.likers = targetTweet.likers.filter(
+        liker => liker.id !== myId
+      );
     }
   }
 });

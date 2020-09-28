@@ -8,22 +8,24 @@ import TweetForm from "../components/Main/Tweets/TweetForm";
 import TweetCard from "../components/Main/Tweets/TweetCard";
 import { userSelector, userActions } from "../features/userSlice";
 import tweetFunctions from "../lib/tweetFunctions";
+import { tweetActions, tweetSelector } from "../features/tweetSlice";
 
 function Index(props) {
   const dispatch = useDispatch();
   const currentUser = useSelector(userSelector.currentUser);
+  const favoriteTweets = useSelector(userSelector.favoriteTweets);
 
-  const [tweets, setTweets] = useState([]);
+  const tweets = useSelector(tweetSelector.tweets);
   const [hasMorePosts, setHasMorePosts] = useState(false);
-  const [loadTweetLoading, setLoadTweetLoading] = useState(false);
+  const [loadTweetLoading, setLoadTweetLoading] = useState(true);
   const [clear, setClear] = useState(null);
 
   console.log("tweets", tweets);
-  console.log("hasMorePosts", hasMorePosts);
-  console.log("loadTweetLoading", loadTweetLoading);
 
   useEffect(() => {
-    getTweets();
+    if (!tweets.length) {
+      getTweets();
+    }
   }, []);
 
   useEffect(() => {
@@ -39,7 +41,7 @@ function Index(props) {
     };
   }, [clear]);
 
-  // 스크롤이 최하단에 가까워지면 트윗들을 추가로 가져옴
+  //// 스크롤이 최하단에 가까워지면 트윗들을 추가로 가져옴
   async function getMoreTweets() {
     if (
       window.scrollY + document.documentElement.clientHeight >
@@ -66,11 +68,20 @@ function Index(props) {
       setTweetLoading();
       const newTweets = await tweetFunctions.getTweets(lastId);
       setHasMorePosts(newTweets.length === 10);
-      setTweets(prev => [...prev, ...newTweets]);
+      dispatch(tweetActions.setTweets(newTweets));
     } catch (error) {
       console.error(error);
     }
   }
+
+  const isFavoriteTweet = useCallback(
+    tweetId => {
+      const index = favoriteTweets.findIndex(tweet => tweet.id === tweetId);
+
+      return index !== -1 ? true : false;
+    },
+    [favoriteTweets]
+  );
 
   return (
     <Grid stackable padded relaxed>
@@ -81,10 +92,14 @@ function Index(props) {
         <WhoToFollow />
       </Grid.Column>
       <Grid.Column tablet={10} computer={10}>
-        <TweetForm setTweets={setTweets} tweets={tweets} />
+        <TweetForm />
 
         {tweets.map(tweet => (
-          <TweetCard key={tweet.id} tweet={tweet} />
+          <TweetCard
+            key={tweet.id}
+            tweet={tweet}
+            favoriteStatus={isFavoriteTweet(tweet.id)}
+          />
         ))}
       </Grid.Column>
     </Grid>
