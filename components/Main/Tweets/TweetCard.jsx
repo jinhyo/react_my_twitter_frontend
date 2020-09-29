@@ -1,14 +1,6 @@
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Card,
-  Button,
-  Icon,
-  Feed,
-  Image,
-  Popup,
-  Dropdown
-} from "semantic-ui-react";
+import { Card, Button, Icon, Feed, Image } from "semantic-ui-react";
 import moment from "moment";
 import TweetImages from "./TweetImages";
 import TweetContents from "./TweetContents";
@@ -77,6 +69,7 @@ function TweetCard({ tweet, favoriteStatus }) {
                     currentUser={currentUser}
                     writerNickname={tweet.user.nickname}
                     writerId={tweet.user.id}
+                    tweetId={tweet.id}
                   />
                 </Feed.Summary>
               </Feed.Content>
@@ -92,13 +85,18 @@ function TweetCard({ tweet, favoriteStatus }) {
         </Card.Description>
       </Card.Content>
       <Card.Content extra>
+        {/* 답글 버튼 */}
         <Button basic color="green">
           <Icon name="comment outline" /> 0
         </Button>
+
+        {/* 리트윗 버튼 */}
         <Button basic color="green">
           <Icon name="retweet" />
           {tweet.retweetOriginId ? tweet.retweets.length : 0}
         </Button>
+
+        {/* 좋아요 버튼 */}
         <Button basic color="green" onClick={handleClickLike}>
           {favoriteStatus ? (
             <Icon name="heart" color="red" />

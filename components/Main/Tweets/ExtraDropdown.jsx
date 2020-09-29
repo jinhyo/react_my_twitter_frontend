@@ -1,10 +1,20 @@
 import React, { useCallback } from "react";
+import { useDispatch } from "react-redux";
 import { Dropdown } from "semantic-ui-react";
+import tweetFunctions from "../../../lib/tweetFunctions";
+import { tweetActions } from "../../../features/tweetSlice";
 
-function ExtraDropdown({ currentUser, writerNickname, writerId }) {
-  console.log("currentUser", currentUser);
-  console.log("writerNickname", writerNickname);
-  console.log("writerId", writerId);
+function ExtraDropdown({ currentUser, writerNickname, writerId, tweetId }) {
+  const dispatch = useDispatch();
+
+  const handleRemoveTweet = useCallback(async () => {
+    try {
+      await tweetFunctions.removeTweet(tweetId);
+      dispatch(tweetActions.removeTweet(tweetId));
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
 
   function isMyTweet() {
     return currentUser?.id === writerId;
@@ -15,10 +25,15 @@ function ExtraDropdown({ currentUser, writerNickname, writerId }) {
       // 내가 쓴 트윗
       return (
         <Dropdown.Menu>
-          <Dropdown.Item icon="trash alternate" text="트윗 삭제" />
+          <Dropdown.Item
+            icon="trash alternate"
+            text="트윗 삭제"
+            onClick={handleRemoveTweet}
+          />
         </Dropdown.Menu>
       );
     } else {
+      // 다른 사람이 쓴 트윗
       return (
         <Dropdown.Menu>
           <Dropdown.Item text={`'${writerNickname}'님을 팔로우 합니다`} />

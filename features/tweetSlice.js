@@ -12,6 +12,9 @@ const tweetSlice = createSlice({
     addTweet: (state, { payload: tweet }) => {
       state.tweets.unshift(tweet);
     },
+    removeTweet: (state, { payload: tweetId }) => {
+      state.tweets = state.tweets.filter(tweet => tweet.id !== tweetId);
+    },
     changeTweet: (state, { payload: newTweet }) => {
       const index = state.tweets.findIndex(tweet => tweet.id === newTweet.id);
       state.tweets[index] = newTweet;
