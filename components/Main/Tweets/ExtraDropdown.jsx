@@ -12,11 +12,13 @@ function ExtraDropdown({ currentUser, writerNickname, writerId, tweetId }) {
 
   //// 트윗 삭제
   const handleRemoveTweet = useCallback(async () => {
-    try {
-      await tweetFunctions.removeTweet(tweetId);
-      dispatch(tweetActions.removeTweet(tweetId));
-    } catch (error) {
-      console.error(error);
+    if (confirm("정말로 삭제하시겠습니까?")) {
+      try {
+        await tweetFunctions.removeTweet(tweetId);
+        dispatch(tweetActions.removeTweet(tweetId));
+      } catch (error) {
+        console.error(error);
+      }
     }
   }, []);
 
@@ -59,6 +61,7 @@ function ExtraDropdown({ currentUser, writerNickname, writerId, tweetId }) {
       return (
         <Dropdown.Menu>
           <Dropdown.Item
+            style={{ color: "red" }}
             icon="trash alternate"
             text="트윗 삭제"
             onClick={handleRemoveTweet}
