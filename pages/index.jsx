@@ -22,6 +22,7 @@ function Index(props) {
   const [clear, setClear] = useState(null);
 
   console.log("tweets", tweets);
+  console.log("currentUser", currentUser);
 
   // 회원가입 or 로그인 시 유저정보 가져오기
   useEffect(() => {

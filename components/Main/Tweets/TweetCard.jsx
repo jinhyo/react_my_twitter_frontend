@@ -1,17 +1,25 @@
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Card, Button, Icon, Feed, Image } from "semantic-ui-react";
+import {
+  Card,
+  Button,
+  Icon,
+  Feed,
+  Image,
+  Popup,
+  Dropdown
+} from "semantic-ui-react";
 import moment from "moment";
 import TweetImages from "./TweetImages";
 import TweetContents from "./TweetContents";
 import tweetFunctions from "../../../lib/tweetFunctions";
 import { userActions, userSelector } from "../../../features/userSlice";
 import { tweetActions } from "../../../features/tweetSlice";
+import ExtraDropdown from "./ExtraDropdown";
 
 function TweetCard({ tweet, favoriteStatus }) {
   const dispatch = useDispatch();
   const currentUser = useSelector(userSelector.currentUser);
-  console.log("~~favoriteStatus", favoriteStatus);
 
   //// 좋아요 버튼 클릭(추가 & 삭제)
   const handleClickLike = useCallback(async () => {
@@ -61,15 +69,22 @@ function TweetCard({ tweet, favoriteStatus }) {
               />
               <Feed.Content>
                 <Feed.Summary>
-                  <Feed.User>{tweet.user.nickname}</Feed.User>
+                  <Feed.User>@{tweet.user.nickname}</Feed.User>
                   <Feed.Date>{moment(tweet.createdAt).fromNow()}</Feed.Date>
+
+                  {/* 추가 드랍다운 메뉴 */}
+                  <ExtraDropdown
+                    currentUser={currentUser}
+                    writerNickname={tweet.user.nickname}
+                    writerId={tweet.user.id}
+                  />
                 </Feed.Summary>
-                @별명?
               </Feed.Content>
             </Feed.Event>
           </Feed>
         </Card.Header>
       </Card.Content>
+
       <Card.Content>
         <Card.Description>
           <TweetContents contents={tweet.contents} />
