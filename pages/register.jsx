@@ -29,9 +29,6 @@ const INITIAL_VALUES = {
 };
 
 function Register(props) {
-  // const isLogin = useSelector(userSelector.isLogin);
-  const dispatch = useDispatch();
-
   const [isLogin, setIsLogin] = useState(false);
   const [IDcheckLoading, setIDcheckLoading] = useState(false);
   const [emailCheckLoading, setemailCheckLoading] = useState(false);
@@ -46,12 +43,12 @@ function Register(props) {
     setValues
   } = useFormInput(INITIAL_VALUES, validateRegisterForm, createUser);
 
-  useEffect(() => {
-    setValues(INITIAL_VALUES);
-    if (isLogin) {
-      Router.push("/");
-    }
-  }, [isLogin]);
+  // useEffect(() => {
+  //   setValues(INITIAL_VALUES);
+  //   if (isLogin) {
+  //     Router.push("/");
+  //   }
+  // }, [isLogin]);
 
   // 회원가입
   async function createUser() {

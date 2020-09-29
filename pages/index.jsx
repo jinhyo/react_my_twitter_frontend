@@ -9,6 +9,7 @@ import TweetCard from "../components/Main/Tweets/TweetCard";
 import { userSelector, userActions } from "../features/userSlice";
 import tweetFunctions from "../lib/tweetFunctions";
 import { tweetActions, tweetSelector } from "../features/tweetSlice";
+import authFunctions from "../lib/authFunctions";
 
 function Index(props) {
   const dispatch = useDispatch();
@@ -21,6 +22,17 @@ function Index(props) {
   const [clear, setClear] = useState(null);
 
   console.log("tweets", tweets);
+
+  // 회원가입 or 로그인 시 유저정보 가져오기
+  useEffect(() => {
+    if (!currentUser) {
+      try {
+        getLoginUserInfo();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (!tweets.length) {
@@ -40,6 +52,11 @@ function Index(props) {
       clearTimeout(clear);
     };
   }, [clear]);
+
+  async function getLoginUserInfo() {
+    const user = await authFunctions.getLoginUserInfo();
+    dispatch(userActions.setCurrentUser(user));
+  }
 
   //// 스크롤이 최하단에 가까워지면 트윗들을 추가로 가져옴
   async function getMoreTweets() {
