@@ -65,12 +65,14 @@ function TweetCard({ tweet, favoriteStatus }) {
                   <Feed.Date>{moment(tweet.createdAt).fromNow()}</Feed.Date>
 
                   {/* 추가 드랍다운 메뉴 */}
-                  <ExtraDropdown
-                    currentUser={currentUser}
-                    writerNickname={tweet.user.nickname}
-                    writerId={tweet.user.id}
-                    tweetId={tweet.id}
-                  />
+                  {currentUser && (
+                    <ExtraDropdown
+                      currentUser={currentUser}
+                      writerNickname={tweet.user.nickname}
+                      writerId={tweet.user.id}
+                      tweetId={tweet.id}
+                    />
+                  )}
                 </Feed.Summary>
               </Feed.Content>
             </Feed.Event>

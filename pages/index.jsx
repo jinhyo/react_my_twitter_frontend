@@ -96,7 +96,7 @@ function Index(props) {
     tweetId => {
       const index = favoriteTweets.findIndex(tweet => tweet.id === tweetId);
 
-      return index !== -1 ? true : false;
+      return index !== -1;
     },
     [favoriteTweets]
   );

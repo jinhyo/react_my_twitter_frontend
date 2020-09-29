@@ -22,6 +22,14 @@ const userSlice = createSlice({
       state.currentUser.favorites = state.currentUser.favorites.filter(
         tweet => tweet.id !== tweetId
       );
+    },
+    addFollowing: (state, { payload: userId }) => {
+      state.currentUser.followings.push({ id: userId });
+    },
+    removeFollowing: (state, { payload: userId }) => {
+      state.currentUser.followings = state.currentUser.followings.filter(
+        following => following.id !== userId
+      );
     }
   }
 });
