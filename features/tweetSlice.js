@@ -28,6 +28,14 @@ const tweetSlice = createSlice({
       targetTweet.likers = targetTweet.likers.filter(
         liker => liker.id !== myId
       );
+    },
+    increaseRetweetCount: (state, { payload: tweetId }) => {
+      const targetTweet = state.tweets.find(tweet => tweet.id === tweetId);
+      targetTweet.retweetedCount++;
+    },
+    decreaseRetweetCount: (state, { payload: tweetId }) => {
+      const targetTweet = state.tweets.find(tweet => tweet.id === tweetId);
+      targetTweet.retweetedCount--;
     }
   }
 });

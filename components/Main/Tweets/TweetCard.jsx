@@ -8,14 +8,15 @@ import tweetFunctions from "../../../lib/tweetFunctions";
 import { userActions, userSelector } from "../../../features/userSlice";
 import { tweetActions } from "../../../features/tweetSlice";
 import ExtraDropdown from "./ExtraDropdown";
+import RetweetButton from "./RetweetButton";
 
 function TweetCard({ tweet, favoriteStatus }) {
   const dispatch = useDispatch();
-  const currentUser = useSelector(userSelector.currentUser);
+  const currentUserId = useSelector(userSelector.currentUserId);
 
   //// 좋아요 버튼 클릭(추가 & 삭제)
   const handleClickLike = useCallback(async () => {
-    if (!currentUser) {
+    if (!currentUserId) {
       return alert("로그인이 필요합니다.");
     }
 
@@ -25,7 +26,7 @@ function TweetCard({ tweet, favoriteStatus }) {
         await tweetFunctions.unlikeTweets(tweet.id);
 
         dispatch(
-          tweetActions.unlikeTweet({ myId: currentUser.id, tweetId: tweet.id })
+          tweetActions.unlikeTweet({ myId: currentUserId, tweetId: tweet.id })
         );
         dispatch(userActions.removeFavoriteTweetsFromMe(tweet.id));
       } catch (error) {
@@ -37,14 +38,14 @@ function TweetCard({ tweet, favoriteStatus }) {
         await tweetFunctions.likeTweets(tweet.id);
 
         dispatch(
-          tweetActions.likeTweet({ myId: currentUser.id, tweetId: tweet.id })
+          tweetActions.likeTweet({ myId: currentUserId, tweetId: tweet.id })
         );
         dispatch(userActions.addFavoriteTweetsToMe(tweet.id));
       } catch (error) {
         console.error(error);
       }
     }
-  }, [favoriteStatus, currentUser]);
+  }, [favoriteStatus, currentUserId]);
 
   return (
     <Card fluid>
@@ -65,9 +66,9 @@ function TweetCard({ tweet, favoriteStatus }) {
                   <Feed.Date>{moment(tweet.createdAt).fromNow()}</Feed.Date>
 
                   {/* 추가 드랍다운 메뉴 */}
-                  {currentUser && (
+                  {currentUserId && (
                     <ExtraDropdown
-                      currentUser={currentUser}
+                      currentUserId={currentUserId}
                       writerNickname={tweet.user.nickname}
                       writerId={tweet.user.id}
                       tweetId={tweet.id}
@@ -89,21 +90,18 @@ function TweetCard({ tweet, favoriteStatus }) {
       <Card.Content extra>
         {/* 답글 버튼 */}
         <Button basic color="green">
-          <Icon name="comment outline" /> 0
+          <Icon name="comment outline" color="grey" /> 0
         </Button>
 
         {/* 리트윗 버튼 */}
-        <Button basic color="green">
-          <Icon name="retweet" />
-          {tweet.retweetOriginId ? tweet.retweets.length : 0}
-        </Button>
+        <RetweetButton tweet={tweet} />
 
         {/* 좋아요 버튼 */}
         <Button basic color="green" onClick={handleClickLike}>
           {favoriteStatus ? (
             <Icon name="heart" color="red" />
           ) : (
-            <Icon name="heart outline" color="green" />
+            <Icon name="heart outline" color="grey" />
           )}
           {tweet.likers.length}
         </Button>

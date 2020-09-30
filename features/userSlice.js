@@ -30,6 +30,14 @@ const userSlice = createSlice({
       state.currentUser.followings = state.currentUser.followings.filter(
         following => following.id !== userId
       );
+    },
+    addRetweetToMe: (state, { payload: tweetId }) => {
+      state.currentUser.retweets.push({ id: tweetId });
+    },
+    removeRtweetFromMe: (state, { payload: tweetId }) => {
+      state.currentUser.retweets = state.currentUser.retweets.filter(
+        tweet => tweet.id !== tweetId
+      );
     }
   }
 });
@@ -38,6 +46,24 @@ const selectCurrentUser = createSelector(
   state => state.currentUser,
 
   currentUser => currentUser
+);
+
+const selectCurrentUserId = createSelector(
+  state => state.currentUser?.id,
+
+  currentUserId => currentUserId
+);
+
+const selectFollowings = createSelector(
+  state => state.currentUser?.followings,
+
+  followings => followings
+);
+
+const selectRetweets = createSelector(
+  state => state.currentUser?.retweets,
+
+  retweets => (retweets ? retweets : [])
 );
 
 const selectFavoriteTweets = createSelector(
@@ -51,5 +77,8 @@ export const userReducer = userSlice.reducer;
 export const USER = userSlice.name;
 export const userSelector = {
   currentUser: state => selectCurrentUser(state[USER]),
-  favoriteTweets: state => selectFavoriteTweets(state[USER])
+  favoriteTweets: state => selectFavoriteTweets(state[USER]),
+  currentUserId: state => selectCurrentUserId(state[USER]),
+  followings: state => selectFollowings(state[USER]),
+  myRetweets: state => selectRetweets(state[USER])
 };

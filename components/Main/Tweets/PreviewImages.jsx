@@ -6,9 +6,6 @@ import TweetImageModal from "./TweetImageModal";
 
 // in <TweetForm />
 function PreviewImages({ previewImages, cancelPicture, setPreviewImages }) {
-  const dispatch = useDispatch();
-  console.log("previewImages", previewImages);
-
   const [modal, setModal] = useState(false);
   const [targetImage, setTargetImage] = useState(false);
   const closeModal = useCallback(() => {

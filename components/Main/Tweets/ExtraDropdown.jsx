@@ -1,14 +1,16 @@
 import React, { useCallback } from "react";
-import { useDispatch } from "react-redux";
-import { Dropdown } from "semantic-ui-react";
+import { useDispatch, useSelector } from "react-redux";
+import { Dropdown, Button } from "semantic-ui-react";
 import tweetFunctions from "../../../lib/tweetFunctions";
 import { tweetActions } from "../../../features/tweetSlice";
 import userFunctions from "../../../lib/userFunctions";
-import { userActions } from "../../../features/userSlice";
+import { userActions, userSelector } from "../../../features/userSlice";
 
 // in <TweetCard />
-function ExtraDropdown({ currentUser, writerNickname, writerId, tweetId }) {
+function ExtraDropdown({ currentUserId, writerNickname, writerId, tweetId }) {
   const dispatch = useDispatch();
+
+  const followings = useSelector(userSelector.followings);
 
   //// 트윗 삭제
   const handleRemoveTweet = useCallback(async () => {
@@ -43,14 +45,11 @@ function ExtraDropdown({ currentUser, writerNickname, writerId, tweetId }) {
   }, []);
 
   function isMyTweet() {
-    return currentUser.id === writerId;
+    return currentUserId === writerId;
   }
 
   function isMyFollowing() {
-    const index = currentUser.followings.findIndex(
-      following => following.id === writerId
-    );
-    console.log("index !== -1", index !== -1);
+    const index = followings.findIndex(following => following.id === writerId);
 
     return index !== -1;
   }
@@ -86,7 +85,7 @@ function ExtraDropdown({ currentUser, writerNickname, writerId, tweetId }) {
           </Dropdown.Menu>
         );
       } else {
-        // 내가 언팔로우 중인 대상의
+        // 내가 언팔로우 중인 대상의 트윗
         return (
           <Dropdown.Menu>
             <Dropdown.Item
@@ -102,7 +101,7 @@ function ExtraDropdown({ currentUser, writerNickname, writerId, tweetId }) {
         );
       }
     }
-  }, [currentUser]);
+  }, [currentUserId]);
 
   return (
     <Dropdown
