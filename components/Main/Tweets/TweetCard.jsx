@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, Button, Icon, Feed, Image } from "semantic-ui-react";
 import moment from "moment";
@@ -13,6 +13,14 @@ import RetweetButton from "./RetweetButton";
 function TweetCard({ tweet, favoriteStatus }) {
   const dispatch = useDispatch();
   const currentUserId = useSelector(userSelector.currentUserId);
+  const afterClickRef = useRef();
+
+  //// popup 해제
+  function cancelPopup() {
+    if (afterClickRef.current) {
+      afterClickRef.current.click();
+    }
+  }
 
   //// 좋아요 버튼 클릭(추가 & 삭제)
   const handleClickLike = useCallback(async () => {
@@ -94,7 +102,8 @@ function TweetCard({ tweet, favoriteStatus }) {
         </Button>
 
         {/* 리트윗 버튼 */}
-        <RetweetButton tweet={tweet} />
+        <RetweetButton tweet={tweet} cancelPopup={cancelPopup} />
+        <span ref={afterClickRef}></span>
 
         {/* 좋아요 버튼 */}
         <Button basic color="green" onClick={handleClickLike}>

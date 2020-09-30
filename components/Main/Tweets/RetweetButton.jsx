@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Icon, Popup } from "semantic-ui-react";
 import tweetFunctions from "../../../lib/tweetFunctions";
@@ -6,7 +6,7 @@ import { tweetActions } from "../../../features/tweetSlice";
 import { userSelector, userActions } from "../../../features/userSlice";
 
 // in <TweetCard />
-function RetweetButton({ tweet }) {
+function RetweetButton({ tweet, cancelPopup }) {
   const dispatch = useDispatch();
 
   const myRetweets = useSelector(userSelector.myRetweets);
@@ -33,8 +33,10 @@ function RetweetButton({ tweet }) {
       dispatch(tweetActions.addTweet(newTweet));
       dispatch(tweetActions.increaseRetweetCount(tweet.id));
       dispatch(userActions.addRetweetToMe(tweet.id));
+
+      cancelPopup();
     } catch (error) {
-      console.error(error.response.data);
+      console.error(error.response.data || error);
     }
   }, [tweet]);
 
@@ -49,22 +51,23 @@ function RetweetButton({ tweet }) {
       dispatch(tweetActions.removeTweet(deletedTweetId));
       dispatch(tweetActions.decreaseRetweetCount(retweetOriginId));
       dispatch(userActions.removeRtweetFromMe(retweetOriginId));
+
+      cancelPopup();
     } catch (error) {
-      console.error(error.response.data);
+      console.error(error.response.data || error);
     }
   }, [tweet]);
 
   //// 현재 트윗이 리트윗된 원본인지 리트윗한 트윗인지 확인 후 원본 트윗 아이디 반환
   function selectRetweetOriginId(currentTweet) {
     if (currentTweet.retweetOriginId) {
-      // 원본이 아닌 경우
+      // 리트윗한 트윗
       return currentTweet.retweetOriginId;
     } else {
-      // 원본인 경우
+      // 리트윗된 원본 트윗
       return currentTweet.id;
     }
   }
-
   return (
     <Popup
       wide
