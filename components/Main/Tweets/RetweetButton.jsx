@@ -28,7 +28,9 @@ function RetweetButton({ tweet, cancelPopup }) {
   //// 리트윗
   const handleRetweet = useCallback(async () => {
     try {
-      const newTweet = await tweetFunctions.retweet(tweet.id);
+      const newTweet = await tweetFunctions.retweet(
+        tweet.retweetOriginId || tweet.id
+      );
 
       dispatch(tweetActions.addTweet(newTweet));
       dispatch(tweetActions.increaseRetweetCount(tweet.id));
