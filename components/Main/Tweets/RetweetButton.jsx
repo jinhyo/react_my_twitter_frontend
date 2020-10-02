@@ -1,16 +1,23 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useRef, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Icon, Popup } from "semantic-ui-react";
 import tweetFunctions from "../../../lib/tweetFunctions";
 import { tweetActions } from "../../../features/tweetSlice";
 import { userSelector, userActions } from "../../../features/userSlice";
 
-// in <TweetCard />
+// in <TweetCard />, <PureRetweetCard />
 function RetweetButton({ tweet, cancelPopup }) {
   const dispatch = useDispatch();
 
   const myRetweets = useSelector(userSelector.myRetweets);
+  const [retweetCountChange, setRetweetCountChange] = useState(null);
   console.log("myRetweets", myRetweets);
+
+  // useEffect(() => {
+  //   return () => {
+  //     clearTimeout(retweetCountChange);
+  //   };
+  // }, [myRetweets]);
 
   //// 내가 리트윗 했는지 확인
   const didIRetweet = useCallback(() => {
@@ -32,9 +39,11 @@ function RetweetButton({ tweet, cancelPopup }) {
         tweet.retweetOriginId || tweet.id
       );
 
+      dispatch(
+        tweetActions.increaseRetweetCount(tweet.retweetOriginId || tweet.id)
+      );
       dispatch(tweetActions.addTweet(newTweet));
-      dispatch(tweetActions.increaseRetweetCount(tweet.id));
-      dispatch(userActions.addRetweetToMe(tweet.id));
+      dispatch(userActions.addRetweetToMe(tweet.retweetOriginId || tweet.id));
 
       cancelPopup();
     } catch (error) {
@@ -50,8 +59,8 @@ function RetweetButton({ tweet, cancelPopup }) {
         retweetOriginId
       );
 
-      dispatch(tweetActions.removeTweet(deletedTweetId));
       dispatch(tweetActions.decreaseRetweetCount(retweetOriginId));
+      dispatch(tweetActions.removeTweet(deletedTweetId));
       dispatch(userActions.removeRtweetFromMe(retweetOriginId));
 
       cancelPopup();

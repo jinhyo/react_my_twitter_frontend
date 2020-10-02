@@ -6,7 +6,7 @@ import { tweetActions } from "../../../features/tweetSlice";
 import userFunctions from "../../../lib/userFunctions";
 import { userActions, userSelector } from "../../../features/userSlice";
 
-// in <TweetCard /> or <PureRetweetCard />
+// in <TweetCard />, <PureRetweetCard />
 function ExtraDropdown({ currentUserId, writerNickname, writerId, tweetId }) {
   const dispatch = useDispatch();
 
