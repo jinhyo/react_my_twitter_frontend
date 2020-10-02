@@ -102,10 +102,9 @@ function Index(props) {
     [favoriteTweets]
   );
 
-  //// 순수 리트윗인지 확인(인용 x)
-
-  function isPureRewteet(tweet) {
-    return tweet.retweetOriginId && tweet.isQuoted === false;
+  //// 리트윗인지 확인
+  function isRewteet(tweet) {
+    return tweet.retweetOriginId;
   }
 
   return (
@@ -120,7 +119,7 @@ function Index(props) {
         <TweetForm />
 
         {tweets.map(tweet =>
-          isPureRewteet(tweet) ? (
+          isRewteet(tweet) ? (
             <PureRetweetCard
               key={tweet.id}
               tweet={tweet}
