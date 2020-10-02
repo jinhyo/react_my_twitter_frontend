@@ -34,3 +34,9 @@
 .image__edit:hover {
   opacity: 0.7;
 }
+
+/* in <TweetCard /> */
+.retweet__sign {
+  opacity: 0.5;
+  font-size: 0.9em;
+}

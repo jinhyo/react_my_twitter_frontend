@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Card, Button, Icon, Feed, Image } from "semantic-ui-react";
+import { Card, Button, Icon, Feed, Image, IconGroup } from "semantic-ui-react";
 import moment from "moment";
 import TweetImages from "./TweetImages";
 import TweetContents from "./TweetContents";
@@ -10,12 +10,15 @@ import { tweetActions } from "../../../features/tweetSlice";
 import ExtraDropdown from "./ExtraDropdown";
 import RetweetButton from "./RetweetButton";
 
+// in <Index />
 function TweetCard({ tweet, favoriteStatus }) {
   const dispatch = useDispatch();
-  const currentUserId = useSelector(userSelector.currentUserId);
   const afterClickRef = useRef();
 
-  //// popup 해제
+  const currentUserId = useSelector(userSelector.currentUserId);
+  const myRetweets = useSelector(userSelector.myRetweets);
+
+  //// 리트윗 popup 해제
   function cancelPopup() {
     if (afterClickRef.current) {
       afterClickRef.current.click();
@@ -55,11 +58,44 @@ function TweetCard({ tweet, favoriteStatus }) {
     }
   }, [favoriteStatus, currentUserId]);
 
+  //// 누가 리트윗 했는지 표시
+  const displayRetweetSign = useCallback(() => {
+    if (tweet.retweetOriginId) {
+      // 리트윗인된 트윗인 경우
+
+      let retweetUser;
+      if (isMyRetweet(currentUserId, tweet, myRetweets)) {
+        // 내가 리트윗한 경우
+        retweetUser = "내가";
+      } else {
+        retweetUser = `${tweet.user.nickname} 님이 `;
+      }
+
+      return (
+        <span className="retweet__sign">
+          <Icon name="retweet" /> {retweetUser} 리트윗함
+        </span>
+      );
+    } else {
+      return null;
+    }
+  }, [currentUserId, tweet, myRetweets]);
+
+  //// 내가 리트윗 했는지 확인
+  function isMyRetweet(currentUserId, tweet, myRetweets) {
+    const index = myRetweets.findIndex(
+      retweet => retweet.id === tweet.retweetOriginId
+    );
+
+    return currentUserId === tweet.user.id && index !== -1;
+  }
+
   return (
     <Card fluid>
       <Card.Content style={{ paddingBottom: 0 }}>
         <Card.Header>
           <Feed>
+            {displayRetweetSign()}
             <Feed.Event>
               <Image
                 floated="left"
@@ -88,7 +124,6 @@ function TweetCard({ tweet, favoriteStatus }) {
           </Feed>
         </Card.Header>
       </Card.Content>
-
       <Card.Content>
         <Card.Description>
           <TweetContents contents={tweet.contents} />
