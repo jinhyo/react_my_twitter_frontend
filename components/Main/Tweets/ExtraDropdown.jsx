@@ -6,8 +6,14 @@ import { tweetActions } from "../../../features/tweetSlice";
 import userFunctions from "../../../lib/userFunctions";
 import { userActions, userSelector } from "../../../features/userSlice";
 
-// in <TweetCard />
-function ExtraDropdown({ currentUserId, writerNickname, writerId, tweetId }) {
+// in <TweetCard /> or <PureRetweetCard />
+function ExtraDropdown({
+  currentUserId,
+  writerNickname,
+  writerId,
+  tweetId,
+  notAllowDelete
+}) {
   const dispatch = useDispatch();
 
   const followings = useSelector(userSelector.followings);
@@ -55,7 +61,7 @@ function ExtraDropdown({ currentUserId, writerNickname, writerId, tweetId }) {
   }
 
   const renderDropdownMenu = useCallback(() => {
-    if (isMyTweet()) {
+    if (isMyTweet() && !notAllowDelete) {
       // 내가 쓴 트윗
       return (
         <Dropdown.Menu>

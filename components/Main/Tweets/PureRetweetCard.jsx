@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Card, Button, Icon, Feed, Image } from "semantic-ui-react";
+import { Card, Button, Icon, Feed, Image, IconGroup } from "semantic-ui-react";
 import moment from "moment";
 import TweetImages from "./TweetImages";
 import TweetContents from "./TweetContents";
@@ -11,11 +11,12 @@ import ExtraDropdown from "./ExtraDropdown";
 import RetweetButton from "./RetweetButton";
 
 // in <Index />
-function TweetCard({ tweet, favoriteStatus }) {
+function PureRetweetCard({ tweet, retweet, favoriteStatus }) {
   const dispatch = useDispatch();
   const afterClickRef = useRef();
 
   const currentUserId = useSelector(userSelector.currentUserId);
+  const myRetweets = useSelector(userSelector.myRetweets);
 
   //// 리트윗 popup 해제
   function cancelPopup() {
@@ -33,55 +34,83 @@ function TweetCard({ tweet, favoriteStatus }) {
     if (favoriteStatus) {
       // 좋아요 삭제
       try {
-        await tweetFunctions.unlikeTweets(tweet.id);
+        await tweetFunctions.unlikeTweets(retweet.id);
 
         dispatch(
-          tweetActions.unlikeTweet({ myId: currentUserId, tweetId: tweet.id })
+          tweetActions.unlikeTweet({ myId: currentUserId, tweetId: retweet.id })
         );
-        dispatch(userActions.removeFavoriteTweetsFromMe(tweet.id));
+        dispatch(userActions.removeFavoriteTweetsFromMe(retweet.id));
       } catch (error) {
         console.error(error);
       }
     } else {
       // 좋아요 등록
       try {
-        await tweetFunctions.likeTweets(tweet.id);
+        await tweetFunctions.likeTweets(retweet.id);
 
         dispatch(
-          tweetActions.likeTweet({ myId: currentUserId, tweetId: tweet.id })
+          tweetActions.likeTweet({ myId: currentUserId, tweetId: retweet.id })
         );
-        dispatch(userActions.addFavoriteTweetsToMe(tweet.id));
+        dispatch(userActions.addFavoriteTweetsToMe(retweet.id));
       } catch (error) {
         console.error(error);
       }
     }
   }, [favoriteStatus, currentUserId]);
 
+  //// 누가 리트윗 했는지 표시
+  const displayRetweetSign = useCallback(() => {
+    let retweetUser;
+    if (isMyRetweet(currentUserId, tweet, myRetweets)) {
+      // 내가 리트윗한 경우
+      retweetUser = "내가";
+    } else {
+      retweetUser = `${tweet.user.nickname} 님이 `;
+    }
+
+    return (
+      <span className="retweet__sign">
+        <Icon name="retweet" /> {retweetUser} 리트윗함
+      </span>
+    );
+  }, [currentUserId, tweet, myRetweets]);
+
+  //// 내가 리트윗 했는지 확인
+  function isMyRetweet(currentUserId, tweet, myRetweets) {
+    const index = myRetweets.findIndex(
+      retweet => retweet.id === tweet.retweetOriginId
+    );
+
+    return currentUserId === tweet.user.id && index !== -1;
+  }
+
   return (
     <Card fluid>
       <Card.Content style={{ paddingBottom: 0 }}>
         <Card.Header>
           <Feed>
+            {displayRetweetSign()}
             <Feed.Event>
               <Image
                 floated="left"
                 width={50}
                 height={50}
-                src={tweet.user.avatarURL}
+                src={retweet.user.avatarURL}
                 className="picture__circle"
               />
               <Feed.Content>
                 <Feed.Summary>
-                  <Feed.User>@{tweet.user.nickname}</Feed.User>
-                  <Feed.Date>{moment(tweet.createdAt).fromNow()}</Feed.Date>
+                  <Feed.User>@{retweet.user.nickname}</Feed.User>
+                  <Feed.Date>{moment(retweet.createdAt).fromNow()}</Feed.Date>
 
                   {/* 추가 드랍다운 메뉴 */}
                   {currentUserId && (
                     <ExtraDropdown
                       currentUserId={currentUserId}
-                      writerNickname={tweet.user.nickname}
-                      writerId={tweet.user.id}
-                      tweetId={tweet.id}
+                      writerNickname={retweet.user.nickname}
+                      writerId={retweet.user.id}
+                      tweetId={retweet.id}
+                      notAllowDelete={true}
                     />
                   )}
                 </Feed.Summary>
@@ -92,8 +121,8 @@ function TweetCard({ tweet, favoriteStatus }) {
       </Card.Content>
       <Card.Content>
         <Card.Description>
-          <TweetContents contents={tweet.contents} />
-          {tweet.hasMedia && <TweetImages images={tweet.images} />}
+          <TweetContents contents={retweet.contents} />
+          {retweet.hasMedia && <TweetImages images={retweet.images} />}
         </Card.Description>
       </Card.Content>
       <Card.Content extra>
@@ -113,11 +142,11 @@ function TweetCard({ tweet, favoriteStatus }) {
           ) : (
             <Icon name="heart outline" color="grey" />
           )}
-          {tweet.likers.length}
+          {retweet.likers.length}
         </Button>
       </Card.Content>
     </Card>
   );
 }
 
-export default TweetCard;
+export default PureRetweetCard;

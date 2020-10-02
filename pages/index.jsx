@@ -10,6 +10,7 @@ import { userSelector, userActions } from "../features/userSlice";
 import tweetFunctions from "../lib/tweetFunctions";
 import { tweetActions, tweetSelector } from "../features/tweetSlice";
 import authFunctions from "../lib/authFunctions";
+import PureRetweetCard from "../components/Main/Tweets/PureRetweetCard";
 
 function Index(props) {
   const dispatch = useDispatch();
@@ -101,6 +102,12 @@ function Index(props) {
     [favoriteTweets]
   );
 
+  //// 순수 리트윗인지 확인(인용 x)
+
+  function isPureRewteet(tweet) {
+    return tweet.retweetOriginId && tweet.isQuoted === false;
+  }
+
   return (
     <Grid stackable padded relaxed>
       <Grid.Column tablet={6} computer={6}>
@@ -112,13 +119,22 @@ function Index(props) {
       <Grid.Column tablet={10} computer={10}>
         <TweetForm />
 
-        {tweets.map(tweet => (
-          <TweetCard
-            key={tweet.id}
-            tweet={tweet}
-            favoriteStatus={isFavoriteTweet(tweet.id)}
-          />
-        ))}
+        {tweets.map(tweet =>
+          isPureRewteet(tweet) ? (
+            <PureRetweetCard
+              key={tweet.id}
+              tweet={tweet}
+              retweet={tweet.retweetOrigin}
+              favoriteStatus={isFavoriteTweet(tweet.retweetOriginId)}
+            />
+          ) : (
+            <TweetCard
+              key={tweet.id}
+              tweet={tweet}
+              favoriteStatus={isFavoriteTweet(tweet.id)}
+            />
+          )
+        )}
       </Grid.Column>
     </Grid>
   );
