@@ -110,7 +110,6 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus }) {
                       writerNickname={retweet.user.nickname}
                       writerId={retweet.user.id}
                       tweetId={retweet.id}
-                      notAllowDelete={true}
                     />
                   )}
                 </Feed.Summary>

@@ -7,13 +7,7 @@ import userFunctions from "../../../lib/userFunctions";
 import { userActions, userSelector } from "../../../features/userSlice";
 
 // in <TweetCard /> or <PureRetweetCard />
-function ExtraDropdown({
-  currentUserId,
-  writerNickname,
-  writerId,
-  tweetId,
-  notAllowDelete
-}) {
+function ExtraDropdown({ currentUserId, writerNickname, writerId, tweetId }) {
   const dispatch = useDispatch();
 
   const followings = useSelector(userSelector.followings);
@@ -61,7 +55,7 @@ function ExtraDropdown({
   }
 
   const renderDropdownMenu = useCallback(() => {
-    if (isMyTweet() && !notAllowDelete) {
+    if (isMyTweet()) {
       // 내가 쓴 트윗
       return (
         <Dropdown.Menu>
@@ -107,7 +101,7 @@ function ExtraDropdown({
         );
       }
     }
-  }, [currentUserId]);
+  }, [currentUserId, followings]);
 
   return (
     <Dropdown
