@@ -167,6 +167,9 @@ function TweetForm() {
         hidden
         ref={fileRef}
         onChange={handleFileInput}
+        onClick={e => {
+          e.target.value = null;
+        }} // 버그픽스 41
       />
       <Divider hidden />
     </>
