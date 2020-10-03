@@ -15,8 +15,11 @@ import { toast } from "react-toastify";
 import tweetFunctions from "../../../lib/tweetFunctions";
 import { userActions, userSelector } from "../../../features/userSlice";
 import { tweetSelector, tweetActions } from "../../../features/tweetSlice";
+import QuotationCard from "./QuotedTweet";
+import QuotedTweet from "./QuotedTweet";
 
-function TweetForm() {
+//  in <QuotedTweetModal />
+function QuotationForm({ quotedTweet }) {
   const dispatch = useDispatch();
   const inputRef = useRef();
   const fileRef = useRef();
@@ -86,25 +89,21 @@ function TweetForm() {
   }, [fileRef]);
 
   //// 이미지 파일 선택
-  const handleFileInput = useCallback(
-    e => {
-      // 5개로 제한
-      if (e.target.files.length > 5) {
-        return toast.warn("최대 5개의 파일을 업로드 할 수 있습니다.");
+  const handleFileInput = useCallback(e => {
+    // 5개로 제한
+    if (e.target.files.length > 5) {
+      return toast.warn("최대 5개의 파일을 업로드 할 수 있습니다.");
+    }
+
+    let files = [];
+    [].forEach.call(e.target.files, file => {
+      if (isAuthorized(file, imageTypes)) {
+        files.push(file);
       }
-      console.log("e.target", e.target);
+    });
 
-      let files = [];
-      [].forEach.call(e.target.files, file => {
-        if (isAuthorized(file, imageTypes)) {
-          files.push(file);
-        }
-      });
-
-      setPreviewImages(files);
-    },
-    [previewImages]
-  );
+    setPreviewImages(files);
+  }, []);
 
   //// 이미지 파일 타입 검증
   function isAuthorized(file, imageTypes) {
@@ -122,8 +121,8 @@ function TweetForm() {
           set="apple"
           style={{
             position: "absolute",
-            top: "130px",
-            left: "10px",
+            top: "200px",
+            left: "50px",
             zIndex: 10
           }}
           onSelect={handleAddEmoji}
@@ -140,6 +139,7 @@ function TweetForm() {
           type="text"
           autoComplete="off"
           onChange={handleTextChange}
+          placeholder="내용 추가하기"
           value={text}
         />
         <PreviewImages
@@ -147,20 +147,21 @@ function TweetForm() {
           cancelPicture={cancelPicture}
           setPreviewImages={setPreviewImages}
         />
+        <QuotedTweet tweet={quotedTweet} />
         <Button
-          color="green"
+          color="blue"
           floated="right"
-          content="트윗"
+          content="리트윗"
           loading={uploadLoading}
           disabled={!text.length && !previewImages.length}
         />
       </Form>
       <Button
         icon={emoji ? "cancel" : "smile outline"}
-        color="green"
+        color="blue"
         onClick={handleEmojiToggle}
       />
-      <Button icon="picture" color="green" onClick={handleClickFileInput} />
+      <Button icon="picture" color="blue" onClick={handleClickFileInput} />
       <input
         type="file"
         multiple
@@ -173,4 +174,4 @@ function TweetForm() {
   );
 }
 
-export default TweetForm;
+export default QuotationForm;

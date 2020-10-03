@@ -6,6 +6,8 @@ import TweetImageModal from "./TweetImageModal";
 
 // in <TweetForm />
 function PreviewImages({ previewImages, cancelPicture, setPreviewImages }) {
+  console.log("previewImages", previewImages);
+
   const [modal, setModal] = useState(false);
   const [targetImage, setTargetImage] = useState(false);
   const closeModal = useCallback(() => {
@@ -46,8 +48,8 @@ function PreviewImages({ previewImages, cancelPicture, setPreviewImages }) {
                 }}
               />
 
-              {/* gif파일은 편집버튼 없음 */}
-              {isGif(image) ? null : (
+              {/* gif파일은 편집버튼 제거 */}
+              {!isGif(image) && (
                 <Label
                   as="a"
                   color="grey"

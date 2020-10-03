@@ -4,20 +4,24 @@ import { Button, Icon, Popup } from "semantic-ui-react";
 import tweetFunctions from "../../../lib/tweetFunctions";
 import { tweetActions } from "../../../features/tweetSlice";
 import { userSelector, userActions } from "../../../features/userSlice";
+import QuotedTweetModal from "./QuotedTweetModal";
 
 // in <TweetCard />, <PureRetweetCard />
 function RetweetButton({ tweet, cancelPopup }) {
   const dispatch = useDispatch();
 
   const myRetweets = useSelector(userSelector.myRetweets);
-  const [retweetCountChange, setRetweetCountChange] = useState(null);
   console.log("myRetweets", myRetweets);
 
-  // useEffect(() => {
-  //   return () => {
-  //     clearTimeout(retweetCountChange);
-  //   };
-  // }, [myRetweets]);
+  const [modal, setModal] = useState(false);
+
+  const openModal = useCallback(() => {
+    setModal(true);
+  }, []);
+
+  const closeModal = useCallback(() => {
+    setModal(false);
+  }, []);
 
   //// 내가 리트윗 했는지 확인
   const didIRetweet = useCallback(() => {
@@ -79,39 +83,53 @@ function RetweetButton({ tweet, cancelPopup }) {
       return currentTweet.id;
     }
   }
-  return (
-    <Popup
-      wide
-      trigger={
-        <Button basic color="green">
-          <Icon name="retweet" color={didIRetweet() ? "green" : "grey"} />
-          {tweet.retweetOriginId
-            ? tweet.retweetOrigin.retweetedCount
-            : tweet.retweetedCount}
-        </Button>
-      }
-      on="click"
-    >
-      {didIRetweet() ? (
-        <Button
-          basic
-          size="medium"
-          content="리트윗 취소하기"
-          fluid
-          onClick={handleCancelRetweet}
-        />
-      ) : (
-        <Button
-          basic
-          size="medium"
-          content="리트윗"
-          fluid
-          onClick={handleRetweet}
-        />
-      )}
 
-      <Button basic size="medium" content="트윗 인용하기" fluid />
-    </Popup>
+  const handleOpenModal = useCallback(() => {
+    cancelPopup();
+    openModal();
+  }, []);
+
+  return (
+    <>
+      <Popup
+        wide
+        trigger={
+          <Button basic color="green">
+            <Icon name="retweet" color={didIRetweet() ? "green" : "grey"} />
+            {tweet.retweetOriginId
+              ? tweet.retweetOrigin.retweetedCount
+              : tweet.retweetedCount}
+          </Button>
+        }
+        on="click"
+      >
+        {didIRetweet() ? (
+          <Button
+            basic
+            size="medium"
+            content="리트윗 취소하기"
+            fluid
+            onClick={handleCancelRetweet}
+          />
+        ) : (
+          <Button
+            basic
+            size="medium"
+            content="리트윗"
+            fluid
+            onClick={handleRetweet}
+          />
+        )}
+        <Button
+          basic
+          size="medium"
+          content="트윗 인용하기"
+          fluid
+          onClick={handleOpenModal}
+        />
+      </Popup>
+      <QuotedTweetModal modal={modal} closeModal={closeModal} tweet={tweet} />
+    </>
   );
 }
 
