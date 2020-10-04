@@ -131,11 +131,6 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus }) {
         </Card.Description>
       </Card.Content>
       <Card.Content extra>
-        {/* 답글 버튼 */}
-        <Button basic color="green">
-          <Icon name="comment outline" color="grey" /> 0
-        </Button>
-
         {/* 리트윗 버튼 */}
         <RetweetButton tweet={tweet} cancelPopup={cancelPopup} />
         <span ref={afterClickRef}></span>
@@ -148,6 +143,11 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus }) {
             <Icon name="heart outline" color="grey" />
           )}
           {retweet.likers.length}
+        </Button>
+
+        {/* 답글 버튼 */}
+        <Button basic color="green">
+          <Icon name="comment outline" color="grey" /> 0
         </Button>
       </Card.Content>
     </Card>
