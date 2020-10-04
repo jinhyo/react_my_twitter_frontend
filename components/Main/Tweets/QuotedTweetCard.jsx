@@ -4,10 +4,13 @@ import moment from "moment";
 import TweetImages from "./TweetImages";
 import TweetContents from "./TweetContents";
 
-// in <QuotationForm />
-function QuotedTweet({ tweet }) {
+// in <TweetCard />
+function QuotedTweetCard({ tweet }) {
   return (
-    <Card fluid raised style={{ width: "95%", marginLeft: "20px" }}>
+    <Card
+      fluid
+      style={{ marginTop: 10, border: "solid 1px", borderRadius: 20 }}
+    >
       <Card.Content style={{ paddingBottom: 0 }}>
         <Card.Header>
           <Feed>
@@ -33,4 +36,4 @@ function QuotedTweet({ tweet }) {
   );
 }
 
-export default QuotedTweet;
+export default QuotedTweetCard;

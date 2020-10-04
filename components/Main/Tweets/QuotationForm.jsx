@@ -19,7 +19,7 @@ import QuotationCard from "./QuotedTweet";
 import QuotedTweet from "./QuotedTweet";
 
 //  in <QuotedTweetModal />
-function QuotationForm({ quotedTweet }) {
+function QuotationForm({ quotedTweet, closeModal }) {
   const dispatch = useDispatch();
   const inputRef = useRef();
   const fileRef = useRef();
@@ -59,17 +59,28 @@ function QuotationForm({ quotedTweet }) {
       });
     }
 
-    // 트윗 전송
+    // 인용한 트윗 전송
     try {
-      const tweetWithOthers = await tweetFunctions.sendTweet(tweetFormData);
+      const tweetWithOthers = await tweetFunctions.quoteTweet(
+        quotedTweet.id,
+        tweetFormData
+      );
       dispatch(tweetActions.addTweet(tweetWithOthers));
-      dispatch(userActions.addMyTweet(tweetWithOthers.id));
+      dispatch(tweetActions.increaseRetweetCount(quotedTweet.id));
+      dispatch(
+        userActions.addMyTweet({
+          tweetId: tweetWithOthers.id,
+          retweetOriginId: null,
+          quotedOriginId: quotedTweet.id
+        })
+      );
     } catch (error) {
       console.error(error);
     } finally {
       setText("");
       setPreviewImages([]);
       setUploadLoading(false);
+      closeModal();
     }
   }, [text, previewImages, currentUser, tweets]);
 
@@ -114,6 +125,11 @@ function QuotationForm({ quotedTweet }) {
     setPreviewImages(prev => prev.filter(image => image.name !== name));
   }, []);
 
+  const notAllowEmptyTweet = useCallback(
+    () => !text.length && !previewImages.length,
+    [text, previewImages]
+  );
+
   return (
     <>
       {emoji && (
@@ -153,7 +169,7 @@ function QuotationForm({ quotedTweet }) {
           floated="right"
           content="리트윗"
           loading={uploadLoading}
-          disabled={!text.length && !previewImages.length}
+          disabled={notAllowEmptyTweet()}
         />
       </Form>
       <Button

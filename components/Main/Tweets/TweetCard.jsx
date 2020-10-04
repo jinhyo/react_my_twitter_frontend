@@ -9,6 +9,7 @@ import { userActions, userSelector } from "../../../features/userSlice";
 import { tweetActions } from "../../../features/tweetSlice";
 import ExtraDropdown from "./ExtraDropdown";
 import RetweetButton from "./RetweetButton";
+import QuotedTweetCard from "./QuotedTweetCard";
 
 // in <Index />
 function TweetCard({ tweet, favoriteStatus }) {
@@ -82,6 +83,7 @@ function TweetCard({ tweet, favoriteStatus }) {
                       writerNickname={tweet.user.nickname}
                       writerId={tweet.user.id}
                       tweetId={tweet.id}
+                      tweet={tweet}
                     />
                   )}
                 </Feed.Summary>
@@ -94,6 +96,11 @@ function TweetCard({ tweet, favoriteStatus }) {
         <Card.Description>
           <TweetContents contents={tweet.contents} />
           {tweet.hasMedia && <TweetImages images={tweet.images} />}
+
+          {/* 인용 트윗인 경우 */}
+          {tweet.quotedOriginId && (
+            <QuotedTweetCard tweet={tweet.quotedOrigin} />
+          )}
         </Card.Description>
       </Card.Content>
       <Card.Content extra>

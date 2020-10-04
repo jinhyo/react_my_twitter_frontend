@@ -11,7 +11,7 @@ function QuotedTweetModal({ modal, closeModal, tweet }) {
         트윗 인용하기
       </Modal.Header>
       <Modal.Content style={{ backgroundColor: "#fffff0" }}>
-        <QuotationForm quotedTweet={tweet} />
+        <QuotationForm quotedTweet={tweet} closeModal={closeModal} />
       </Modal.Content>
     </Modal>
   );

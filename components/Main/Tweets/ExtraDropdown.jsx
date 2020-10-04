@@ -7,7 +7,13 @@ import userFunctions from "../../../lib/userFunctions";
 import { userActions, userSelector } from "../../../features/userSlice";
 
 // in <TweetCard />, <PureRetweetCard />
-function ExtraDropdown({ currentUserId, writerNickname, writerId, tweetId }) {
+function ExtraDropdown({
+  currentUserId,
+  writerNickname,
+  writerId,
+  tweetId,
+  tweet
+}) {
   const dispatch = useDispatch();
 
   const followings = useSelector(userSelector.followings);
@@ -16,8 +22,15 @@ function ExtraDropdown({ currentUserId, writerNickname, writerId, tweetId }) {
   const handleRemoveTweet = useCallback(async () => {
     if (confirm("정말로 삭제하시겠습니까?")) {
       try {
-        await tweetFunctions.removeTweet(tweetId);
+        const deltedTweetIds = await tweetFunctions.removeTweet(tweetId);
+
         dispatch(tweetActions.removeTweet(tweetId));
+        dispatch(userActions.removeMyTweet(deltedTweetIds));
+
+        // 인용한 트윗인 경우 인용된 트윗의 리트윗 카운트 감소
+        if (tweet.quotedOriginId) {
+          dispatch(tweetActions.decreaseRetweetCount(tweet.quotedOriginId));
+        }
       } catch (error) {
         console.error(error);
       }

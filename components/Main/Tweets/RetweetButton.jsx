@@ -40,7 +40,7 @@ function RetweetButton({ tweet, cancelPopup }) {
   const handleRetweet = useCallback(async () => {
     try {
       const newTweet = await tweetFunctions.retweet(
-        tweet.retweetOriginId || tweet.id
+        tweet.retweetOriginId || tweet.id // 원본을 리트윗 || 리트윗한 트윗을 리트윗
       );
 
       dispatch(
@@ -48,6 +48,13 @@ function RetweetButton({ tweet, cancelPopup }) {
       );
       dispatch(tweetActions.addTweet(newTweet));
       dispatch(userActions.addRetweetToMe(tweet.retweetOriginId || tweet.id));
+      dispatch(
+        userActions.addMyTweet({
+          tweetId: newTweet.id,
+          retweetOriginId: tweet.retweetOriginId || tweet.id,
+          quotedOriginId: null
+        })
+      );
 
       cancelPopup();
     } catch (error) {
@@ -66,6 +73,7 @@ function RetweetButton({ tweet, cancelPopup }) {
       dispatch(tweetActions.decreaseRetweetCount(retweetOriginId));
       dispatch(tweetActions.removeTweet(deletedTweetId));
       dispatch(userActions.removeRtweetFromMe(retweetOriginId));
+      dispatch(userActions.removeMyTweet([deletedTweetId]));
 
       cancelPopup();
     } catch (error) {
@@ -73,7 +81,7 @@ function RetweetButton({ tweet, cancelPopup }) {
     }
   }, [tweet]);
 
-  //// 현재 트윗이 리트윗된 원본인지 리트윗한 트윗인지 확인 후 원본 트윗 아이디 반환
+  //// 현재 트윗이 리트윗된 원본인지, 리트윗한 트윗인지 확인 후 원본 트윗 아이디 반환
   function selectRetweetOriginId(currentTweet) {
     if (currentTweet.retweetOriginId) {
       // 리트윗한 트윗

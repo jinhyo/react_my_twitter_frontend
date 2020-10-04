@@ -60,7 +60,13 @@ function TweetForm() {
     try {
       const tweetWithOthers = await tweetFunctions.sendTweet(tweetFormData);
       dispatch(tweetActions.addTweet(tweetWithOthers));
-      dispatch(userActions.addMyTweet(tweetWithOthers.id));
+      dispatch(
+        userActions.addMyTweet({
+          tweetId: tweetWithOthers.id,
+          retweetOriginId: null,
+          quotedOriginId: null
+        })
+      );
     } catch (error) {
       console.error(error);
     } finally {
@@ -115,6 +121,11 @@ function TweetForm() {
     setPreviewImages(prev => prev.filter(image => image.name !== name));
   }, []);
 
+  const notAllowEmptyTweet = useCallback(
+    () => !text.length && !previewImages.length,
+    [text, previewImages]
+  );
+
   return (
     <>
       {emoji && (
@@ -152,7 +163,7 @@ function TweetForm() {
           floated="right"
           content="트윗"
           loading={uploadLoading}
-          disabled={!text.length && !previewImages.length}
+          disabled={notAllowEmptyTweet()}
         />
       </Form>
       <Button

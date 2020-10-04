@@ -12,8 +12,20 @@ const userSlice = createSlice({
     clearCurrentUser: state => {
       state.currentUser = null;
     },
-    addMyTweet: (state, { payload: tweetId }) => {
-      state.currentUser.tweets.push({ id: tweetId });
+    addMyTweet: (
+      state,
+      { payload: { tweetId, retweetOriginId, quotedOriginId } }
+    ) => {
+      state.currentUser.tweets.push({
+        id: tweetId,
+        retweetOriginId,
+        quotedOriginId
+      });
+    },
+    removeMyTweet: (state, { payload: deltedTweetIds }) => {
+      state.currentUser.tweets = state.currentUser.tweets.filter(
+        tweet => !deltedTweetIds.includes(tweet.id)
+      );
     },
     addFavoriteTweetsToMe: (state, { payload: tweetId }) => {
       state.currentUser.favorites.push({ id: tweetId });
