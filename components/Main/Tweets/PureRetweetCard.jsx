@@ -9,6 +9,7 @@ import { userActions, userSelector } from "../../../features/userSlice";
 import { tweetActions } from "../../../features/tweetSlice";
 import ExtraDropdown from "./ExtraDropdown";
 import RetweetButton from "./RetweetButton";
+import QuotedTweetCard from "./QuotedTweetCard";
 
 // in <Index />
 function PureRetweetCard({ tweet, retweet, favoriteStatus }) {
@@ -122,6 +123,11 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus }) {
         <Card.Description>
           <TweetContents contents={retweet.contents} />
           {retweet.hasMedia && <TweetImages images={retweet.images} />}
+
+          {/* 인용 트윗을 리트윗하는 경우 */}
+          {retweet.quotedOriginId && (
+            <QuotedTweetCard tweet={retweet.quotedOrigin} />
+          )}
         </Card.Description>
       </Card.Content>
       <Card.Content extra>
