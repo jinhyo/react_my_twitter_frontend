@@ -3,6 +3,7 @@ import { Card, Feed, Image } from "semantic-ui-react";
 import moment from "moment";
 import TweetImages from "./TweetImages";
 import TweetContents from "./TweetContents";
+import Link from "next/link";
 
 // in <TweetCard />
 function QuotedTweetCard({ tweet }) {
@@ -15,11 +16,29 @@ function QuotedTweetCard({ tweet }) {
         <Card.Header>
           <Feed>
             <Feed.Event>
-              <Image floated="left" avatar src={tweet.user.avatarURL} />
+              <Link href={`/users/${tweet.user.id}`}>
+                <a>
+                  <Image floated="left" avatar src={tweet.user.avatarURL} />
+                </a>
+              </Link>
               <Feed.Content>
                 <Feed.Summary>
-                  <Feed.User>@{tweet.user.nickname}</Feed.User>
+                  <Link href={`/users/${tweet.user.id}`}>
+                    <a>@{tweet.user.nickname}</a>
+                  </Link>
                   <Feed.Date>{moment(tweet.createdAt).fromNow()}</Feed.Date>
+
+                  <Link href={`/tweets/[tweetId]`} as={`/tweets/${tweet.id}`}>
+                    <a
+                      style={{
+                        position: "absolute",
+                        right: 20,
+                        fontSize: "0.9em"
+                      }}
+                    >
+                      상세보기
+                    </a>
+                  </Link>
                 </Feed.Summary>
               </Feed.Content>
             </Feed.Event>

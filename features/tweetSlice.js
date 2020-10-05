@@ -3,7 +3,8 @@ import { createSelector, createSlice } from "@reduxjs/toolkit";
 const tweetSlice = createSlice({
   name: "tweetSlice",
   initialState: {
-    tweets: []
+    tweets: [],
+    tweetStatus: null
   },
   reducers: {
     setTweets: (state, { payload: tweets }) => {
@@ -89,6 +90,9 @@ const tweetSlice = createSlice({
       commentedOrigin.comments = commentedOrigin.comments.filter(
         comment => comment.id !== commentTweetId
       );
+    },
+    setTweetStatus: (state, { payload: tweet }) => {
+      state.tweetStatus = tweet;
     }
   }
 });
@@ -99,9 +103,16 @@ const selectTweets = createSelector(
   tweets => tweets
 );
 
+const selectTweetStatus = createSelector(
+  state => state.tweetStatus,
+
+  tweetStatus => tweetStatus
+);
+
 export const tweetActions = tweetSlice.actions;
 export const tweetReducer = tweetSlice.reducer;
 export const TWEET = tweetSlice.name;
 export const tweetSelector = {
-  tweets: state => selectTweets(state[TWEET])
+  tweets: state => selectTweets(state[TWEET]),
+  tweetStatus: state => selectTweetStatus(state[TWEET])
 };

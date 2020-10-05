@@ -4,17 +4,34 @@ import { Grid, Divider } from "semantic-ui-react";
 import ProfileCard from "../../components/LeftSide/ProfileCard";
 import Trends from "../../components/LeftSide/Trends/Trends";
 import WhoToFollow from "../../components/LeftSide/WhoToFollow/WhoToFollow";
-import TweetForm from "../../components/Main/Tweets/TweetForm";
-import TweetCard from "../../components/Main/Tweets/TweetCard";
 import { userSelector } from "../../features/userSlice";
 import { useRouter } from "next/router";
+import tweetFunctions from "../../lib/tweetFunctions";
+import TweetInfoCard from "../../components/Main/Tweets/TweetInfoCard";
+import { tweetSelector, tweetActions } from "../../features/tweetSlice";
 
-function Tweets(props) {
+function TweetStatus(props) {
   const router = useRouter();
-  const { tagName } = router.query;
   const dispatch = useDispatch();
+  const { tweetId } = router.query;
 
   const currentUser = useSelector(userSelector.currentUser);
+  const tweetStatus = useSelector(tweetSelector.tweetStatus);
+
+  console.log("~~~tweetStatus", tweetStatus);
+
+  useEffect(() => {
+    getTweetStatus(tweetId);
+  }, []);
+
+  async function getTweetStatus(tweetId) {
+    try {
+      const tweet = await tweetFunctions.getTweetStatus(tweetId);
+      dispatch(tweetActions.setTweetStatus(tweet));
+    } catch (error) {
+      console.error(error.response.data || error);
+    }
+  }
 
   return (
     <Grid stackable padded relaxed>
@@ -24,9 +41,11 @@ function Tweets(props) {
         <Trends />
         <WhoToFollow />
       </Grid.Column>
-      <Grid.Column tablet={10} computer={10}></Grid.Column>
+      <Grid.Column tablet={10} computer={10}>
+        {tweetStatus && <TweetInfoCard tweet={tweetStatus} />}
+      </Grid.Column>
     </Grid>
   );
 }
 
-export default Tweets;
+export default TweetStatus;

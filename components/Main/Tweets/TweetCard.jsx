@@ -13,7 +13,7 @@ import QuotedTweetCard from "./QuotedTweetCard";
 import TweetForm from "./TweetForm";
 import Link from "next/link";
 
-// in <Index />
+// in <Index />, <TweetInfoCard />
 function TweetCard({ tweet, favoriteStatus, commentStatus }) {
   const dispatch = useDispatch();
   const afterClickRef = useRef();

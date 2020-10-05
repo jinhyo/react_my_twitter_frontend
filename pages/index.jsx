@@ -94,6 +94,7 @@ function Index(props) {
     }
   }
 
+  // 내가 좋아요 눌렀는지 확인
   const isFavoriteTweet = useCallback(
     tweetId => {
       const index = favoriteTweets.findIndex(tweet => tweet.id === tweetId);

@@ -1,10 +1,12 @@
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Dropdown, Button } from "semantic-ui-react";
+import { Dropdown, Button, Icon } from "semantic-ui-react";
 import tweetFunctions from "../../../lib/tweetFunctions";
 import { tweetActions } from "../../../features/tweetSlice";
 import userFunctions from "../../../lib/userFunctions";
 import { userActions, userSelector } from "../../../features/userSlice";
+import Link from "next/link";
+import Router from "next/router";
 
 // in <TweetCard />, <PureRetweetCard />
 function ExtraDropdown({
@@ -14,6 +16,8 @@ function ExtraDropdown({
   tweetId,
   tweet
 }) {
+  console.log("~~tweet", tweet);
+
   const dispatch = useDispatch();
 
   const followings = useSelector(userSelector.followings);
@@ -77,6 +81,10 @@ function ExtraDropdown({
     return index !== -1;
   }
 
+  const moveToTweetStatus = useCallback(() => {
+    Router.push(`/tweets/${tweet.id}`).then(() => window.scrollTo(0, 0));
+  }, [tweet]);
+
   const renderDropdownMenu = useCallback(() => {
     if (isMyTweet()) {
       // 내가 쓴 트윗
@@ -87,6 +95,11 @@ function ExtraDropdown({
             icon="trash alternate"
             text="트윗 삭제"
             onClick={handleRemoveTweet}
+          />
+          <Dropdown.Item
+            icon="info circle"
+            text="상세 보기"
+            onClick={moveToTweetStatus}
           />
         </Dropdown.Menu>
       );
@@ -105,6 +118,11 @@ function ExtraDropdown({
               icon="ban"
               text={`'${writerNickname}'님을 차단 합니다.`}
             />
+            <Dropdown.Item
+              icon="info circle"
+              text="상세 보기"
+              onClick={moveToTweetStatus}
+            />
           </Dropdown.Menu>
         );
       } else {
@@ -120,11 +138,16 @@ function ExtraDropdown({
               icon="ban"
               text={`'${writerNickname}'님을 차단 합니다.`}
             />
+            <Dropdown.Item
+              icon="info circle"
+              text="상세 보기"
+              onClick={moveToTweetStatus}
+            />
           </Dropdown.Menu>
         );
       }
     }
-  }, [currentUserId, followings]);
+  }, [currentUserId, followings, tweet]);
 
   return (
     <Dropdown
@@ -132,7 +155,7 @@ function ExtraDropdown({
       pointing="right"
       style={{ position: "absolute", right: 20 }}
     >
-      {renderDropdownMenu()}
+      {tweet && renderDropdownMenu()}
     </Dropdown>
   );
 }

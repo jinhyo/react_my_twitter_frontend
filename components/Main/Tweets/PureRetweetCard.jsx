@@ -10,6 +10,7 @@ import { tweetActions } from "../../../features/tweetSlice";
 import ExtraDropdown from "./ExtraDropdown";
 import RetweetButton from "./RetweetButton";
 import QuotedTweetCard from "./QuotedTweetCard";
+import Link from "next/link";
 
 // in <Index />
 function PureRetweetCard({ tweet, retweet, favoriteStatus }) {
@@ -91,17 +92,24 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus }) {
         <Card.Header>
           <Feed>
             {displayRetweetSign()}
+
             <Feed.Event>
-              <Image
-                floated="left"
-                width={50}
-                height={50}
-                src={retweet.user.avatarURL}
-                className="picture__circle"
-              />
+              <Link href={`/users/${retweet.user.id}`}>
+                <a>
+                  <Image
+                    floated="left"
+                    width={50}
+                    height={50}
+                    src={retweet.user.avatarURL}
+                    className="picture__circle"
+                  />
+                </a>
+              </Link>
               <Feed.Content>
                 <Feed.Summary>
-                  <Feed.User>@{retweet.user.nickname}</Feed.User>
+                  <Link href={`/users/${retweet.user.id}`}>
+                    <a>@{retweet.user.nickname}</a>
+                  </Link>
                   <Feed.Date>{moment(retweet.createdAt).fromNow()}</Feed.Date>
 
                   {/* 추가 드랍다운 메뉴 */}
@@ -111,6 +119,7 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus }) {
                       writerNickname={retweet.user.nickname}
                       writerId={retweet.user.id}
                       tweetId={retweet.id}
+                      tweet={tweet}
                     />
                   )}
                 </Feed.Summary>
