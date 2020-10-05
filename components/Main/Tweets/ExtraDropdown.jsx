@@ -31,6 +31,16 @@ function ExtraDropdown({
         if (tweet.quotedOriginId) {
           dispatch(tweetActions.decreaseRetweetCount(tweet.quotedOriginId));
         }
+
+        // 댓글인 경우 댓글을 단 트윗의 댓글 state를 변경 in redux
+        if (tweet.commentedOriginId) {
+          dispatch(
+            tweetActions.removeComment({
+              commentedOriginId: tweet.commentedOriginId,
+              commentTweetId: tweetId
+            })
+          );
+        }
       } catch (error) {
         console.error(error);
       }

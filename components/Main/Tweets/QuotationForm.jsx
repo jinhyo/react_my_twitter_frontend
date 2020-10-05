@@ -71,7 +71,8 @@ function QuotationForm({ quotedTweet, closeModal }) {
         userActions.addMyTweet({
           tweetId: tweetWithOthers.id,
           retweetOriginId: null,
-          quotedOriginId: quotedTweet.id
+          quotedOriginId: quotedTweet.id,
+          commentedOriginId: null
         })
       );
     } catch (error) {

@@ -14,12 +14,15 @@ const userSlice = createSlice({
     },
     addMyTweet: (
       state,
-      { payload: { tweetId, retweetOriginId, quotedOriginId } }
+      {
+        payload: { tweetId, retweetOriginId, quotedOriginId, commentedOriginId }
+      }
     ) => {
       state.currentUser.tweets.push({
         id: tweetId,
         retweetOriginId,
-        quotedOriginId
+        quotedOriginId,
+        commentedOriginId
       });
     },
     removeMyTweet: (state, { payload: deltedTweetIds }) => {
@@ -84,6 +87,12 @@ const selectFavoriteTweets = createSelector(
   favorites => (favorites ? favorites : [])
 );
 
+const selectMyTweets = createSelector(
+  state => state.currentUser?.tweets,
+
+  tweets => (tweets ? tweets : [])
+);
+
 export const userActions = userSlice.actions;
 export const userReducer = userSlice.reducer;
 export const USER = userSlice.name;
@@ -92,5 +101,6 @@ export const userSelector = {
   favoriteTweets: state => selectFavoriteTweets(state[USER]),
   currentUserId: state => selectCurrentUserId(state[USER]),
   followings: state => selectFollowings(state[USER]),
-  myRetweets: state => selectRetweets(state[USER])
+  myRetweets: state => selectRetweets(state[USER]),
+  myTweets: state => selectMyTweets(state[USER])
 };

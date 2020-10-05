@@ -16,7 +16,8 @@ import tweetFunctions from "../../../lib/tweetFunctions";
 import { userActions, userSelector } from "../../../features/userSlice";
 import { tweetSelector, tweetActions } from "../../../features/tweetSlice";
 
-function TweetForm() {
+// in <Index />, <TweetCard />
+function TweetForm({ commentedTweetId, setCommentInput }) {
   const dispatch = useDispatch();
   const inputRef = useRef();
   const fileRef = useRef();
@@ -56,23 +57,52 @@ function TweetForm() {
       });
     }
 
-    // 트윗 전송
+    //// 트윗 전송
     try {
-      const tweetWithOthers = await tweetFunctions.sendTweet(tweetFormData);
+      let tweetWithOthers;
+      if (commentedTweetId) {
+        // 답글 트윗 전송
+        tweetWithOthers = await tweetFunctions.commentTweet(
+          commentedTweetId,
+          tweetFormData
+        );
+        dispatch(
+          userActions.addMyTweet({
+            tweetId: tweetWithOthers.id,
+            retweetOriginId: null,
+            quotedOriginId: null,
+            commentedOriginId: commentedTweetId
+          })
+        );
+        dispatch(
+          tweetActions.addComment({
+            commentedOriginId: commentedTweetId,
+            commentTweetId: tweetWithOthers.id
+          })
+        );
+      } else {
+        // 일반 트윗 전송
+        tweetWithOthers = await tweetFunctions.sendTweet(tweetFormData);
+        dispatch(
+          userActions.addMyTweet({
+            tweetId: tweetWithOthers.id,
+            retweetOriginId: null,
+            quotedOriginId: null,
+            commentedOriginId: null
+          })
+        );
+      }
       dispatch(tweetActions.addTweet(tweetWithOthers));
-      dispatch(
-        userActions.addMyTweet({
-          tweetId: tweetWithOthers.id,
-          retweetOriginId: null,
-          quotedOriginId: null
-        })
-      );
     } catch (error) {
       console.error(error);
     } finally {
       setText("");
       setPreviewImages([]);
       setUploadLoading(false);
+
+      if (commentedTweetId) {
+        setCommentInput(false); // 댓글 입력창 닫기
+      }
     }
   }, [text, previewImages, currentUser, tweets]);
 
@@ -152,6 +182,11 @@ function TweetForm() {
           autoComplete="off"
           onChange={handleTextChange}
           value={text}
+          placeholder={
+            commentedTweetId
+              ? "답글을 트윗합니다."
+              : "무슨 일이 일어나고 있나요?"
+          }
         />
         <PreviewImages
           previewImages={previewImages}

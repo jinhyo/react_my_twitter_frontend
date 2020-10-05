@@ -72,6 +72,23 @@ const tweetSlice = createSlice({
           state.tweets[i].retweetOrigin.retweetedCount--;
         }
       }
+    },
+    addComment: (state, { payload: { commentedOriginId, commentTweetId } }) => {
+      const commentedOrigin = state.tweets.find(
+        tweet => tweet.id === commentedOriginId
+      );
+      commentedOrigin.comments.push({ id: commentTweetId });
+    },
+    removeComment: (
+      state,
+      { payload: { commentedOriginId, commentTweetId } }
+    ) => {
+      const commentedOrigin = state.tweets.find(
+        tweet => tweet.id === commentedOriginId
+      );
+      commentedOrigin.comments = commentedOrigin.comments.filter(
+        comment => comment.id !== commentTweetId
+      );
     }
   }
 });

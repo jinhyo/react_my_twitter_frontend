@@ -52,7 +52,8 @@ function RetweetButton({ tweet, cancelPopup }) {
         userActions.addMyTweet({
           tweetId: newTweet.id,
           retweetOriginId: tweet.retweetOriginId || tweet.id,
-          quotedOriginId: null
+          quotedOriginId: null,
+          commentedOriginId: null
         })
       );
 

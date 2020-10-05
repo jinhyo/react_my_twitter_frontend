@@ -16,6 +16,7 @@ function Index(props) {
   const dispatch = useDispatch();
   const currentUser = useSelector(userSelector.currentUser);
   const favoriteTweets = useSelector(userSelector.favoriteTweets);
+  const myTweets = useSelector(userSelector.myTweets);
 
   const tweets = useSelector(tweetSelector.tweets);
   const [hasMorePosts, setHasMorePosts] = useState(false);
@@ -107,6 +108,18 @@ function Index(props) {
     return tweet.retweetOriginId;
   }
 
+  //// 내가 댓글을 달았는지 확인
+  const didIComment = useCallback(
+    currentTweetId => {
+      const index = myTweets.findIndex(
+        tweet => tweet.commentedOriginId === currentTweetId
+      );
+
+      return index !== -1;
+    },
+    [myTweets]
+  );
+
   return (
     <Grid stackable padded relaxed>
       <Grid.Column tablet={6} computer={6}>
@@ -116,7 +129,7 @@ function Index(props) {
         <WhoToFollow />
       </Grid.Column>
       <Grid.Column tablet={10} computer={10}>
-        <TweetForm />
+        {currentUser && <TweetForm />}
         <Divider />
 
         {/* 트윗들 랜더링 */}
@@ -133,6 +146,7 @@ function Index(props) {
               key={tweet.id}
               tweet={tweet}
               favoriteStatus={isFavoriteTweet(tweet.id)}
+              commentStatus={didIComment(tweet.id)}
             />
           )
         )}
