@@ -3,9 +3,9 @@ import { useDispatch } from "react-redux";
 import { Grid, Comment } from "semantic-ui-react";
 import Trends from "../../components/LeftSide/Trends/Trends";
 import WhoToFollow from "../../components/LeftSide/WhoToFollow/WhoToFollow";
-import ProfileHeader from "../../components/Main/Profile/ProfileHeader";
-import Follower from "../../components/Main/Profile/Follower";
-import Following from "../../components/Main/Profile/Following";
+import ProfileHeader from "../../components/Main/Users/ProfileHeader";
+import Follower from "../../components/Main/Users/Follower";
+import Following from "../../components/Main/Users/Following";
 import { useRouter } from "next/router";
 
 function Profile(props) {

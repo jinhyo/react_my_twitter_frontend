@@ -73,7 +73,7 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
           <Card.Header>
             <Feed>
               <Feed.Event>
-                <Link href={`/profiles/${tweet.user.id}`}>
+                <Link href={`/users/${tweet.user.id}`}>
                   <a>
                     <Image
                       floated="left"
