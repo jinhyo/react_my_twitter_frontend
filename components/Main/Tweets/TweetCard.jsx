@@ -73,16 +73,22 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
           <Card.Header>
             <Feed>
               <Feed.Event>
-                <Image
-                  floated="left"
-                  width={50}
-                  height={50}
-                  src={tweet.user.avatarURL}
-                  className="picture__circle"
-                />
+                <Link href={`/profiles/${tweet.user.id}`}>
+                  <a>
+                    <Image
+                      floated="left"
+                      width={50}
+                      height={50}
+                      src={tweet.user.avatarURL}
+                      className="picture__circle"
+                    />
+                  </a>
+                </Link>
                 <Feed.Content>
                   <Feed.Summary>
-                    <Feed.User>@{tweet.user.nickname}</Feed.User>
+                    <Link href={`/users/${tweet.user.id}`}>
+                      <a>@{tweet.user.nickname}</a>
+                    </Link>
                     <Feed.Date>{moment(tweet.createdAt).fromNow()}</Feed.Date>
 
                     {/* 추가 드랍다운 메뉴 */}

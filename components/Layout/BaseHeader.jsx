@@ -9,10 +9,11 @@ import { toast } from "react-toastify";
 
 function BaseHeader() {
   const dispatch = useDispatch();
-  const currentUser = useSelector(userSelector.currentUser);
+  const currentUserId = useSelector(userSelector.currentUserId);
+  console.log("currentUserId", currentUserId);
 
   const handleLogout = useCallback(async () => {
-    if (currentUser) {
+    if (currentUserId) {
       try {
         await authFunctions.logout();
         dispatch(userActions.clearCurrentUser());
@@ -22,7 +23,7 @@ function BaseHeader() {
         toast.error(error.response.data);
       }
     }
-  }, [currentUser]);
+  }, [currentUserId]);
 
   return (
     <Menu className="baseHeader">
@@ -33,32 +34,36 @@ function BaseHeader() {
           </a>
         </Link>
       </Menu.Item>
-      <Menu.Item>
-        <Link href="/profile" className="item">
-          <a>
-            <Icon name="user circle" color="teal" />
-            프로필
-          </a>
-        </Link>
-      </Menu.Item>
-      <Menu.Item>
-        <Link href="/notification" className="item">
-          <a>
-            <Icon name="bell outline" color="teal" /> 알림
-          </a>
-        </Link>
-      </Menu.Item>
-      <Menu.Item>
-        <Link href="/message" className="item">
-          <a>
-            <Icon name="mail outline" color="teal" />
-            메시지
-          </a>
-        </Link>
-      </Menu.Item>
+      {currentUserId && (
+        <>
+          <Menu.Item>
+            <Link href={`/users/${currentUserId}`} className="item">
+              <a>
+                <Icon name="user circle" color="teal" />
+                프로필
+              </a>
+            </Link>
+          </Menu.Item>
+          <Menu.Item>
+            <Link href="/notification" className="item">
+              <a>
+                <Icon name="bell outline" color="teal" /> 알림
+              </a>
+            </Link>
+          </Menu.Item>
+          <Menu.Item>
+            <Link href="/message" className="item">
+              <a>
+                <Icon name="mail outline" color="teal" />
+                메시지
+              </a>
+            </Link>
+          </Menu.Item>
+        </>
+      )}
 
       <Menu.Menu position="right">
-        {currentUser ? (
+        {currentUserId ? (
           <>
             <Menu.Item>
               <Input
@@ -70,7 +75,7 @@ function BaseHeader() {
               <Dropdown size="large" icon="cog" className="icon">
                 <Dropdown.Menu>
                   <Dropdown.Item>
-                    <Link href="/profile">
+                    <Link href={`/users/${currentUserId}`}>
                       <a>
                         <span style={{ color: "black" }}>프로필</span>
                       </a>
