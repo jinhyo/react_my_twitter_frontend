@@ -37,13 +37,13 @@ function TweetStatus() {
 
   return (
     <Grid stackable padded relaxed>
-      <Grid.Column tablet={6} computer={6}>
+      <Grid.Column tablet={5} computer={6}>
         {currentUser && <ProfileCard currentUser={currentUser} />}
 
         <Trends />
         <WhoToFollow />
       </Grid.Column>
-      <Grid.Column tablet={10} computer={10}>
+      <Grid.Column tablet={11} computer={10}>
         {tweetStatus && <TweetInfoCard tweet={tweetStatus} />}
       </Grid.Column>
     </Grid>

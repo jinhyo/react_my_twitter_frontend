@@ -127,14 +127,19 @@ function TweetInfoCard({ tweet }) {
     <>
       <TweetCard tweet={tweet} />
 
-      <Menu pointing>
+      <Menu pointing widths={4}>
         <Menu.Item
           name="comments"
           active={activeItem === "comments"}
           onClick={handleItemClick}
         >
           댓글
-          <Label basic color="teal" content={tweet.comments.length} />
+          <Label
+            size="mini"
+            basic
+            color="teal"
+            content={tweet.comments.length}
+          />
         </Menu.Item>
         <Menu.Item
           name="retweetUsers"
@@ -142,7 +147,12 @@ function TweetInfoCard({ tweet }) {
           onClick={handleItemClick}
         >
           리트윗
-          <Label basic color="teal" content={tweet.retweets.length} />
+          <Label
+            size="mini"
+            basic
+            color="teal"
+            content={tweet.retweets.length}
+          />
         </Menu.Item>
         <Menu.Item
           name="quotations"
@@ -150,7 +160,12 @@ function TweetInfoCard({ tweet }) {
           onClick={handleItemClick}
         >
           인용한 트윗
-          <Label basic color="teal" content={tweet.quotations.length} />
+          <Label
+            size="mini"
+            basic
+            color="teal"
+            content={tweet.quotations.length}
+          />
         </Menu.Item>
         <Menu.Item
           name="likers"
@@ -158,7 +173,7 @@ function TweetInfoCard({ tweet }) {
           onClick={handleItemClick}
         >
           좋아요
-          <Label basic color="teal" content={tweet.likers.length} />
+          <Label size="mini" basic color="teal" content={tweet.likers.length} />
         </Menu.Item>
       </Menu>
 
