@@ -148,7 +148,7 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
             {tweet.likers.length}
           </Button>
 
-          {/* 답글 버튼 */}
+          {/* 댓글 버튼 */}
           <Button basic color="green" onClick={handleShowCommentInput}>
             {commentStatus ? (
               <Icon name="comment" />
