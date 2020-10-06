@@ -88,7 +88,7 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus }) {
 
   return (
     <Card fluid>
-      <Card.Content style={{ paddingBottom: 0 }}>
+      <Card.Content>
         <Card.Header>
           <Feed>
             {displayRetweetSign()}

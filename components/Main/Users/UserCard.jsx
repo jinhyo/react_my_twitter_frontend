@@ -72,7 +72,6 @@ function UserCard({ user }) {
       </Card.Content>
     </Card>
   );
-  팔로우, 언팔로우 기능 in <UserCard />
   //   return (
   // <Comment style={{ marginBottom: 10 }}>
   //   <Comment.Avatar src={user.avatarURL} />

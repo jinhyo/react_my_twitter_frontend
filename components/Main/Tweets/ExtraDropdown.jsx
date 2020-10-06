@@ -6,7 +6,7 @@ import { tweetActions } from "../../../features/tweetSlice";
 import userFunctions from "../../../lib/userFunctions";
 import { userActions, userSelector } from "../../../features/userSlice";
 import Link from "next/link";
-import Router from "next/router";
+import { useRouter } from "next/router";
 
 // in <TweetCard />, <PureRetweetCard />
 function ExtraDropdown({
@@ -16,8 +16,7 @@ function ExtraDropdown({
   tweetId,
   tweet
 }) {
-  console.log("~~tweet", tweet);
-
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const followings = useSelector(userSelector.followings);
@@ -81,10 +80,6 @@ function ExtraDropdown({
     return index !== -1;
   }
 
-  const moveToTweetStatus = useCallback(() => {
-    Router.push(`/tweets/${tweet.id}`).then(() => window.scrollTo(0, 0));
-  }, [tweet]);
-
   const renderDropdownMenu = useCallback(() => {
     if (isMyTweet()) {
       // 내가 쓴 트윗
@@ -96,11 +91,14 @@ function ExtraDropdown({
             text="트윗 삭제"
             onClick={handleRemoveTweet}
           />
-          <Dropdown.Item
-            icon="info circle"
-            text="상세 보기"
-            onClick={moveToTweetStatus}
-          />
+          <Link
+            href={`/tweets/[tweetId]`}
+            as={`/tweets/${tweet.retweetOriginId || tweet.id}`}
+          >
+            <a className="item">
+              <Dropdown.Item icon="info circle" text="상세 보기" />
+            </a>
+          </Link>
         </Dropdown.Menu>
       );
     } else {
@@ -118,11 +116,14 @@ function ExtraDropdown({
               icon="ban"
               text={`'${writerNickname}'님을 차단 합니다.`}
             />
-            <Dropdown.Item
-              icon="info circle"
-              text="상세 보기"
-              onClick={moveToTweetStatus}
-            />
+            <Link
+              href={`/tweets/[tweetId]`}
+              as={`/tweets/${tweet.retweetOriginId || tweet.id}`}
+            >
+              <a className="item">
+                <Dropdown.Item icon="info circle" text="상세 보기" />
+              </a>
+            </Link>
           </Dropdown.Menu>
         );
       } else {
@@ -138,11 +139,14 @@ function ExtraDropdown({
               icon="ban"
               text={`'${writerNickname}'님을 차단 합니다.`}
             />
-            <Dropdown.Item
-              icon="info circle"
-              text="상세 보기"
-              onClick={moveToTweetStatus}
-            />
+            <Link
+              href={`/tweets/[tweetId]`}
+              as={`/tweets/${tweet.retweetOriginId || tweet.id}`}
+            >
+              <a className="item">
+                <Dropdown.Item icon="info circle" text="상세 보기" />
+              </a>
+            </Link>
           </Dropdown.Menu>
         );
       }

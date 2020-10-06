@@ -69,7 +69,7 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
   return (
     <>
       <Card fluid>
-        <Card.Content style={{ paddingBottom: 0 }}>
+        <Card.Content>
           <Card.Header>
             <Feed>
               <Feed.Event>
