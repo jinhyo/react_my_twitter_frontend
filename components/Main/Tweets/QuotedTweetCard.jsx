@@ -16,14 +16,14 @@ function QuotedTweetCard({ tweet }) {
         <Card.Header>
           <Feed>
             <Feed.Event>
-              <Link href={`/users/${tweet.user.id}`}>
+              <Link href={`/users/[userId]`} as={`/users/${tweet.user.id}`}>
                 <a>
                   <Image floated="left" avatar src={tweet.user.avatarURL} />
                 </a>
               </Link>
               <Feed.Content>
                 <Feed.Summary>
-                  <Link href={`/users/${tweet.user.id}`}>
+                  <Link href={`/users/[userId]`} as={`/users/${tweet.user.id}`}>
                     <a>@{tweet.user.nickname}</a>
                   </Link>
                   <Feed.Date>{moment(tweet.createdAt).fromNow()}</Feed.Date>

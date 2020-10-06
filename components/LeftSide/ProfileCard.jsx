@@ -7,7 +7,7 @@ function ProfileCard({ currentUser }) {
     <>
       <Card>
         <Card.Content>
-          <Link href={`/users/${currentUser.id}`}>
+          <Link href={`/users/[userId]`} as={`/users/${currentUser.id}`}>
             <a>
               <Image
                 floated="left"
@@ -18,7 +18,7 @@ function ProfileCard({ currentUser }) {
               />
             </a>
           </Link>
-          <Link href={`/users/${currentUser.id}`}>
+          <Link href={`/users/[userId]`} as={`/users/${currentUser.id}`}>
             <h3>
               <a>@{currentUser.nickname}</a>
             </h3>
@@ -29,7 +29,7 @@ function ProfileCard({ currentUser }) {
         </Card.Content>
 
         <Card.Content extra>
-          <Link href={`/users/${currentUser.id}`}>
+          <Link href={`/users/[userId]`} as={`/users/${currentUser.id}`}>
             <a>
               <div className="ui three buttons">
                 <Button basic color="green">

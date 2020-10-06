@@ -73,7 +73,7 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
           <Card.Header>
             <Feed>
               <Feed.Event>
-                <Link href={`/users/${tweet.user.id}`}>
+                <Link href={`/users/[userId]`} as={`/users/${tweet.user.id}`}>
                   <a>
                     <Image
                       floated="left"
@@ -86,7 +86,10 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
                 </Link>
                 <Feed.Content>
                   <Feed.Summary>
-                    <Link href={`/users/${tweet.user.id}`}>
+                    <Link
+                      href={`/users/[userId]`}
+                      as={`/users/${tweet.user.id}`}
+                    >
                       <a>@{tweet.user.nickname}</a>
                     </Link>
                     <Feed.Date>{moment(tweet.createdAt).fromNow()}</Feed.Date>
@@ -107,11 +110,17 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
                   {/* 답글일 경우 표시 */}
                   {tweet.commentedOrigin && (
                     <Feed.Summary>
-                      <Link href={`/users/${tweet.commentedOrigin.user.id}`}>
+                      <Link
+                        href={`/users/[userId]`}
+                        as={`/users/${tweet.commentedOrigin.user.id}`}
+                      >
                         <a>@{tweet.commentedOrigin.user.nickname}</a>
                       </Link>
                       님의
-                      <Link href={`/tweets/${tweet.commentedOriginId}`}>
+                      <Link
+                        href={`/tweets/[tweetId]`}
+                        as={`/tweets/${tweet.commentedOriginId}`}
+                      >
                         <a>트윗</a>
                       </Link>
                       에 보내는 답글

@@ -94,7 +94,7 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus }) {
             {displayRetweetSign()}
 
             <Feed.Event>
-              <Link href={`/users/${retweet.user.id}`}>
+              <Link href={`/users/[userId]`} as={`/users/${retweet.user.id}`}>
                 <a>
                   <Image
                     floated="left"
@@ -107,7 +107,10 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus }) {
               </Link>
               <Feed.Content>
                 <Feed.Summary>
-                  <Link href={`/users/${retweet.user.id}`}>
+                  <Link
+                    href={`/users/[userId]`}
+                    as={`/users/${retweet.user.id}`}
+                  >
                     <a>@{retweet.user.nickname}</a>
                   </Link>
                   <Feed.Date>{moment(retweet.createdAt).fromNow()}</Feed.Date>

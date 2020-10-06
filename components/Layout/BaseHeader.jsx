@@ -37,7 +37,11 @@ function BaseHeader() {
       {currentUserId && (
         <>
           <Menu.Item>
-            <Link href={`/users/${currentUserId}`} className="item">
+            <Link
+              href={`/users/[userId]`}
+              as={`/users/${currentUserId}`}
+              className="item"
+            >
               <a>
                 <Icon name="user circle" color="teal" />
                 프로필
@@ -75,7 +79,11 @@ function BaseHeader() {
               <Dropdown size="large" icon="cog" className="icon">
                 <Dropdown.Menu>
                   <Dropdown.Item>
-                    <Link href={`/users/${currentUserId}`}>
+                    <Link
+                      href={`/users/[userId]`}
+                      as={`/users/${currentUserId}`}
+                      className="item"
+                    >
                       <a>
                         <span style={{ color: "black" }}>프로필</span>
                       </a>

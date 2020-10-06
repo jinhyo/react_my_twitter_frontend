@@ -46,7 +46,7 @@ function UserCard({ user }) {
         <Card.Header>
           <Feed>
             <Feed.Event>
-              <Link href={`/users/${user.id}`}>
+              <Link href={`/users/[userId]`} as={`/users/${user.id}`}>
                 <a>
                   <Image
                     floated="left"
@@ -59,7 +59,7 @@ function UserCard({ user }) {
               </Link>
               <Feed.Content>
                 <Feed.Summary>
-                  <Link href={`/users/${user.id}`}>
+                  <Link href={`/users/[userId]`} as={`/users/${user.id}`}>
                     <a>@{user.nickname}</a>
                   </Link>
                   {displayFollowButton()}
@@ -72,7 +72,7 @@ function UserCard({ user }) {
       </Card.Content>
     </Card>
   );
-
+  팔로우, 언팔로우 기능 in <UserCard />
   //   return (
   // <Comment style={{ marginBottom: 10 }}>
   //   <Comment.Avatar src={user.avatarURL} />
