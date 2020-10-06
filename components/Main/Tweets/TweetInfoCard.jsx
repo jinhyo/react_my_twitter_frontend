@@ -1,10 +1,19 @@
 import React, { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import TweetCard from "./TweetCard";
-import { Button, Menu, Label } from "semantic-ui-react";
+import {
+  Button,
+  Menu,
+  Label,
+  Comment,
+  Divider,
+  Loader,
+  Dimmer
+} from "semantic-ui-react";
 import PureRetweetCard from "./PureRetweetCard";
 import { userSelector } from "../../../features/userSlice";
 import userFunctions from "../../../lib/userFunctions";
+import UserCard from "../Users/UserCard";
 
 // in <TweetStatus />
 function TweetInfoCard({ tweet }) {
@@ -12,31 +21,53 @@ function TweetInfoCard({ tweet }) {
   const myTweets = useSelector(userSelector.myTweets);
 
   const [activeItem, setActiveItem] = useState("comments");
+  const [loading, setLoading] = useState(false);
   const [retweetUsers, setRetweetUsers] = useState([]);
   const [likers, setLikers] = useState([]);
   const [quotaions, setQuotaions] = useState([]);
   const [comments, setComments] = useState([]);
 
   console.log("retweetUsers", retweetUsers);
+  console.log("likers", likers);
 
   const handleItemClick = useCallback(
     async (e, { name }) => {
       setActiveItem(name);
 
       if (name === "comments") {
-      } else if (name === "retweets") {
-        try {
-          const users = await userFunctions.getRetweetUsers(tweet.id);
-          setRetweetUsers(users);
-        } catch (error) {
-          console.error(error.response.message || error);
-        }
+      } else if (name === "retweetUsers") {
+        await getRetweetUsers(tweet.id);
       } else if (name === "quotations") {
       } else if (name === "likers") {
+        await getLikers(tweet.id);
       }
     },
     [tweet]
   );
+
+  async function getRetweetUsers(tweetId) {
+    try {
+      setLoading(true);
+      const users = await userFunctions.getRetweetUsers(tweetId);
+      setRetweetUsers(users);
+    } catch (error) {
+      console.error(error.response.message || error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function getLikers(tweetId) {
+    try {
+      setLoading(true);
+      const users = await userFunctions.getLikers(tweetId);
+      setLikers(users);
+    } catch (error) {
+      console.error(error.response.message || error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   // 내가 좋아요 눌렀는지 확인
   const isFavoriteTweet = useCallback(
@@ -78,8 +109,8 @@ function TweetInfoCard({ tweet }) {
           <Label basic color="teal" content={tweet.comments.length} />
         </Menu.Item>
         <Menu.Item
-          name="retweets"
-          active={activeItem === "retweets"}
+          name="retweetUsers"
+          active={activeItem === "retweetUsers"}
           onClick={handleItemClick}
         >
           리트윗
@@ -103,13 +134,19 @@ function TweetInfoCard({ tweet }) {
         </Menu.Item>
       </Menu>
 
+      <Loader size="small" active={loading} />
+
       {/* 댓글 트윗들 */}
 
       {/* 리트윗한 유저들 */}
+      {activeItem === "retweetUsers" &&
+        retweetUsers.map(user => <UserCard key={user.id} user={user} />)}
 
       {/* 인용한 트윗들 */}
 
       {/* 좋아요 누른 유저들 */}
+      {activeItem === "likers" &&
+        likers.map(user => <UserCard key={user.id} user={user} />)}
     </>
   );
 }

@@ -41,7 +41,7 @@ function ProfileCard({ currentUser }) {
                   <p>{currentUser.followers.length}</p>
                 </Button>
                 <Button basic color="green">
-                  <p>팔로윙</p>
+                  <p>팔로잉</p>
                   <p>{currentUser.followings.length}</p>
                 </Button>
               </div>

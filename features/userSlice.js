@@ -72,7 +72,7 @@ const selectCurrentUserId = createSelector(
 const selectFollowings = createSelector(
   state => state.currentUser?.followings,
 
-  followings => followings
+  followings => (followings ? followings : [])
 );
 
 const selectRetweets = createSelector(
