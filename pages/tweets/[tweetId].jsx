@@ -21,7 +21,9 @@ function TweetStatus() {
   console.log("~~~tweetStatus", tweetStatus);
 
   useEffect(() => {
-    getTweetStatus(tweetId);
+    if (tweetId) {
+      getTweetStatus(tweetId);
+    }
   }, [tweetId]);
 
   async function getTweetStatus(tweetId) {

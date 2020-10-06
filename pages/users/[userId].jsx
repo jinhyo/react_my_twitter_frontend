@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Grid, Comment } from "semantic-ui-react";
 import Trends from "../../components/LeftSide/Trends/Trends";
@@ -11,7 +11,12 @@ import { useRouter } from "next/router";
 function Profile(props) {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { tagName } = router.query;
+  const { userId } = router.query;
+
+  useEffect(() => {
+    if (userId) {
+    }
+  }, [userId]);
 
   return (
     <Grid stackable padded relaxed>
