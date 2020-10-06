@@ -34,7 +34,7 @@ function UserCard({ user }) {
           animated
           floated="right"
           color="teal"
-          size="mini"
+          size="small"
           onClick={handleUnfollowUser}
         >
           <Button.Content visible>팔로잉</Button.Content>
@@ -44,7 +44,7 @@ function UserCard({ user }) {
     } else {
       // 언팔로오 중
       return (
-        <Button floated="right" primary size="mini" onClick={handleFollowUser}>
+        <Button floated="right" primary size="small" onClick={handleFollowUser}>
           팔로우
         </Button>
       );

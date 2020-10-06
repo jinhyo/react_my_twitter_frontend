@@ -10,7 +10,7 @@ import tweetFunctions from "../../lib/tweetFunctions";
 import TweetInfoCard from "../../components/Main/Tweets/TweetInfoCard";
 import { tweetSelector, tweetActions } from "../../features/tweetSlice";
 
-function TweetStatus(props) {
+function TweetStatus() {
   const router = useRouter();
   const dispatch = useDispatch();
   const { tweetId } = router.query;

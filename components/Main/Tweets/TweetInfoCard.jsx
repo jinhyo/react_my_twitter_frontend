@@ -14,6 +14,7 @@ import PureRetweetCard from "./PureRetweetCard";
 import { userSelector } from "../../../features/userSlice";
 import userFunctions from "../../../lib/userFunctions";
 import UserCard from "../Users/UserCard";
+import tweetFunctions from "../../../lib/tweetFunctions";
 
 // in <TweetStatus />
 function TweetInfoCard({ tweet }) {
@@ -24,11 +25,12 @@ function TweetInfoCard({ tweet }) {
   const [loading, setLoading] = useState(false);
   const [retweetUsers, setRetweetUsers] = useState([]);
   const [likers, setLikers] = useState([]);
-  const [quotaions, setQuotaions] = useState([]);
+  const [quotations, setQuotations] = useState([]);
   const [comments, setComments] = useState([]);
 
   console.log("retweetUsers", retweetUsers);
   console.log("likers", likers);
+  console.log("quotations", quotations);
 
   const handleItemClick = useCallback(
     async (e, { name }) => {
@@ -38,6 +40,7 @@ function TweetInfoCard({ tweet }) {
       } else if (name === "retweetUsers") {
         await getRetweetUsers(tweet.id);
       } else if (name === "quotations") {
+        await getQuotaions(tweet.id);
       } else if (name === "likers") {
         await getLikers(tweet.id);
       }
@@ -49,9 +52,10 @@ function TweetInfoCard({ tweet }) {
     try {
       setLoading(true);
       const users = await userFunctions.getRetweetUsers(tweetId);
+
       setRetweetUsers(users);
     } catch (error) {
-      console.error(error.response.message || error);
+      console.error(error.response.data || error);
     } finally {
       setLoading(false);
     }
@@ -63,7 +67,21 @@ function TweetInfoCard({ tweet }) {
       const users = await userFunctions.getLikers(tweetId);
       setLikers(users);
     } catch (error) {
-      console.error(error.response.message || error);
+      console.error(error.response.data || error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function getQuotaions(tweetId) {
+    try {
+      setLoading(true);
+      const quotationTweets = await tweetFunctions.getQuotations(tweetId);
+      console.log("quotationTweets", quotationTweets);
+
+      setQuotations(quotationTweets);
+    } catch (error) {
+      console.error(error.response.data || error);
     } finally {
       setLoading(false);
     }
@@ -93,11 +111,7 @@ function TweetInfoCard({ tweet }) {
 
   return (
     <>
-      <TweetCard
-        tweet={tweet}
-        favoriteStatus={isFavoriteTweet(tweet.id)}
-        commentStatus={didIComment(tweet.id)}
-      />
+      <TweetCard tweet={tweet} />
 
       <Menu pointing>
         <Menu.Item
@@ -143,6 +157,15 @@ function TweetInfoCard({ tweet }) {
         retweetUsers.map(user => <UserCard key={user.id} user={user} />)}
 
       {/* 인용한 트윗들 */}
+      {activeItem === "quotations" &&
+        quotations.map(tweet => (
+          <TweetCard
+            key={tweet.id}
+            tweet={tweet}
+            favoriteStatus={isFavoriteTweet(tweet.id)}
+            commentStatus={didIComment(tweet.id)}
+          />
+        ))}
 
       {/* 좋아요 누른 유저들 */}
       {activeItem === "likers" &&
