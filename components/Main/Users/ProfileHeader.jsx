@@ -10,8 +10,6 @@ import {
 } from "semantic-ui-react";
 
 function ProfileHeader({ user }) {
-  console.log("user", user);
-
   const [loading, setLoading] = useState(false);
   const [activeItem, setActiveItem] = useState("tweets");
 
@@ -20,10 +18,11 @@ function ProfileHeader({ user }) {
       setActiveItem(name);
 
       if (name === "tweets") {
-      } else if (name === "tweetWithReplies") {
+      } else if (name === "replies") {
       } else if (name === "medias") {
       } else if (name === "followers") {
       } else if (name === "followings") {
+      } else if (name === "likedTweets") {
       }
     },
     [user]
@@ -86,7 +85,7 @@ function ProfileHeader({ user }) {
         </Card.Content>
       </Card>
 
-      <Menu pointing widths={3}>
+      <Menu pointing widths={4}>
         <Menu.Item
           name="tweets"
           active={activeItem === "tweets"}
@@ -101,11 +100,11 @@ function ProfileHeader({ user }) {
           />
         </Menu.Item>
         <Menu.Item
-          name="tweetWithReplies"
-          active={activeItem === "tweetWithReplies"}
+          name="replies"
+          active={activeItem === "replies"}
           onClick={handleItemClick}
         >
-          트윗 및 댓글
+          댓글
           <Label
             basic
             color="teal"
@@ -119,6 +118,19 @@ function ProfileHeader({ user }) {
           onClick={handleItemClick}
         >
           미디어
+          <Label
+            basic
+            color="teal"
+            size="mini"
+            content="1" /* content={tweet.quotations.length} */
+          />
+        </Menu.Item>
+        <Menu.Item
+          name="likedTweets"
+          active={activeItem === "likedTweets"}
+          onClick={handleItemClick}
+        >
+          좋아요
           <Label
             basic
             color="teal"

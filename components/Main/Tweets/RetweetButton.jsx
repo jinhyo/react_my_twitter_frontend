@@ -11,7 +11,6 @@ function RetweetButton({ tweet, cancelPopup }) {
   const dispatch = useDispatch();
 
   const myRetweets = useSelector(userSelector.myRetweets);
-  console.log("myRetweets", myRetweets);
 
   const [modal, setModal] = useState(false);
 
