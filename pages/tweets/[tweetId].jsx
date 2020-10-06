@@ -22,7 +22,7 @@ function TweetStatus() {
 
   useEffect(() => {
     getTweetStatus(tweetId);
-  }, []);
+  }, [tweetId]);
 
   async function getTweetStatus(tweetId) {
     try {

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import TweetCard from "./TweetCard";
 import {
@@ -28,25 +28,39 @@ function TweetInfoCard({ tweet }) {
   const [quotations, setQuotations] = useState([]);
   const [comments, setComments] = useState([]);
 
-  console.log("retweetUsers", retweetUsers);
-  console.log("likers", likers);
-  console.log("quotations", quotations);
+  useEffect(() => {
+    getComments(tweet.id);
+  }, [tweet]);
 
   const handleItemClick = useCallback(
     async (e, { name }) => {
       setActiveItem(name);
 
       if (name === "comments") {
+        getComments(tweet.id);
       } else if (name === "retweetUsers") {
-        await getRetweetUsers(tweet.id);
+        getRetweetUsers(tweet.id);
       } else if (name === "quotations") {
-        await getQuotaions(tweet.id);
+        getQuotaions(tweet.id);
       } else if (name === "likers") {
-        await getLikers(tweet.id);
+        getLikers(tweet.id);
       }
     },
     [tweet]
   );
+
+  async function getComments(tweetId) {
+    try {
+      setLoading(true);
+      const commentTweets = await tweetFunctions.getComments(tweetId);
+
+      setComments(commentTweets);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   async function getRetweetUsers(tweetId) {
     try {
@@ -55,7 +69,7 @@ function TweetInfoCard({ tweet }) {
 
       setRetweetUsers(users);
     } catch (error) {
-      console.error(error.response.data || error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -67,7 +81,7 @@ function TweetInfoCard({ tweet }) {
       const users = await userFunctions.getLikers(tweetId);
       setLikers(users);
     } catch (error) {
-      console.error(error.response.data || error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -81,7 +95,7 @@ function TweetInfoCard({ tweet }) {
 
       setQuotations(quotationTweets);
     } catch (error) {
-      console.error(error.response.data || error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -151,6 +165,15 @@ function TweetInfoCard({ tweet }) {
       <Loader size="small" active={loading} />
 
       {/* 댓글 트윗들 */}
+      {activeItem === "comments" &&
+        comments.map(tweet => (
+          <TweetCard
+            key={tweet.id}
+            tweet={tweet}
+            favoriteStatus={isFavoriteTweet(tweet.id)}
+            commentStatus={didIComment(tweet.id)}
+          />
+        ))}
 
       {/* 리트윗한 유저들 */}
       {activeItem === "retweetUsers" &&
