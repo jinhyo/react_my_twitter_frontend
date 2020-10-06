@@ -6,7 +6,6 @@ import { tweetActions } from "../../../features/tweetSlice";
 import userFunctions from "../../../lib/userFunctions";
 import { userActions, userSelector } from "../../../features/userSlice";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 // in <TweetCard />, <PureRetweetCard />
 function ExtraDropdown({
@@ -16,7 +15,6 @@ function ExtraDropdown({
   tweetId,
   tweet
 }) {
-  const router = useRouter();
   const dispatch = useDispatch();
 
   const followings = useSelector(userSelector.followings);
