@@ -4,17 +4,39 @@ import TweetCard from "./TweetCard";
 import { Button, Menu, Label } from "semantic-ui-react";
 import PureRetweetCard from "./PureRetweetCard";
 import { userSelector } from "../../../features/userSlice";
+import userFunctions from "../../../lib/userFunctions";
 
 // in <TweetStatus />
 function TweetInfoCard({ tweet }) {
   const favoriteTweets = useSelector(userSelector.favoriteTweets);
   const myTweets = useSelector(userSelector.myTweets);
 
-  const [activeItem, setActiveItem] = useState("comment");
+  const [activeItem, setActiveItem] = useState("comments");
+  const [retweetUsers, setRetweetUsers] = useState([]);
+  const [likers, setLikers] = useState([]);
+  const [quotaions, setQuotaions] = useState([]);
+  const [comments, setComments] = useState([]);
 
-  const handleItemClick = useCallback((e, { name }) => {
-    setActiveItem(name);
-  }, []);
+  console.log("retweetUsers", retweetUsers);
+
+  const handleItemClick = useCallback(
+    async (e, { name }) => {
+      setActiveItem(name);
+
+      if (name === "comments") {
+      } else if (name === "retweets") {
+        try {
+          const users = await userFunctions.getRetweetUsers(tweet.id);
+          setRetweetUsers(users);
+        } catch (error) {
+          console.error(error.response.message || error);
+        }
+      } else if (name === "quotations") {
+      } else if (name === "likers") {
+      }
+    },
+    [tweet]
+  );
 
   // 내가 좋아요 눌렀는지 확인
   const isFavoriteTweet = useCallback(
@@ -48,38 +70,46 @@ function TweetInfoCard({ tweet }) {
 
       <Menu pointing>
         <Menu.Item
-          name="comment"
-          active={activeItem === "comment"}
+          name="comments"
+          active={activeItem === "comments"}
           onClick={handleItemClick}
         >
           댓글
           <Label basic color="teal" content={tweet.comments.length} />
         </Menu.Item>
         <Menu.Item
-          name="retweet"
-          active={activeItem === "retweet"}
+          name="retweets"
+          active={activeItem === "retweets"}
           onClick={handleItemClick}
         >
           리트윗
           <Label basic color="teal" content={tweet.retweets.length} />
         </Menu.Item>
         <Menu.Item
-          name="quotation"
-          active={activeItem === "quotation"}
+          name="quotations"
+          active={activeItem === "quotations"}
           onClick={handleItemClick}
         >
           인용한 트윗
           <Label basic color="teal" content={tweet.quotations.length} />
         </Menu.Item>
         <Menu.Item
-          name="friends"
-          active={activeItem === "friends"}
+          name="likers"
+          active={activeItem === "likers"}
           onClick={handleItemClick}
         >
           좋아요
           <Label basic color="teal" content={tweet.likers.length} />
         </Menu.Item>
       </Menu>
+
+      {/* 댓글 트윗들 */}
+
+      {/* 리트윗한 유저들 */}
+
+      {/* 인용한 트윗들 */}
+
+      {/* 좋아요 누른 유저들 */}
     </>
   );
 }
