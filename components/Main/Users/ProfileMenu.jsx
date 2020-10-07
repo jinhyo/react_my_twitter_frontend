@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Menu, Label } from "semantic-ui-react";
+import { useDispatch, useSelector } from "react-redux";
 
-function ProfileMenu({ user, setLoading, handleItemClick, activeItem }) {
+import { Menu, Label } from "semantic-ui-react";
+import { userSelector } from "../../../features/userSlice";
+
+function ProfileMenu({ setLoading, handleItemClick, activeItem }) {
+  const specificUser = useSelector(userSelector.specificUser);
+
   const [tweetCount, setTweetCount] = useState(0);
   const [commentCount, setCommentCount] = useState(0);
   const [mediaCount, setMediaCount] = useState(0);
@@ -9,12 +14,12 @@ function ProfileMenu({ user, setLoading, handleItemClick, activeItem }) {
 
   //// 매뉴 항목들의 개수 파악
   useEffect(() => {
-    if (user) {
+    if (specificUser) {
       let tweetCount = 0;
       let commentCount = 0;
       let mediaCount = 0;
 
-      user.tweets.forEach(tweet => {
+      specificUser.tweets.forEach(tweet => {
         if (tweet.commentedOriginId) {
           commentCount++;
         } else if (tweet.hasMedia) {
@@ -27,9 +32,9 @@ function ProfileMenu({ user, setLoading, handleItemClick, activeItem }) {
       setTweetCount(tweetCount);
       setCommentCount(commentCount);
       setMediaCount(mediaCount);
-      setFavoriteCount(user.favorites.length);
+      setFavoriteCount(specificUser.favorites.length);
     }
-  }, [user]);
+  }, [specificUser]);
 
   return (
     <Menu pointing widths={4}>

@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Card,
   Image,
@@ -9,8 +10,16 @@ import {
   Loader
 } from "semantic-ui-react";
 import moment from "moment";
+import { userSelector } from "../../../features/userSlice";
 
-function ProfileHeader({ user, setLoading, handleItemClick, activeItem }) {
+function ProfileHeader({
+  setLoading,
+  handleItemClick,
+  activeItem,
+  totalTweetCount
+}) {
+  const specificUser = useSelector(userSelector.specificUser);
+
   return (
     <>
       <Card fluid>
@@ -18,7 +27,7 @@ function ProfileHeader({ user, setLoading, handleItemClick, activeItem }) {
           <Image
             floated="left"
             size="small"
-            src={user.avatarURL}
+            src={specificUser.avatarURL}
             width={200}
             height={200}
             className="picture__circle"
@@ -28,17 +37,19 @@ function ProfileHeader({ user, setLoading, handleItemClick, activeItem }) {
           </Button>
         </Card.Content>
         <Card.Content>
-          <Card.Header>@{user.nickname}</Card.Header>
+          <Card.Header>@{specificUser.nickname}</Card.Header>
           <Card.Meta>
-            {user.location && (
+            {specificUser.location && (
               <>
-                <Icon name="map marker alternate" /> user.location &emsp;
+                <Icon name="map marker alternate" /> specificUser.location
+                &emsp;
               </>
             )}
             <Icon name="calendar alternate outline" />
-            {moment(user.createdAt).format("YYYY-MM-DD")} 가입
+            {moment(specificUser.createdAt).format("YYYY-MM-DD")} 가입 &emsp;
+            작성한 트윗: {totalTweetCount}
           </Card.Meta>
-          <Card.Description>{user.selfIntro}</Card.Description>
+          <Card.Description>{specificUser.selfIntro}</Card.Description>
         </Card.Content>
         <Card.Content>
           <Menu widths={2}>
@@ -52,7 +63,7 @@ function ProfileHeader({ user, setLoading, handleItemClick, activeItem }) {
                 basic
                 color="teal"
                 size="mini"
-                content={user.followers.length}
+                content={specificUser.followers.length}
               />
             </Menu.Item>
             <Menu.Item
@@ -65,7 +76,7 @@ function ProfileHeader({ user, setLoading, handleItemClick, activeItem }) {
                 basic
                 color="teal"
                 size="mini"
-                content={user.followings.length}
+                content={specificUser.followings.length}
               />
             </Menu.Item>
           </Menu>
