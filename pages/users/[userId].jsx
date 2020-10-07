@@ -18,6 +18,7 @@ function Profile() {
   const [specificUser, setSpecificUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [activeItem, setActiveItem] = useState("tweets");
+
   console.log("specificUser", specificUser);
 
   useEffect(() => {
@@ -40,7 +41,7 @@ function Profile() {
       setActiveItem(name);
 
       if (name === "tweets") {
-      } else if (name === "replies") {
+      } else if (name === "comments") {
       } else if (name === "medias") {
       } else if (name === "followers") {
       } else if (name === "followings") {
@@ -57,18 +58,22 @@ function Profile() {
         <WhoToFollow />
       </Grid.Column>
       <Grid.Column tablet={10} computer={10}>
-        <ProfileHeader
-          user={specificUser}
-          setLoading={setLoading}
-          handleItemClick={handleItemClick}
-          activeItem={activeItem}
-        />
-        <ProfileMenu
-          user={specificUser}
-          setLoading={setLoading}
-          handleItemClick={handleItemClick}
-          activeItem={activeItem}
-        />
+        {specificUser && (
+          <>
+            <ProfileHeader
+              user={specificUser}
+              setLoading={setLoading}
+              handleItemClick={handleItemClick}
+              activeItem={activeItem}
+            />
+            <ProfileMenu
+              user={specificUser}
+              setLoading={setLoading}
+              handleItemClick={handleItemClick}
+              activeItem={activeItem}
+            />
+          </>
+        )}
 
         <Loader size="small" active={loading} />
 
