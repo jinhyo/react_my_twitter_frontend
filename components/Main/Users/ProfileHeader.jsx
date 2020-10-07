@@ -9,25 +9,7 @@ import {
   Loader
 } from "semantic-ui-react";
 
-function ProfileHeader({ user }) {
-  const [loading, setLoading] = useState(false);
-  const [activeItem, setActiveItem] = useState("tweets");
-
-  const handleItemClick = useCallback(
-    async (e, { name }) => {
-      setActiveItem(name);
-
-      if (name === "tweets") {
-      } else if (name === "replies") {
-      } else if (name === "medias") {
-      } else if (name === "followers") {
-      } else if (name === "followings") {
-      } else if (name === "likedTweets") {
-      }
-    },
-    [user]
-  );
-
+function ProfileHeader({ user, setLoading, handleItemClick, activeItem }) {
   return (
     <>
       <Card fluid>
@@ -84,63 +66,6 @@ function ProfileHeader({ user }) {
           </Menu>
         </Card.Content>
       </Card>
-
-      <Menu pointing widths={4}>
-        <Menu.Item
-          name="tweets"
-          active={activeItem === "tweets"}
-          onClick={handleItemClick}
-        >
-          트윗
-          <Label
-            basic
-            color="teal"
-            size="mini"
-            content="1" /* content={tweet.comments.length} */
-          />
-        </Menu.Item>
-        <Menu.Item
-          name="replies"
-          active={activeItem === "replies"}
-          onClick={handleItemClick}
-        >
-          댓글
-          <Label
-            basic
-            color="teal"
-            size="mini"
-            content="1" /* content={tweet.retweets.length} */
-          />
-        </Menu.Item>
-        <Menu.Item
-          name="medias"
-          active={activeItem === "medias"}
-          onClick={handleItemClick}
-        >
-          미디어
-          <Label
-            basic
-            color="teal"
-            size="mini"
-            content="1" /* content={tweet.quotations.length} */
-          />
-        </Menu.Item>
-        <Menu.Item
-          name="likedTweets"
-          active={activeItem === "likedTweets"}
-          onClick={handleItemClick}
-        >
-          좋아요
-          <Label
-            basic
-            color="teal"
-            size="mini"
-            content="1" /* content={tweet.quotations.length} */
-          />
-        </Menu.Item>
-      </Menu>
-
-      <Loader size="small" active={loading} />
     </>
   );
 }
