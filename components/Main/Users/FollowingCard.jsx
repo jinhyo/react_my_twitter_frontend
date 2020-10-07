@@ -5,8 +5,8 @@ import { userSelector, userActions } from "../../../features/userSlice";
 import Link from "next/link";
 import userFunctions from "../../../lib/userFunctions";
 
-// in <TweetInfoCard />
-function UserCard({ user }) {
+// in <Profile />
+function FollowingCard({ user }) {
   const dispatch = useDispatch();
   const cancelRef = useRef();
 
@@ -18,7 +18,7 @@ function UserCard({ user }) {
     return index !== -1;
   }
 
-  // 현재  <UserCard />의 정보가 나인지 확인
+  // 현재  <FollowingCard />의 정보가 나인지 확인
   function isMe(userId, currentUserId) {
     return currentUserId === userId;
   }
@@ -59,7 +59,7 @@ function UserCard({ user }) {
     } catch (error) {
       console.error(error);
     }
-  }, [user]);
+  }, [user, cancelRef.current]);
 
   //// 언팔로우
   const handleUnfollowUser = useCallback(async () => {
@@ -69,7 +69,7 @@ function UserCard({ user }) {
     } catch (error) {
       console.error(error);
     }
-  }, [user]);
+  }, [user, cancelRef.current]);
 
   return (
     <>
@@ -103,8 +103,9 @@ function UserCard({ user }) {
           </Card.Header>
         </Card.Content>
       </Card>
+      <span ref={cancelRef}></span>
     </>
   );
 }
 
-export default UserCard;
+export default FollowingCard;

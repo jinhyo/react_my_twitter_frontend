@@ -4,18 +4,21 @@ import { Grid, Comment, Loader } from "semantic-ui-react";
 import Trends from "../../components/LeftSide/Trends/Trends";
 import WhoToFollow from "../../components/LeftSide/WhoToFollow/WhoToFollow";
 import ProfileHeader from "../../components/Main/Users/ProfileHeader";
-import Follower from "../../components/Main/Users/Follower";
-import Following from "../../components/Main/Users/Following";
+import FollowerCard from "../../components/Main/Users/FollowerCard";
+import FollowingCard from "../../components/Main/Users/FollowingCard";
 import { useRouter } from "next/router";
 import userFunctions from "../../lib/userFunctions";
 import ProfileMenu from "../../components/Main/Users/ProfileMenu";
 import { userActions, userSelector } from "../../features/userSlice";
+import UserCard from "../../components/Main/Users/FollowerCard";
+import ProfileCard from "../../components/LeftSide/ProfileCard";
 
 function Profile() {
   const router = useRouter();
   const dispatch = useDispatch();
   const { userId } = router.query;
 
+  const currentUser = useSelector(userSelector.currentUser);
   const specificUser = useSelector(userSelector.specificUser);
   const followers = useSelector(userSelector.specificUsersFollowers);
   const followings = useSelector(userSelector.specificUsersFollowings);
@@ -31,6 +34,7 @@ function Profile() {
   useEffect(() => {
     if (userId) {
       getSpecificUser(userId);
+      setActiveItem("tweets");
     }
   }, [userId]);
 
@@ -88,6 +92,10 @@ function Profile() {
   return (
     <Grid stackable padded relaxed>
       <Grid.Column tablet={6} computer={6}>
+        {currentUser?.id !== specificUser?.id && (
+          <ProfileCard currentUser={currentUser} />
+        )}
+
         <Trends />
         <WhoToFollow />
       </Grid.Column>
@@ -108,19 +116,19 @@ function Profile() {
           </>
         )}
 
-        <Loader size="small" active={loading} />
-
         {/* 팔로워 */}
+        {activeItem === "followers" &&
+          followers.map(user => <UserCard key={user.id} user={user} />)}
 
         {/* 팔로잉 */}
-
+        {activeItem === "followings" &&
+          followings.map(user => <UserCard key={user.id} user={user} />)}
         {/* 트윗들  */}
-
         {/* 댓글들 */}
-
         {/* 미더어 트윗들 */}
-
         {/* 좋아요 누른 트윗들 */}
+
+        <Loader size="small" active={loading} />
       </Grid.Column>
     </Grid>
   );
