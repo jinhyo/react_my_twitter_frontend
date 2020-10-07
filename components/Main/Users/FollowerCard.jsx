@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Comment, Button, Divider, Image, Card, Feed } from "semantic-ui-react";
+import { Button, Image, Card, Feed } from "semantic-ui-react";
 import { userSelector, userActions } from "../../../features/userSlice";
 import Link from "next/link";
 import userFunctions from "../../../lib/userFunctions";

@@ -12,12 +12,8 @@ import {
 import moment from "moment";
 import { userSelector } from "../../../features/userSlice";
 
-function ProfileHeader({
-  setLoading,
-  handleItemClick,
-  activeItem,
-  totalTweetCount
-}) {
+// in <Profile />
+function ProfileHeader({ handleItemClick, activeItem, totalTweetCount }) {
   const specificUser = useSelector(userSelector.specificUser);
 
   return (

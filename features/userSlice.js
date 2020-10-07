@@ -1,18 +1,20 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 
+const INITIAL_SPECIFIC_USER_INFO = {
+  user: null,
+  followers: [],
+  followings: [],
+  tweets: [],
+  comments: [],
+  mediaTweets: [],
+  favorites: []
+};
+
 const userSlice = createSlice({
   name: "userSlice",
   initialState: {
     currentUser: null,
-    specificUser: {
-      user: null,
-      followers: [],
-      followings: [],
-      tweets: [],
-      comments: [],
-      medias: [],
-      favorites: []
-    }
+    specificUser: INITIAL_SPECIFIC_USER_INFO
   },
   reducers: {
     setCurrentUser: (state, { payload: user }) => {
@@ -79,11 +81,16 @@ const userSlice = createSlice({
     setSpecificUsersComments: (state, { payload: comments }) => {
       state.specificUser.comments = comments;
     },
-    setSpecificUsersMedias: (state, { payload: medias }) => {
-      state.specificUser.medias = medias;
+    setSpecificUsersMediaTweets: (state, { payload: mediaTweets }) => {
+      console.log("~~~~mediaTweets", mediaTweets);
+
+      state.specificUser.mediaTweets = mediaTweets;
     },
     setSpecificUsersFavorites: (state, { payload: favorites }) => {
       state.specificUser.favorites = favorites;
+    },
+    clearSpecificUserInfos: state => {
+      state.specificUser = INITIAL_SPECIFIC_USER_INFO;
     }
   }
 });
@@ -154,10 +161,10 @@ const selectSpecificUsersComments = createSelector(
   comments => comments
 );
 
-const selectSpecificUsersMedias = createSelector(
-  state => state.specificUser.medias,
+const selectSpecificUsersMediaTweets = createSelector(
+  state => state.specificUser.mediaTweets,
 
-  medias => medias
+  mediaTweets => mediaTweets
 );
 
 const selectSpecificUsersFavorites = createSelector(
@@ -182,6 +189,7 @@ export const userSelector = {
   specificUsersFollowings: state => selectSpecificUsersFollowings(state[USER]),
   specificUsersTweets: state => selectSpecificUsersTweets(state[USER]),
   specificUsersComments: state => selectSpecificUsersComments(state[USER]),
-  specificUsersMedias: state => selectSpecificUsersMedias(state[USER]),
+  specificUsersMediaTweets: state =>
+    selectSpecificUsersMediaTweets(state[USER]),
   specificUsersFavorites: state => selectSpecificUsersFavorites(state[USER])
 };

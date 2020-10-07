@@ -1,26 +1,13 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import TweetCard from "./TweetCard";
-import {
-  Button,
-  Menu,
-  Label,
-  Comment,
-  Divider,
-  Loader,
-  Dimmer
-} from "semantic-ui-react";
-import PureRetweetCard from "./PureRetweetCard";
-import { userSelector } from "../../../features/userSlice";
+import { Menu, Label, Loader } from "semantic-ui-react";
 import userFunctions from "../../../lib/userFunctions";
 import UserCard from "../Users/UserCard";
 import tweetFunctions from "../../../lib/tweetFunctions";
+import ShowTweets from "./ShowTweets";
 
 // in <TweetStatus />
 function TweetInfoCard({ tweet }) {
-  const favoriteTweets = useSelector(userSelector.favoriteTweets);
-  const myTweets = useSelector(userSelector.myTweets);
-
   const [activeItem, setActiveItem] = useState("comments");
   const [loading, setLoading] = useState(false);
   const [retweetUsers, setRetweetUsers] = useState([]);
@@ -101,32 +88,11 @@ function TweetInfoCard({ tweet }) {
     }
   }
 
-  // 내가 좋아요 눌렀는지 확인
-  const isFavoriteTweet = useCallback(
-    tweetId => {
-      const index = favoriteTweets.findIndex(tweet => tweet.id === tweetId);
-
-      return index !== -1;
-    },
-    [favoriteTweets]
-  );
-
-  //// 내가 댓글을 달았는지 확인
-  const didIComment = useCallback(
-    currentTweetId => {
-      const index = myTweets.findIndex(
-        tweet => tweet.commentedOriginId === currentTweetId
-      );
-
-      return index !== -1;
-    },
-    [myTweets]
-  );
-
   return (
     <>
       <TweetCard tweet={tweet} />
 
+      {/* 트윗 인포 매뉴 */}
       <Menu pointing widths={4}>
         <Menu.Item
           name="comments"
@@ -180,30 +146,14 @@ function TweetInfoCard({ tweet }) {
       <Loader size="small" active={loading} />
 
       {/* 댓글 트윗들 */}
-      {activeItem === "comments" &&
-        comments.map(tweet => (
-          <TweetCard
-            key={tweet.id}
-            tweet={tweet}
-            favoriteStatus={isFavoriteTweet(tweet.id)}
-            commentStatus={didIComment(tweet.id)}
-          />
-        ))}
+      {activeItem === "comments" && <ShowTweets tweets={comments} />}
 
       {/* 리트윗한 유저들 */}
       {activeItem === "retweetUsers" &&
         retweetUsers.map(user => <UserCard key={user.id} user={user} />)}
 
       {/* 인용한 트윗들 */}
-      {activeItem === "quotations" &&
-        quotations.map(tweet => (
-          <TweetCard
-            key={tweet.id}
-            tweet={tweet}
-            favoriteStatus={isFavoriteTweet(tweet.id)}
-            commentStatus={didIComment(tweet.id)}
-          />
-        ))}
+      {activeItem === "quotations" && <ShowTweets tweets={quotations} />}
 
       {/* 좋아요 누른 유저들 */}
       {activeItem === "likers" &&

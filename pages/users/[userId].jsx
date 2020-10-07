@@ -12,6 +12,9 @@ import ProfileMenu from "../../components/Main/Users/ProfileMenu";
 import { userActions, userSelector } from "../../features/userSlice";
 import UserCard from "../../components/Main/Users/FollowerCard";
 import ProfileCard from "../../components/LeftSide/ProfileCard";
+import PureRetweetCard from "../../components/Main/Tweets/PureRetweetCard";
+import TweetCard from "../../components/Main/Tweets/TweetCard";
+import ShowTweets from "../../components/Main/Tweets/ShowTweets";
 
 function Profile() {
   const router = useRouter();
@@ -20,22 +23,35 @@ function Profile() {
 
   const currentUser = useSelector(userSelector.currentUser);
   const specificUser = useSelector(userSelector.specificUser);
-  const followers = useSelector(userSelector.specificUsersFollowers);
-  const followings = useSelector(userSelector.specificUsersFollowings);
+  const specificUsersFollowers = useSelector(
+    userSelector.specificUsersFollowers
+  );
+  const specificUsersFollowings = useSelector(
+    userSelector.specificUsersFollowings
+  );
+  const specificUsersTweets = useSelector(userSelector.specificUsersTweets);
+  const specificUsersComments = useSelector(userSelector.specificUsersComments);
+  const specificUsersMediaTweets = useSelector(
+    userSelector.specificUsersMediaTweets
+  );
+  const specificUsersFavorites = useSelector(
+    userSelector.specificUsersFavorites
+  );
 
   const [loading, setLoading] = useState(false);
   const [activeItem, setActiveItem] = useState("tweets");
   const [totalTweetCount, setTotalTweetCount] = useState(0);
 
-  console.log("specificUser", specificUser);
-  console.log("followers", followers);
-  console.log("followings", followings);
-
   useEffect(() => {
     if (userId) {
       getSpecificUser(userId);
+      getTweets(userId);
       setActiveItem("tweets");
     }
+
+    return () => {
+      dispatch(userActions.clearSpecificUserInfos());
+    };
   }, [userId]);
 
   async function getSpecificUser(userId) {
@@ -53,13 +69,17 @@ function Profile() {
       setActiveItem(name);
 
       if (name === "tweets") {
+        getTweets(specificUser.id);
       } else if (name === "comments") {
+        getComments(specificUser.id);
       } else if (name === "medias") {
+        getMediaTweets(specificUser.id);
       } else if (name === "followers") {
         getFollowers(specificUser.id);
       } else if (name === "followings") {
         getFollowings(specificUser.id);
-      } else if (name === "likedTweets") {
+      } else if (name === "favoriteTweets") {
+        getFavorites(specificUser.id);
       }
     },
     [specificUser]
@@ -68,7 +88,7 @@ function Profile() {
   async function getFollowers(userId) {
     try {
       setLoading(true);
-      const followers = await userFunctions.getFollowers(userId);
+      const followers = await userFunctions.getSpecificUsersFollowers(userId);
       dispatch(userActions.setSpecificUsersFollowers(followers));
     } catch (error) {
       console.error(error);
@@ -80,8 +100,56 @@ function Profile() {
   async function getFollowings(userId) {
     try {
       setLoading(true);
-      const followings = await userFunctions.getFollowings(userId);
+      const followings = await userFunctions.getSpecificUsersFollowings(userId);
       dispatch(userActions.setSpecificUsersFollowings(followings));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function getTweets(userId) {
+    try {
+      setLoading(true);
+      const tweets = await userFunctions.getSpecificUsersTweets(userId);
+      dispatch(userActions.setSpecificUsersTweets(tweets));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function getComments(userId) {
+    try {
+      setLoading(true);
+      const tweets = await userFunctions.getSpecificUsersComments(userId);
+      dispatch(userActions.setSpecificUsersComments(tweets));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function getMediaTweets(userId) {
+    try {
+      setLoading(true);
+      const tweets = await userFunctions.getSpecificUsersMediaTweets(userId);
+      dispatch(userActions.setSpecificUsersMediaTweets(tweets));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function getFavorites(userId) {
+    try {
+      setLoading(true);
+      const tweets = await userFunctions.getSpecificUsersFavorites(userId);
+      dispatch(userActions.setSpecificUsersFavorites(tweets));
     } catch (error) {
       console.error(error);
     } finally {
@@ -92,7 +160,7 @@ function Profile() {
   return (
     <Grid stackable padded relaxed>
       <Grid.Column tablet={6} computer={6}>
-        {currentUser?.id !== specificUser?.id && (
+        {currentUser && currentUser?.id !== specificUser?.id && (
           <ProfileCard currentUser={currentUser} />
         )}
 
@@ -118,15 +186,33 @@ function Profile() {
 
         {/* 팔로워 */}
         {activeItem === "followers" &&
-          followers.map(user => <UserCard key={user.id} user={user} />)}
+          specificUsersFollowers.map(user => (
+            <UserCard key={user.id} user={user} />
+          ))}
 
         {/* 팔로잉 */}
         {activeItem === "followings" &&
-          followings.map(user => <UserCard key={user.id} user={user} />)}
+          specificUsersFollowings.map(user => (
+            <UserCard key={user.id} user={user} />
+          ))}
+
         {/* 트윗들  */}
+        {activeItem === "tweets" && <ShowTweets tweets={specificUsersTweets} />}
+
         {/* 댓글들 */}
-        {/* 미더어 트윗들 */}
+        {activeItem === "comments" && (
+          <ShowTweets tweets={specificUsersComments} />
+        )}
+
+        {/* 미디어 트윗들 */}
+        {activeItem === "medias" && (
+          <ShowTweets tweets={specificUsersMediaTweets} />
+        )}
+
         {/* 좋아요 누른 트윗들 */}
+        {activeItem === "favoriteTweets" && (
+          <ShowTweets tweets={specificUsersFavorites} />
+        )}
 
         <Loader size="small" active={loading} />
       </Grid.Column>

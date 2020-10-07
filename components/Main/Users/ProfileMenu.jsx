@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Menu, Label } from "semantic-ui-react";
 import { userSelector } from "../../../features/userSlice";
 
-function ProfileMenu({ setLoading, handleItemClick, activeItem }) {
+// in <Profile />
+function ProfileMenu({ handleItemClick, activeItem }) {
   const specificUser = useSelector(userSelector.specificUser);
 
   const [tweetCount, setTweetCount] = useState(0);
@@ -63,8 +64,8 @@ function ProfileMenu({ setLoading, handleItemClick, activeItem }) {
         <Label basic color="teal" size="mini" content={mediaCount} />
       </Menu.Item>
       <Menu.Item
-        name="likedTweets"
-        active={activeItem === "likedTweets"}
+        name="favoriteTweets"
+        active={activeItem === "favoriteTweets"}
         onClick={handleItemClick}
       >
         좋아요

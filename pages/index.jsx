@@ -5,18 +5,15 @@ import ProfileCard from "../components/LeftSide/ProfileCard";
 import Trends from "../components/LeftSide/Trends/Trends";
 import WhoToFollow from "../components/LeftSide/WhoToFollow/WhoToFollow";
 import TweetForm from "../components/Main/Tweets/TweetForm";
-import TweetCard from "../components/Main/Tweets/TweetCard";
 import { userSelector, userActions } from "../features/userSlice";
 import tweetFunctions from "../lib/tweetFunctions";
 import { tweetActions, tweetSelector } from "../features/tweetSlice";
 import authFunctions from "../lib/authFunctions";
-import PureRetweetCard from "../components/Main/Tweets/PureRetweetCard";
+import ShowTweets from "../components/Main/Tweets/ShowTweets";
 
-function Index(props) {
+function Index() {
   const dispatch = useDispatch();
   const currentUser = useSelector(userSelector.currentUser);
-  const favoriteTweets = useSelector(userSelector.favoriteTweets);
-  const myTweets = useSelector(userSelector.myTweets);
 
   const tweets = useSelector(tweetSelector.tweets);
   const [hasMorePosts, setHasMorePosts] = useState(false);
@@ -94,33 +91,6 @@ function Index(props) {
     }
   }
 
-  // 내가 좋아요 눌렀는지 확인
-  const isFavoriteTweet = useCallback(
-    tweetId => {
-      const index = favoriteTweets.findIndex(tweet => tweet.id === tweetId);
-
-      return index !== -1;
-    },
-    [favoriteTweets]
-  );
-
-  //// 리트윗인지 확인
-  function isRewteet(tweet) {
-    return tweet.retweetOriginId;
-  }
-
-  //// 내가 댓글을 달았는지 확인
-  const didIComment = useCallback(
-    currentTweetId => {
-      const index = myTweets.findIndex(
-        tweet => tweet.commentedOriginId === currentTweetId
-      );
-
-      return index !== -1;
-    },
-    [myTweets]
-  );
-
   return (
     <Grid stackable padded relaxed>
       <Grid.Column tablet={6} computer={6}>
@@ -134,23 +104,7 @@ function Index(props) {
         <Divider />
 
         {/* 트윗들 랜더링 */}
-        {tweets.map(tweet =>
-          isRewteet(tweet) ? (
-            <PureRetweetCard
-              key={tweet.id}
-              tweet={tweet}
-              retweet={tweet.retweetOrigin}
-              favoriteStatus={isFavoriteTweet(tweet.retweetOriginId)}
-            />
-          ) : (
-            <TweetCard
-              key={tweet.id}
-              tweet={tweet}
-              favoriteStatus={isFavoriteTweet(tweet.id)}
-              commentStatus={didIComment(tweet.id)}
-            />
-          )
-        )}
+        <ShowTweets tweets={tweets} />
       </Grid.Column>
     </Grid>
   );
