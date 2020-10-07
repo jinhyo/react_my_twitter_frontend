@@ -8,6 +8,7 @@ import {
   Label,
   Loader
 } from "semantic-ui-react";
+import moment from "moment";
 
 function ProfileHeader({ user, setLoading, handleItemClick, activeItem }) {
   return (
@@ -17,7 +18,7 @@ function ProfileHeader({ user, setLoading, handleItemClick, activeItem }) {
           <Image
             floated="left"
             size="small"
-            src="/temp.jpg"
+            src={user.avatarURL}
             width={200}
             height={200}
             className="picture__circle"
@@ -27,13 +28,17 @@ function ProfileHeader({ user, setLoading, handleItemClick, activeItem }) {
           </Button>
         </Card.Content>
         <Card.Content>
-          <Card.Header>JJ</Card.Header>
+          <Card.Header>@{user.nickname}</Card.Header>
           <Card.Meta>
-            @Jin &emsp;
-            <Icon name="map marker alternate" /> 서울 &emsp;
-            <Icon name="calendar alternate outline" /> 20017년 8월 15일 가입
+            {user.location && (
+              <>
+                <Icon name="map marker alternate" /> user.location &emsp;
+              </>
+            )}
+            <Icon name="calendar alternate outline" />
+            {moment(user.createdAt).format("YYYY-MM-DD")} 가입
           </Card.Meta>
-          <Card.Description>자기소개</Card.Description>
+          <Card.Description>{user.selfIntro}</Card.Description>
         </Card.Content>
         <Card.Content>
           <Menu widths={2}>
@@ -47,7 +52,7 @@ function ProfileHeader({ user, setLoading, handleItemClick, activeItem }) {
                 basic
                 color="teal"
                 size="mini"
-                content="1" /* content={tweet.likers.length} */
+                content={user.followers.length}
               />
             </Menu.Item>
             <Menu.Item
@@ -60,7 +65,7 @@ function ProfileHeader({ user, setLoading, handleItemClick, activeItem }) {
                 basic
                 color="teal"
                 size="mini"
-                content="1" /* content={tweet.likers.length} */
+                content={user.followings.length}
               />
             </Menu.Item>
           </Menu>
