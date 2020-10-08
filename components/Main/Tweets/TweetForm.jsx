@@ -92,7 +92,11 @@ function TweetForm({ commentedTweetId, setCommentInput }) {
           })
         );
       }
-      dispatch(tweetActions.addTweet(tweetWithOthers));
+
+      // 댓글일 경우 메인화면에 표시되지 않도록
+      if (!tweetWithOthers.commentedOriginId) {
+        dispatch(tweetActions.addTweet(tweetWithOthers));
+      }
     } catch (error) {
       console.error(error);
     } finally {

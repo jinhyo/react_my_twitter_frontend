@@ -58,7 +58,7 @@ function RetweetButton({ tweet, cancelPopup }) {
 
       cancelPopup();
     } catch (error) {
-      console.error(error.response.data || error);
+      console.error(error);
     }
   }, [tweet]);
 
@@ -77,7 +77,7 @@ function RetweetButton({ tweet, cancelPopup }) {
 
       cancelPopup();
     } catch (error) {
-      console.error(error.response.data || error);
+      console.error(error);
     }
   }, [tweet]);
 

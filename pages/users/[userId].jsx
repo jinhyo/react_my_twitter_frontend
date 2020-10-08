@@ -1,19 +1,15 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Grid, Comment, Loader } from "semantic-ui-react";
+import { Grid, Loader } from "semantic-ui-react";
 import Trends from "../../components/LeftSide/Trends/Trends";
 import WhoToFollow from "../../components/LeftSide/WhoToFollow/WhoToFollow";
 import ProfileHeader from "../../components/Main/Users/ProfileHeader";
-import FollowerCard from "../../components/Main/Users/FollowerCard";
-import FollowingCard from "../../components/Main/Users/FollowingCard";
 import { useRouter } from "next/router";
 import userFunctions from "../../lib/userFunctions";
 import ProfileMenu from "../../components/Main/Users/ProfileMenu";
 import { userActions, userSelector } from "../../features/userSlice";
-import UserCard from "../../components/Main/Users/FollowerCard";
+import UserCard from "../../components/Main/Users/UserCard";
 import ProfileCard from "../../components/LeftSide/ProfileCard";
-import PureRetweetCard from "../../components/Main/Tweets/PureRetweetCard";
-import TweetCard from "../../components/Main/Tweets/TweetCard";
 import ShowTweets from "../../components/Main/Tweets/ShowTweets";
 
 function Profile() {
