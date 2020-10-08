@@ -80,6 +80,7 @@ const tweetSlice = createSlice({
       );
       commentedOrigin.comments.push({ id: commentTweetId });
     },
+
     removeComment: (
       state,
       { payload: { commentedOriginId, commentTweetId } }

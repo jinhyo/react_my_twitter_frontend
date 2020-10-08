@@ -11,6 +11,10 @@ import { userActions, userSelector } from "../../features/userSlice";
 import UserCard from "../../components/Main/Users/UserCard";
 import ProfileCard from "../../components/LeftSide/ProfileCard";
 import ShowTweets from "../../components/Main/Tweets/ShowTweets";
+import {
+  specificUserSelector,
+  specificUserActions
+} from "../../features/specificUser";
 
 function Profile() {
   const router = useRouter();
@@ -18,25 +22,23 @@ function Profile() {
   const { userId } = router.query;
 
   const currentUser = useSelector(userSelector.currentUser);
-  const specificUser = useSelector(userSelector.specificUser);
-  const specificUsersFollowers = useSelector(
-    userSelector.specificUsersFollowers
-  );
-  const specificUsersFollowings = useSelector(
-    userSelector.specificUsersFollowings
-  );
-  const specificUsersTweets = useSelector(userSelector.specificUsersTweets);
-  const specificUsersComments = useSelector(userSelector.specificUsersComments);
+  const specificUser = useSelector(specificUserSelector.user);
+  const specificUsersFollowers = useSelector(specificUserSelector.followers);
+  const specificUsersFollowings = useSelector(specificUserSelector.followings);
+  const specificUsersTweets = useSelector(specificUserSelector.tweets);
+  const specificUsersComments = useSelector(specificUserSelector.commentTweets);
   const specificUsersMediaTweets = useSelector(
-    userSelector.specificUsersMediaTweets
+    specificUserSelector.mediaTweets
   );
   const specificUsersFavorites = useSelector(
-    userSelector.specificUsersFavorites
+    specificUserSelector.favoriteTweets
   );
+
+  console.log("specificUsersTweets", specificUsersTweets);
+  console.log("specificUsersComments", specificUsersComments);
 
   const [loading, setLoading] = useState(false);
   const [activeItem, setActiveItem] = useState("tweets");
-  const [totalTweetCount, setTotalTweetCount] = useState(0);
 
   useEffect(() => {
     if (userId) {
@@ -46,15 +48,16 @@ function Profile() {
     }
 
     return () => {
-      dispatch(userActions.clearSpecificUserInfos());
+      dispatch(specificUserActions.clearUserInfos());
+      dispatch(specificUserActions.clearCounts());
     };
   }, [userId]);
 
   async function getSpecificUser(userId) {
     try {
       const user = await userFunctions.getSpecificUser(userId);
-      dispatch(userActions.setSpecificUser(user));
-      setTotalTweetCount(user.tweets.length);
+      dispatch(specificUserActions.setUser(user));
+      dispatch(specificUserActions.changeTotalTweetCount(user.tweets.length));
     } catch (error) {
       console.error(error);
     }
@@ -85,7 +88,7 @@ function Profile() {
     try {
       setLoading(true);
       const followers = await userFunctions.getSpecificUsersFollowers(userId);
-      dispatch(userActions.setSpecificUsersFollowers(followers));
+      dispatch(specificUserActions.setFollowers(followers));
     } catch (error) {
       console.error(error);
     } finally {
@@ -97,7 +100,7 @@ function Profile() {
     try {
       setLoading(true);
       const followings = await userFunctions.getSpecificUsersFollowings(userId);
-      dispatch(userActions.setSpecificUsersFollowings(followings));
+      dispatch(specificUserActions.setFollowings(followings));
     } catch (error) {
       console.error(error);
     } finally {
@@ -109,7 +112,7 @@ function Profile() {
     try {
       setLoading(true);
       const tweets = await userFunctions.getSpecificUsersTweets(userId);
-      dispatch(userActions.setSpecificUsersTweets(tweets));
+      dispatch(specificUserActions.setTweets(tweets));
     } catch (error) {
       console.error(error);
     } finally {
@@ -121,7 +124,7 @@ function Profile() {
     try {
       setLoading(true);
       const tweets = await userFunctions.getSpecificUsersComments(userId);
-      dispatch(userActions.setSpecificUsersComments(tweets));
+      dispatch(specificUserActions.setCommentTweets(tweets));
     } catch (error) {
       console.error(error);
     } finally {
@@ -133,7 +136,7 @@ function Profile() {
     try {
       setLoading(true);
       const tweets = await userFunctions.getSpecificUsersMediaTweets(userId);
-      dispatch(userActions.setSpecificUsersMediaTweets(tweets));
+      dispatch(specificUserActions.setMediaTweets(tweets));
     } catch (error) {
       console.error(error);
     } finally {
@@ -145,7 +148,7 @@ function Profile() {
     try {
       setLoading(true);
       const tweets = await userFunctions.getSpecificUsersFavorites(userId);
-      dispatch(userActions.setSpecificUsersFavorites(tweets));
+      dispatch(specificUserActions.setFavoriteTweets(tweets));
     } catch (error) {
       console.error(error);
     } finally {
@@ -170,7 +173,6 @@ function Profile() {
               setLoading={setLoading}
               handleItemClick={handleItemClick}
               activeItem={activeItem}
-              totalTweetCount={totalTweetCount}
             />
             <ProfileMenu
               setLoading={setLoading}

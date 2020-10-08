@@ -3,15 +3,20 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { Menu, Label } from "semantic-ui-react";
 import { userSelector } from "../../../features/userSlice";
+import {
+  specificUserSelector,
+  specificUserActions
+} from "../../../features/specificUser";
 
 // in <Profile />
 function ProfileMenu({ handleItemClick, activeItem }) {
-  const specificUser = useSelector(userSelector.specificUser);
+  const dispatch = useDispatch();
 
-  const [tweetCount, setTweetCount] = useState(0);
-  const [commentCount, setCommentCount] = useState(0);
-  const [mediaCount, setMediaCount] = useState(0);
-  const [favoriteCount, setFavoriteCount] = useState(0);
+  const specificUser = useSelector(specificUserSelector.user);
+  console.log("specificUser", specificUser);
+
+  const count = useSelector(specificUserSelector.tweetCounts);
+  console.log("count", count);
 
   //// 매뉴 항목들의 개수 파악
   useEffect(() => {
@@ -25,15 +30,20 @@ function ProfileMenu({ handleItemClick, activeItem }) {
           commentCount++;
         } else if (tweet.hasMedia) {
           mediaCount++;
+          tweetCount++;
         } else {
           tweetCount++;
         }
       });
 
-      setTweetCount(tweetCount);
-      setCommentCount(commentCount);
-      setMediaCount(mediaCount);
-      setFavoriteCount(specificUser.favorites.length);
+      dispatch(specificUserActions.changeTweetCount(tweetCount));
+      dispatch(specificUserActions.changeCommentTweetCount(commentCount));
+      dispatch(specificUserActions.changeMediaTweetCount(mediaCount));
+      dispatch(
+        specificUserActions.changeFavoriteTweetCount(
+          specificUser.favorites.length
+        )
+      );
     }
   }, [specificUser]);
 
@@ -45,7 +55,7 @@ function ProfileMenu({ handleItemClick, activeItem }) {
         onClick={handleItemClick}
       >
         트윗
-        <Label basic color="teal" size="mini" content={tweetCount} />
+        <Label basic color="teal" size="mini" content={count.tweets} />
       </Menu.Item>
       <Menu.Item
         name="comments"
@@ -53,7 +63,7 @@ function ProfileMenu({ handleItemClick, activeItem }) {
         onClick={handleItemClick}
       >
         댓글
-        <Label basic color="teal" size="mini" content={commentCount} />
+        <Label basic color="teal" size="mini" content={count.commentTweets} />
       </Menu.Item>
       <Menu.Item
         name="medias"
@@ -61,7 +71,7 @@ function ProfileMenu({ handleItemClick, activeItem }) {
         onClick={handleItemClick}
       >
         미디어
-        <Label basic color="teal" size="mini" content={mediaCount} />
+        <Label basic color="teal" size="mini" content={count.mediaTweets} />
       </Menu.Item>
       <Menu.Item
         name="favoriteTweets"
@@ -69,7 +79,7 @@ function ProfileMenu({ handleItemClick, activeItem }) {
         onClick={handleItemClick}
       >
         좋아요
-        <Label basic color="teal" size="mini" content={favoriteCount} />
+        <Label basic color="teal" size="mini" content={count.favoriteTweets} />
       </Menu.Item>
     </Menu>
   );

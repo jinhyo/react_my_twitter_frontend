@@ -10,12 +10,12 @@ import {
   Loader
 } from "semantic-ui-react";
 import moment from "moment";
-import { userSelector } from "../../../features/userSlice";
+import { specificUserSelector } from "../../../features/specificUser";
 
 // in <Profile />
-function ProfileHeader({ handleItemClick, activeItem, totalTweetCount }) {
-  const specificUser = useSelector(userSelector.specificUser);
-
+function ProfileHeader({ handleItemClick, activeItem }) {
+  const specificUser = useSelector(specificUserSelector.user);
+  const totalTweetCount = useSelector(specificUserSelector.totalTweetCount);
   return (
     <>
       <Card fluid>
