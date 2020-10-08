@@ -12,24 +12,31 @@ import RetweetButton from "./RetweetButton";
 import QuotedTweetCard from "./QuotedTweetCard";
 import TweetForm from "./TweetForm";
 import Link from "next/link";
+import {
+  specificUserActions,
+  specificUserSelector
+} from "../../../features/specificUserSlice";
 
-// in <Index />, <TweetInfoCard />
-function TweetCard({ tweet, favoriteStatus, commentStatus }) {
+// in <ShowTweets />
+function TweetCard({ tweet, favoriteStatus, commentStatus, inProfile }) {
+  console.log("~~inProfile", inProfile);
+
   const dispatch = useDispatch();
   const afterClickRef = useRef();
 
   const currentUserId = useSelector(userSelector.currentUserId);
+  const specificUserId = useSelector(specificUserSelector.userId);
 
   const [commentInput, setCommentInput] = useState(false);
 
-  //// 리트윗 popup 해제
+  /*  리트윗 popup 해제 */
   function cancelPopup() {
     if (afterClickRef.current) {
       afterClickRef.current.click();
     }
   }
 
-  //// 좋아요 버튼 클릭(추가 & 삭제)
+  /*  좋아요 버튼 클릭(추가 & 삭제) */
   const handleClickLike = useCallback(async () => {
     if (!currentUserId) {
       return alert("로그인이 필요합니다.");
@@ -39,32 +46,96 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
       // 좋아요 삭제
       try {
         await tweetFunctions.unlikeTweets(tweet.id);
+      } catch (error) {
+        console.error(error);
+      }
 
+      // redux state change
+      if (inProfile) {
+        // specificUser에게 적용
+        dispatch(
+          specificUserActions.unlikeTweet({
+            myId: currentUserId,
+            tweetId: tweet.id
+          })
+        );
+        dispatch(userActions.removeFavoriteTweetsFromMe(tweet.id));
+
+        // 내가 내 프로필을 보고 있을 경우 프로필 화면의 좋아요 카운트 변경
+        if (currentUserId === specificUserId) {
+          dispatch(specificUserActions.changeFavoriteTweetCount(-1));
+        }
+      } else {
+        // currentUser에게 적용
         dispatch(
           tweetActions.unlikeTweet({ myId: currentUserId, tweetId: tweet.id })
         );
         dispatch(userActions.removeFavoriteTweetsFromMe(tweet.id));
-      } catch (error) {
-        console.error(error);
       }
     } else {
       // 좋아요 등록
       try {
         await tweetFunctions.likeTweets(tweet.id);
+      } catch (error) {
+        console.error(error);
+      }
 
+      // redux state change
+      if (inProfile) {
+        // specificUser에게 적용
+        dispatch(
+          specificUserActions.likeTweet({
+            myId: currentUserId,
+            tweetId: tweet.id
+          })
+        );
+        dispatch(userActions.addFavoriteTweetsToMe(tweet.id));
+
+        // 내가 내 프로필을 보고 있을 경우 프로필 화면의 좋아요 카운트 변경
+        if (currentUserId === specificUserId) {
+          dispatch(specificUserActions.changeFavoriteTweetCount(1));
+        }
+      } else {
+        // currentUser에게 적용
         dispatch(
           tweetActions.likeTweet({ myId: currentUserId, tweetId: tweet.id })
         );
         dispatch(userActions.addFavoriteTweetsToMe(tweet.id));
-      } catch (error) {
-        console.error(error);
       }
     }
-  }, [favoriteStatus, currentUserId]);
+  }, [favoriteStatus, currentUserId, specificUserId]);
 
   const handleShowCommentInput = useCallback(() => {
     setCommentInput(prev => !prev);
   }, [commentInput]);
+
+  /*  댓글일 경우 표시 */
+  const renderCommentStatus = useCallback(() => {
+    if (tweet.commentedOriginId && !tweet.commentedOrigin) {
+      return <Feed.Summary>댓글이 달린 트윗이 삭제되었습니다.</Feed.Summary>;
+    } else if (tweet.commentedOriginId) {
+      return (
+        <Feed.Summary>
+          <Link
+            href={`/users/[userId]`}
+            as={`/users/${tweet.commentedOrigin.user.id}`}
+          >
+            <a>@{tweet.commentedOrigin.user.nickname}</a>
+          </Link>
+          님의
+          <Link
+            href={`/tweets/[tweetId]`}
+            as={`/tweets/${tweet.commentedOriginId}`}
+          >
+            <a>트윗</a>
+          </Link>
+          에 보내는 답글
+        </Feed.Summary>
+      );
+    } else {
+      return null;
+    }
+  }, [tweet]);
 
   return (
     <>
@@ -108,24 +179,7 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
                   <p />
 
                   {/* 답글일 경우 표시 */}
-                  {tweet.commentedOrigin && (
-                    <Feed.Summary>
-                      <Link
-                        href={`/users/[userId]`}
-                        as={`/users/${tweet.commentedOrigin.user.id}`}
-                      >
-                        <a>@{tweet.commentedOrigin.user.nickname}</a>
-                      </Link>
-                      님의
-                      <Link
-                        href={`/tweets/[tweetId]`}
-                        as={`/tweets/${tweet.commentedOriginId}`}
-                      >
-                        <a>트윗</a>
-                      </Link>
-                      에 보내는 답글
-                    </Feed.Summary>
-                  )}
+                  {renderCommentStatus()}
                 </Feed.Content>
               </Feed.Event>
             </Feed>

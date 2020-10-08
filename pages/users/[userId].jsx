@@ -14,7 +14,7 @@ import ShowTweets from "../../components/Main/Tweets/ShowTweets";
 import {
   specificUserSelector,
   specificUserActions
-} from "../../features/specificUser";
+} from "../../features/specificUserSlice";
 
 function Profile() {
   const router = useRouter();
@@ -195,21 +195,23 @@ function Profile() {
           ))}
 
         {/* 트윗들  */}
-        {activeItem === "tweets" && <ShowTweets tweets={specificUsersTweets} />}
+        {activeItem === "tweets" && (
+          <ShowTweets tweets={specificUsersTweets} inProfile={true} />
+        )}
 
         {/* 댓글들 */}
         {activeItem === "comments" && (
-          <ShowTweets tweets={specificUsersComments} />
+          <ShowTweets tweets={specificUsersComments} inProfile={true} />
         )}
 
         {/* 미디어 트윗들 */}
         {activeItem === "medias" && (
-          <ShowTweets tweets={specificUsersMediaTweets} />
+          <ShowTweets tweets={specificUsersMediaTweets} inProfile={true} />
         )}
 
         {/* 좋아요 누른 트윗들 */}
         {activeItem === "favoriteTweets" && (
-          <ShowTweets tweets={specificUsersFavorites} />
+          <ShowTweets tweets={specificUsersFavorites} inProfile={true} />
         )}
 
         <Loader size="small" active={loading} />

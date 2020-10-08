@@ -10,7 +10,7 @@ import {
   Loader
 } from "semantic-ui-react";
 import moment from "moment";
-import { specificUserSelector } from "../../../features/specificUser";
+import { specificUserSelector } from "../../../features/specificUserSlice";
 
 // in <Profile />
 function ProfileHeader({ handleItemClick, activeItem }) {

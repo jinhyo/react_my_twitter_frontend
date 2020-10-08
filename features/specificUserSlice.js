@@ -69,6 +69,44 @@ const specificUserSlice = createSlice({
     clearCounts: state => {
       state.totalTweetCount = 0;
       state.count = INITIAL_COUNTS;
+    },
+
+    /* like 적용 */
+    likeTweet: (state, { payload: { myId, tweetId } }) => {
+      // 리트윗된 원본의 라이크 변경
+      const targetTweet = state.specificUser.tweets.find(
+        tweet => tweet.id === tweetId
+      );
+      if (targetTweet) {
+        targetTweet.likers.push({ id: myId });
+      }
+
+      // 리트윗한 트윗의 라이크 변경
+      state.specificUser.tweets.forEach(tweet => {
+        if (tweet.retweetOriginId === tweetId) {
+          tweet.retweetOrigin.likers.push({ id: myId });
+        }
+      });
+    },
+    unlikeTweet: (state, { payload: { myId, tweetId } }) => {
+      // 리트윗된 원본의 라이크 변경
+      const targetTweet = state.specificUser.tweets.find(
+        tweet => tweet.id === tweetId
+      );
+      if (targetTweet) {
+        targetTweet.likers = targetTweet.likers.filter(
+          liker => liker.id !== myId
+        );
+      }
+
+      // 리트윗한 트윗의 라이크 변경
+      state.specificUser.tweets.forEach(tweet => {
+        if (tweet.retweetOriginId === tweetId) {
+          tweet.retweetOrigin.likers = tweet.retweetOrigin.likers.filter(
+            liker => liker.id !== myId
+          );
+        }
+      });
     }
   }
 });
@@ -77,6 +115,12 @@ const selectUser = createSelector(
   state => state.specificUser.user,
 
   specificUser => specificUser
+);
+
+const selectUserId = createSelector(
+  state => state.specificUser.user?.id,
+
+  specificUserId => specificUserId
 );
 
 const selectFollowers = createSelector(
@@ -133,6 +177,7 @@ export const specificUserReducer = specificUserSlice.reducer;
 export const SPECIFIC_USER = specificUserSlice.name;
 export const specificUserSelector = {
   user: state => selectUser(state[SPECIFIC_USER]),
+  userId: state => selectUserId(state[SPECIFIC_USER]),
   followers: state => selectFollowers(state[SPECIFIC_USER]),
   followings: state => selectFollowings(state[SPECIFIC_USER]),
   tweets: state => selectTweets(state[SPECIFIC_USER]),

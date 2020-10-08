@@ -6,7 +6,7 @@ import { userSelector } from "../../../features/userSlice";
 import {
   specificUserSelector,
   specificUserActions
-} from "../../../features/specificUser";
+} from "../../../features/specificUserSlice";
 
 // in <Profile />
 function ProfileMenu({ handleItemClick, activeItem }) {

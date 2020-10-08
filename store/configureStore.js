@@ -2,7 +2,10 @@ import { createWrapper, HYDRATE } from "next-redux-wrapper";
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { USER, userReducer } from "../features/userSlice";
 import { TWEET, tweetReducer } from "../features/tweetSlice";
-import { SPECIFIC_USER, specificUserReducer } from "../features/specificUser";
+import {
+  SPECIFIC_USER,
+  specificUserReducer
+} from "../features/specificUserSlice";
 
 const rootReducer = (state, action) => {
   switch (action.type) {

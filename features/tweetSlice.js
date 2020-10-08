@@ -25,7 +25,9 @@ const tweetSlice = createSlice({
     likeTweet: (state, { payload: { myId, tweetId } }) => {
       // 리트윗된 원본의 라이크 변경
       const targetTweet = state.tweets.find(tweet => tweet.id === tweetId);
-      targetTweet.likers.push({ id: myId });
+      if (targetTweet) {
+        targetTweet.likers.push({ id: myId });
+      }
 
       // 리트윗한 트윗의 라이크 변경
       state.tweets.forEach(tweet => {
@@ -37,9 +39,12 @@ const tweetSlice = createSlice({
     unlikeTweet: (state, { payload: { myId, tweetId } }) => {
       // 리트윗된 원본의 라이크 변경
       const targetTweet = state.tweets.find(tweet => tweet.id === tweetId);
-      targetTweet.likers = targetTweet.likers.filter(
-        liker => liker.id !== myId
-      );
+
+      if (targetTweet) {
+        targetTweet.likers = targetTweet.likers.filter(
+          liker => liker.id !== myId
+        );
+      }
 
       // 리트윗한 트윗의 라이크 변경
       state.tweets.forEach(tweet => {
