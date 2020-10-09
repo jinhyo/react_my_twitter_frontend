@@ -112,7 +112,6 @@ const tweetSlice = createSlice({
         retweet.retweetOrigin.comments.push({ id: commentTweetId });
       }
     },
-
     removeComment: (
       state,
       { payload: { commentedOriginId, commentTweetId } }
@@ -124,6 +123,7 @@ const tweetSlice = createSlice({
         comment => comment.id !== commentTweetId
       );
     },
+
     setTweetStatus: (state, { payload: tweet }) => {
       state.tweetStatus = tweet;
     }

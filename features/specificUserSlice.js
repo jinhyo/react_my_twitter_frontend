@@ -1,5 +1,7 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 
+const TWEET_KEYS = ["tweets", "commentTweets", "mediaTweets", "favoriteTweets"];
+
 const INITIAL_SPECIFIC_USER_INFO = {
   user: null,
   followers: [],
@@ -71,42 +73,118 @@ const specificUserSlice = createSlice({
       state.count = INITIAL_COUNTS;
     },
 
-    /* like 적용 */
     likeTweet: (state, { payload: { myId, tweetId } }) => {
-      // 리트윗된 원본의 라이크 변경
-      const targetTweet = state.specificUser.tweets.find(
-        tweet => tweet.id === tweetId
-      );
-      if (targetTweet) {
-        targetTweet.likers.push({ id: myId });
-      }
-
-      // 리트윗한 트윗의 라이크 변경
-      state.specificUser.tweets.forEach(tweet => {
-        if (tweet.retweetOriginId === tweetId) {
-          tweet.retweetOrigin.likers.push({ id: myId });
+      // 리트윗된 원본의 좋아요 변경
+      TWEET_KEYS.forEach(key => {
+        const targetTweet = state.specificUser[key].find(
+          tweet => tweet.id === tweetId
+        );
+        if (targetTweet) {
+          targetTweet.likers.push({ id: myId });
         }
+      });
+
+      // 리트윗한 트윗의 좋아요 변경
+      TWEET_KEYS.forEach(key => {
+        state.specificUser[key].forEach(tweet => {
+          if (tweet.retweetOriginId === tweetId) {
+            tweet.retweetOrigin.likers.push({ id: myId });
+          }
+        });
       });
     },
     unlikeTweet: (state, { payload: { myId, tweetId } }) => {
-      // 리트윗된 원본의 라이크 변경
-      const targetTweet = state.specificUser.tweets.find(
-        tweet => tweet.id === tweetId
-      );
-      if (targetTweet) {
-        targetTweet.likers = targetTweet.likers.filter(
-          liker => liker.id !== myId
+      // 리트윗된 원본의 좋아요 변경
+      TWEET_KEYS.forEach(key => {
+        const targetTweet = state.specificUser[key].find(
+          tweet => tweet.id === tweetId
         );
-      }
-
-      // 리트윗한 트윗의 라이크 변경
-      state.specificUser.tweets.forEach(tweet => {
-        if (tweet.retweetOriginId === tweetId) {
-          tweet.retweetOrigin.likers = tweet.retweetOrigin.likers.filter(
+        if (targetTweet) {
+          targetTweet.likers = targetTweet.likers.filter(
             liker => liker.id !== myId
           );
         }
       });
+
+      // 리트윗한 트윗의 좋아요 변경
+      TWEET_KEYS.forEach(key => {
+        state.specificUser[key].forEach(tweet => {
+          if (tweet.retweetOriginId === tweetId) {
+            tweet.retweetOrigin.likers = tweet.retweetOrigin.likers.filter(
+              liker => liker.id !== myId
+            );
+          }
+        });
+      });
+    },
+
+    increaseRetweetCount: (state, { payload: tweetId }) => {
+      // 리트윗된 원본 트윗의 카운트 변경
+      const targetTweet = state.tweets.find(tweet => tweet.id === tweetId);
+      if (targetTweet) {
+        targetTweet.retweetedCount++;
+      }
+
+      // 기존에 리트윗한 트윗들의 카운트 변경
+      for (let i = 0; i < state.tweets.length; i++) {
+        if (state.tweets[i].retweetOriginId === tweetId) {
+          state.tweets[i].retweetOrigin.retweetedCount++;
+        }
+      }
+    },
+    decreaseRetweetCount: (state, { payload: tweetId }) => {
+      // 리트윗된 원본 트윗의 카운트 변경
+      const targetTweet = state.tweets.find(tweet => tweet.id === tweetId);
+      if (targetTweet) {
+        targetTweet.retweetedCount--;
+      }
+
+      // 기존에 리트윗한 트윗들의 카운트 변경
+      for (let i = 0; i < state.tweets.length; i++) {
+        if (state.tweets[i].retweetOriginId === tweetId) {
+          state.tweets[i].retweetOrigin.retweetedCount--;
+        }
+      }
+    },
+    addComment: (
+      state,
+      { payload: { currentRetweetId, commentedOriginId, commentTweetId } }
+    ) => {
+      if (currentRetweetId) {
+        // 리트윗 트윗에서 댓글을 추가하는 경우
+        const retweet = state.tweets.find(
+          tweet => tweet.id === currentRetweetId
+        );
+
+        retweet.retweetOrigin.comments.push({ id: commentTweetId });
+      }
+
+      // 리트윗 원본 or 일반 트윗에서 댓글을 추가하는 경우
+      const commentedOrigin = state.tweets.find(
+        tweet => tweet.id === commentedOriginId
+      );
+      if (commentedOrigin) {
+        commentedOrigin.comments.push({ id: commentTweetId });
+      }
+
+      // 원본을 리트윗한 트윗의 댓글 카운트도 변경
+      const retweet = state.tweets.find(
+        tweet => tweet.retweetOriginId === commentedOriginId
+      );
+      if (retweet && !currentRetweetId) {
+        retweet.retweetOrigin.comments.push({ id: commentTweetId });
+      }
+    },
+    removeComment: (
+      state,
+      { payload: { commentedOriginId, commentTweetId } }
+    ) => {
+      const commentedOrigin = state.tweets.find(
+        tweet => tweet.id === commentedOriginId
+      );
+      commentedOrigin.comments = commentedOrigin.comments.filter(
+        comment => comment.id !== commentTweetId
+      );
     }
   }
 });
