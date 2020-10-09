@@ -27,6 +27,8 @@ const specificUserSlice = createSlice({
     count: INITIAL_COUNTS
   },
   reducers: {
+    /* 초기 세팅 */
+
     setUser: (state, { payload: user }) => {
       state.specificUser.user = user;
     },
@@ -52,7 +54,8 @@ const specificUserSlice = createSlice({
       state.specificUser = INITIAL_SPECIFIC_USER_INFO;
     },
 
-    /* 카운트 */
+    /* 카운트 변경 */
+
     changeTotalTweetCount: (state, { payload: number }) => {
       state.totalTweetCount += number;
     },
@@ -72,6 +75,8 @@ const specificUserSlice = createSlice({
       state.totalTweetCount = 0;
       state.count = INITIAL_COUNTS;
     },
+
+    /* 유저 프로필 내의 정보 변경 */
 
     likeTweet: (state, { payload: { myId, tweetId } }) => {
       // 리트윗된 원본의 좋아요 변경
@@ -117,7 +122,6 @@ const specificUserSlice = createSlice({
         });
       });
     },
-
     increaseRetweetCount: (state, { payload: tweetId }) => {
       // 리트윗된 원본 트윗의 카운트 변경
       TWEET_KEYS.forEach(key => {
@@ -210,6 +214,14 @@ const specificUserSlice = createSlice({
           );
         }
       });
+    },
+
+    /* 내 프로필 내의 정보 변경 */
+
+    removeFavoriteTweet: (state, { payload: favoriteTweetId }) => {
+      state.specificUser.favoriteTweets = state.specificUser.favoriteTweets.filter(
+        tweet => tweet.id !== favoriteTweetId
+      );
     }
   }
 });

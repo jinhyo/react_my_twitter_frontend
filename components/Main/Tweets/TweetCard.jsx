@@ -59,9 +59,10 @@ function TweetCard({ tweet, favoriteStatus, commentStatus, inProfile }) {
           })
         );
 
-        // 내가 내 프로필을 보고 있을 경우 프로필 화면의 좋아요 카운트 변경
+        // 내가 내 프로필을 보고 있을 경우 프로필 화면의 좋아요 카운트 변경 & 좋아요 트윗 추가
         if (currentUserId === specificUserId) {
           dispatch(specificUserActions.changeFavoriteTweetCount(-1));
+          dispatch(specificUserActions.removeFavoriteTweet(tweet.id));
         }
       } else {
         // currentUser에게 적용
