@@ -226,6 +226,7 @@ function TweetCard({ tweet, favoriteStatus, commentStatus, inProfile }) {
         <TweetForm
           commentedTweetId={tweet.id}
           setCommentInput={setCommentInput}
+          inProfile={inProfile}
         />
       )}
     </>

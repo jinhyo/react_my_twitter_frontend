@@ -15,9 +15,15 @@ import { toast } from "react-toastify";
 import tweetFunctions from "../../../lib/tweetFunctions";
 import { userActions, userSelector } from "../../../features/userSlice";
 import { tweetSelector, tweetActions } from "../../../features/tweetSlice";
+import { specificUserActions } from "../../../features/specificUserSlice";
 
 // in <Index />, <TweetCard />, <PureRetweetCard />
-function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
+function TweetForm({
+  commentedTweetId,
+  setCommentInput,
+  currentRetweetId,
+  inProfile
+}) {
   const dispatch = useDispatch();
   const inputRef = useRef();
   const fileRef = useRef();
@@ -75,13 +81,26 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
             commentedOriginId: commentedTweetId
           })
         );
-        dispatch(
-          tweetActions.addComment({
-            currentRetweetId,
-            commentedOriginId: commentedTweetId,
-            commentTweetId: tweetWithOthers.id
-          })
-        );
+
+        if (inProfile) {
+          // specificUser에게 적용
+          dispatch(
+            specificUserActions.addComment({
+              currentRetweetId,
+              commentedOriginId: commentedTweetId,
+              commentTweetId: tweetWithOthers.id
+            })
+          );
+        } else {
+          // currentUser에게 적용
+          dispatch(
+            tweetActions.addComment({
+              currentRetweetId,
+              commentedOriginId: commentedTweetId,
+              commentTweetId: tweetWithOthers.id
+            })
+          );
+        }
       } else {
         // 일반 트윗 전송
         tweetWithOthers = await tweetFunctions.sendTweet(tweetFormData);

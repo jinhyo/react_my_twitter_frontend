@@ -96,8 +96,9 @@ const tweetSlice = createSlice({
         const retweet = state.tweets.find(
           tweet => tweet.id === currentRetweetId
         );
-
-        retweet.retweetOrigin.comments.push({ id: commentTweetId });
+        if (retweet) {
+          retweet.retweetOrigin.comments.push({ id: commentTweetId });
+        }
       }
 
       // 리트윗 원본 or 일반 트윗에서 댓글을 추가하는 경우
@@ -123,9 +124,12 @@ const tweetSlice = createSlice({
       const commentedOrigin = state.tweets.find(
         tweet => tweet.id === commentedOriginId
       );
-      commentedOrigin.comments = commentedOrigin.comments.filter(
-        comment => comment.id !== commentTweetId
-      );
+
+      if (commentedOrigin) {
+        commentedOrigin.comments = commentedOrigin.comments.filter(
+          comment => comment.id !== commentTweetId
+        );
+      }
     },
 
     setTweetStatus: (state, { payload: tweet }) => {

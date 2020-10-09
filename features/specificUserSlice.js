@@ -166,39 +166,50 @@ const specificUserSlice = createSlice({
     ) => {
       if (currentRetweetId) {
         // 리트윗 트윗에서 댓글을 추가하는 경우
-        const retweet = state.tweets.find(
-          tweet => tweet.id === currentRetweetId
-        );
-
-        retweet.retweetOrigin.comments.push({ id: commentTweetId });
+        TWEET_KEYS.forEach(key => {
+          const retweet = state.specificUser[key].find(
+            tweet => tweet.id === currentRetweetId
+          );
+          if (retweet) {
+            retweet.retweetOrigin.comments.push({ id: commentTweetId });
+          }
+        });
       }
 
       // 리트윗 원본 or 일반 트윗에서 댓글을 추가하는 경우
-      const commentedOrigin = state.tweets.find(
-        tweet => tweet.id === commentedOriginId
-      );
-      if (commentedOrigin) {
-        commentedOrigin.comments.push({ id: commentTweetId });
-      }
+      TWEET_KEYS.forEach(key => {
+        const commentedOrigin = state.specificUser[key].find(
+          tweet => tweet.id === commentedOriginId
+        );
+        if (commentedOrigin) {
+          commentedOrigin.comments.push({ id: commentTweetId });
+        }
+      });
 
-      // 원본을 리트윗한 트윗의 댓글 카운트도 변경
-      const retweet = state.tweets.find(
-        tweet => tweet.retweetOriginId === commentedOriginId
-      );
-      if (retweet && !currentRetweetId) {
-        retweet.retweetOrigin.comments.push({ id: commentTweetId });
-      }
+      // 원본을 리트윗한 트윗의 댓글도 추가
+      TWEET_KEYS.forEach(key => {
+        const retweet = state.specificUser[key].find(
+          tweet => tweet.retweetOriginId === commentedOriginId
+        );
+        if (retweet && !currentRetweetId) {
+          retweet.retweetOrigin.comments.push({ id: commentTweetId });
+        }
+      });
     },
     removeComment: (
       state,
       { payload: { commentedOriginId, commentTweetId } }
     ) => {
-      const commentedOrigin = state.tweets.find(
-        tweet => tweet.id === commentedOriginId
-      );
-      commentedOrigin.comments = commentedOrigin.comments.filter(
-        comment => comment.id !== commentTweetId
-      );
+      TWEET_KEYS.forEach(key => {
+        const commentedOrigin = state.specificUser[key].find(
+          tweet => tweet.id === commentedOriginId
+        );
+        if (commentedOrigin) {
+          commentedOrigin.comments = commentedOrigin.comments.filter(
+            comment => comment.id !== commentTweetId
+          );
+        }
+      });
     }
   }
 });
