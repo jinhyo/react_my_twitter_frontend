@@ -16,8 +16,8 @@ import tweetFunctions from "../../../lib/tweetFunctions";
 import { userActions, userSelector } from "../../../features/userSlice";
 import { tweetSelector, tweetActions } from "../../../features/tweetSlice";
 
-// in <Index />, <TweetCard />
-function TweetForm({ commentedTweetId, setCommentInput }) {
+// in <Index />, <TweetCard />, <PureRetweetCard />
+function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
   const dispatch = useDispatch();
   const inputRef = useRef();
   const fileRef = useRef();
@@ -60,8 +60,9 @@ function TweetForm({ commentedTweetId, setCommentInput }) {
     //// 트윗 전송
     try {
       let tweetWithOthers;
+
       if (commentedTweetId) {
-        // 답글 트윗 전송
+        // 댓글 트윗 전송
         tweetWithOthers = await tweetFunctions.commentTweet(
           commentedTweetId,
           tweetFormData
@@ -76,6 +77,7 @@ function TweetForm({ commentedTweetId, setCommentInput }) {
         );
         dispatch(
           tweetActions.addComment({
+            currentRetweetId,
             commentedOriginId: commentedTweetId,
             commentTweetId: tweetWithOthers.id
           })
@@ -94,9 +96,9 @@ function TweetForm({ commentedTweetId, setCommentInput }) {
       }
 
       // 댓글일 경우 메인화면에 표시되지 않도록
-      // if (!tweetWithOthers.commentedOriginId) {
-      dispatch(tweetActions.addTweet(tweetWithOthers));
-      // }
+      if (!tweetWithOthers.commentedOriginId) {
+        dispatch(tweetActions.addTweet(tweetWithOthers));
+      }
     } catch (error) {
       console.error(error);
     } finally {

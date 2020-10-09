@@ -83,11 +83,34 @@ const tweetSlice = createSlice({
         }
       }
     },
-    addComment: (state, { payload: { commentedOriginId, commentTweetId } }) => {
+    addComment: (
+      state,
+      { payload: { currentRetweetId, commentedOriginId, commentTweetId } }
+    ) => {
+      if (currentRetweetId) {
+        // 리트윗 트윗에서 댓글을 추가하는 경우
+        const retweet = state.tweets.find(
+          tweet => tweet.id === currentRetweetId
+        );
+
+        retweet.retweetOrigin.comments.push({ id: commentTweetId });
+      }
+
+      // 리트윗 원본 or 일반 트윗에서 댓글을 추가하는 경우
       const commentedOrigin = state.tweets.find(
         tweet => tweet.id === commentedOriginId
       );
-      commentedOrigin.comments.push({ id: commentTweetId });
+      if (commentedOrigin) {
+        commentedOrigin.comments.push({ id: commentTweetId });
+      }
+
+      // 원본을 리트윗한 트윗의 댓글 카운트도 변경
+      const retweet = state.tweets.find(
+        tweet => tweet.retweetOriginId === commentedOriginId
+      );
+      if (retweet && !currentRetweetId) {
+        retweet.retweetOrigin.comments.push({ id: commentTweetId });
+      }
     },
 
     removeComment: (

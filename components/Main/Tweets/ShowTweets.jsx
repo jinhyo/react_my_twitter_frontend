@@ -45,6 +45,7 @@ function ShowTweets({ tweets, inProfile }) {
             tweet={tweet}
             retweet={tweet.retweetOrigin}
             favoriteStatus={isFavoriteTweet(tweet.retweetOriginId)}
+            commentStatus={didIComment(tweet.retweetOriginId)}
             inProfile={inProfile}
           />
         ) : (

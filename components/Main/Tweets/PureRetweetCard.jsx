@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, Button, Icon, Feed, Image, IconGroup } from "semantic-ui-react";
 import moment from "moment";
@@ -15,15 +15,24 @@ import {
   specificUserSelector,
   specificUserActions
 } from "../../../features/specificUserSlice";
+import TweetForm from "./TweetForm";
 
 // in <ShowTweets />
-function PureRetweetCard({ tweet, retweet, favoriteStatus, inProfile }) {
+function PureRetweetCard({
+  tweet,
+  retweet,
+  favoriteStatus,
+  commentStatus,
+  inProfile
+}) {
   const dispatch = useDispatch();
   const afterClickRef = useRef();
 
   const currentUserId = useSelector(userSelector.currentUserId);
   const specificUserId = useSelector(specificUserSelector.userId);
   const myRetweets = useSelector(userSelector.myRetweets);
+
+  const [commentInput, setCommentInput] = useState(false);
 
   //// 리트윗 popup 해제
   function cancelPopup() {
@@ -126,6 +135,10 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus, inProfile }) {
 
     return currentUserId === tweet.user.id && index !== -1;
   }
+
+  const handleShowCommentInput = useCallback(() => {
+    setCommentInput(prev => !prev);
+  }, [commentInput]);
 
   // 댓글일 경우 표시
   const renderCommentStatus = useCallback(() => {
@@ -230,10 +243,22 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus, inProfile }) {
           {retweet.likers.length}
         </Button>
 
-        {/* 답글 버튼 */}
-        <Button basic color="green">
-          <Icon name="comment outline" color="grey" /> 0
+        {/* 댓글 버튼 */}
+        <Button basic color="green" onClick={handleShowCommentInput}>
+          {commentStatus ? (
+            <Icon name="comment" />
+          ) : (
+            <Icon name="comment outline" color="grey" />
+          )}
+          {retweet.comments.length}
         </Button>
+        {commentInput && (
+          <TweetForm
+            commentedTweetId={retweet.id}
+            setCommentInput={setCommentInput}
+            currentRetweetId={tweet.id}
+          />
+        )}
       </Card.Content>
     </Card>
   );
