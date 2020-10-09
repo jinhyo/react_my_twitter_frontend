@@ -5,9 +5,10 @@ import tweetFunctions from "../../../lib/tweetFunctions";
 import { tweetActions } from "../../../features/tweetSlice";
 import { userSelector, userActions } from "../../../features/userSlice";
 import QuotedTweetModal from "./QuotedTweetModal";
+import { specificUserActions } from "../../../features/specificUserSlice";
 
 // in <TweetCard />, <PureRetweetCard />
-function RetweetButton({ tweet, cancelPopup }) {
+function RetweetButton({ tweet, cancelPopup, inProfile }) {
   const dispatch = useDispatch();
 
   const myRetweets = useSelector(userSelector.myRetweets);
@@ -42,9 +43,20 @@ function RetweetButton({ tweet, cancelPopup }) {
         tweet.retweetOriginId || tweet.id // 원본을 리트윗 || 리트윗한 트윗을 리트윗
       );
 
-      dispatch(
-        tweetActions.increaseRetweetCount(tweet.retweetOriginId || tweet.id)
-      );
+      if (inProfile) {
+        // specificUser에게 적용
+        dispatch(
+          specificUserActions.increaseRetweetCount(
+            tweet.retweetOriginId || tweet.id
+          )
+        );
+      } else {
+        // currentUser에게 적용
+        dispatch(
+          tweetActions.increaseRetweetCount(tweet.retweetOriginId || tweet.id)
+        );
+      }
+
       dispatch(tweetActions.addTweet(newTweet));
       dispatch(userActions.addRetweetToMe(tweet.retweetOriginId || tweet.id));
       dispatch(
@@ -70,7 +82,19 @@ function RetweetButton({ tweet, cancelPopup }) {
         retweetOriginId
       );
 
-      dispatch(tweetActions.decreaseRetweetCount(retweetOriginId));
+      if (inProfile) {
+        // specificUser에게 적용
+        dispatch(
+          specificUserActions.decreaseRetweetCount(
+            tweet.retweetOriginId || tweet.id
+          )
+        );
+      } else {
+        // currentUser에게 적용
+        dispatch(
+          tweetActions.decreaseRetweetCount(tweet.retweetOriginId || tweet.id)
+        );
+      }
       dispatch(tweetActions.removeTweet(deletedTweetId));
       dispatch(userActions.removeRtweetFromMe(retweetOriginId));
       dispatch(userActions.removeMyTweet([deletedTweetId]));
@@ -136,7 +160,12 @@ function RetweetButton({ tweet, cancelPopup }) {
           onClick={handleOpenModal}
         />
       </Popup>
-      <QuotedTweetModal modal={modal} closeModal={closeModal} tweet={tweet} />
+      <QuotedTweetModal
+        modal={modal}
+        closeModal={closeModal}
+        tweet={tweet}
+        inProfile={inProfile}
+      />
     </>
   );
 }

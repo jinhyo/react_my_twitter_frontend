@@ -1,13 +1,6 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  Form,
-  Input,
-  Button,
-  Segment,
-  TextArea,
-  Divider
-} from "semantic-ui-react";
+import { Form, Button, TextArea, Divider } from "semantic-ui-react";
 import { Picker } from "emoji-mart";
 import PreviewImages from "./PreviewImages";
 import mime from "mime-types";
@@ -15,11 +8,11 @@ import { toast } from "react-toastify";
 import tweetFunctions from "../../../lib/tweetFunctions";
 import { userActions, userSelector } from "../../../features/userSlice";
 import { tweetSelector, tweetActions } from "../../../features/tweetSlice";
-import QuotationCard from "./QuotedTweet";
 import QuotedTweet from "./QuotedTweet";
+import { specificUserActions } from "../../../features/specificUserSlice";
 
 //  in <QuotedTweetModal />
-function QuotationForm({ quotedTweet, closeModal }) {
+function QuotationForm({ quotedTweet, closeModal, inProfile }) {
   const dispatch = useDispatch();
   const inputRef = useRef();
   const fileRef = useRef();
@@ -66,7 +59,6 @@ function QuotationForm({ quotedTweet, closeModal }) {
         tweetFormData
       );
       dispatch(tweetActions.addTweet(tweetWithOthers));
-      dispatch(tweetActions.increaseRetweetCount(quotedTweet.id));
       dispatch(
         userActions.addMyTweet({
           tweetId: tweetWithOthers.id,
@@ -75,6 +67,14 @@ function QuotationForm({ quotedTweet, closeModal }) {
           commentedOriginId: null
         })
       );
+
+      if (inProfile) {
+        // specificUser에게 적용
+        dispatch(specificUserActions.increaseRetweetCount(quotedTweet.id));
+      } else {
+        // currentUser에게 적용
+        dispatch(tweetActions.increaseRetweetCount(quotedTweet.id));
+      }
     } catch (error) {
       console.error(error);
     } finally {

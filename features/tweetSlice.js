@@ -55,30 +55,34 @@ const tweetSlice = createSlice({
         }
       });
     },
-    increaseRetweetCount: (state, { payload: tweetId }) => {
+    increaseRetweetCount: (state, { payload: retweetOriginId }) => {
       // 리트윗된 원본 트윗의 카운트 변경
-      const targetTweet = state.tweets.find(tweet => tweet.id === tweetId);
+      const targetTweet = state.tweets.find(
+        tweet => tweet.id === retweetOriginId
+      );
       if (targetTweet) {
         targetTweet.retweetedCount++;
       }
 
       // 기존에 리트윗한 트윗들의 카운트 변경
       for (let i = 0; i < state.tweets.length; i++) {
-        if (state.tweets[i].retweetOriginId === tweetId) {
+        if (state.tweets[i].retweetOriginId === retweetOriginId) {
           state.tweets[i].retweetOrigin.retweetedCount++;
         }
       }
     },
-    decreaseRetweetCount: (state, { payload: tweetId }) => {
+    decreaseRetweetCount: (state, { payload: retweetOriginId }) => {
       // 리트윗된 원본 트윗의 카운트 변경
-      const targetTweet = state.tweets.find(tweet => tweet.id === tweetId);
+      const targetTweet = state.tweets.find(
+        tweet => tweet.id === retweetOriginId
+      );
       if (targetTweet) {
         targetTweet.retweetedCount--;
       }
 
       // 기존에 리트윗한 트윗들의 카운트 변경
       for (let i = 0; i < state.tweets.length; i++) {
-        if (state.tweets[i].retweetOriginId === tweetId) {
+        if (state.tweets[i].retweetOriginId === retweetOriginId) {
           state.tweets[i].retweetOrigin.retweetedCount--;
         }
       }

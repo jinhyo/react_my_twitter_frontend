@@ -19,8 +19,6 @@ import {
 
 // in <ShowTweets />
 function TweetCard({ tweet, favoriteStatus, commentStatus, inProfile }) {
-  console.log("~~inProfile", inProfile);
-
   const dispatch = useDispatch();
   const afterClickRef = useRef();
 
@@ -50,7 +48,8 @@ function TweetCard({ tweet, favoriteStatus, commentStatus, inProfile }) {
         console.error(error);
       }
 
-      // redux state change
+      dispatch(userActions.removeFavoriteTweetsFromMe(tweet.id));
+
       if (inProfile) {
         // specificUser에게 적용
         dispatch(
@@ -59,7 +58,6 @@ function TweetCard({ tweet, favoriteStatus, commentStatus, inProfile }) {
             tweetId: tweet.id
           })
         );
-        dispatch(userActions.removeFavoriteTweetsFromMe(tweet.id));
 
         // 내가 내 프로필을 보고 있을 경우 프로필 화면의 좋아요 카운트 변경
         if (currentUserId === specificUserId) {
@@ -70,7 +68,6 @@ function TweetCard({ tweet, favoriteStatus, commentStatus, inProfile }) {
         dispatch(
           tweetActions.unlikeTweet({ myId: currentUserId, tweetId: tweet.id })
         );
-        dispatch(userActions.removeFavoriteTweetsFromMe(tweet.id));
       }
     } else {
       // 좋아요 등록
@@ -80,7 +77,8 @@ function TweetCard({ tweet, favoriteStatus, commentStatus, inProfile }) {
         console.error(error);
       }
 
-      // redux state change
+      dispatch(userActions.addFavoriteTweetsToMe(tweet.id));
+
       if (inProfile) {
         // specificUser에게 적용
         dispatch(
@@ -89,7 +87,6 @@ function TweetCard({ tweet, favoriteStatus, commentStatus, inProfile }) {
             tweetId: tweet.id
           })
         );
-        dispatch(userActions.addFavoriteTweetsToMe(tweet.id));
 
         // 내가 내 프로필을 보고 있을 경우 프로필 화면의 좋아요 카운트 변경
         if (currentUserId === specificUserId) {
@@ -100,7 +97,6 @@ function TweetCard({ tweet, favoriteStatus, commentStatus, inProfile }) {
         dispatch(
           tweetActions.likeTweet({ myId: currentUserId, tweetId: tweet.id })
         );
-        dispatch(userActions.addFavoriteTweetsToMe(tweet.id));
       }
     }
   }, [favoriteStatus, currentUserId, specificUserId]);
@@ -198,7 +194,11 @@ function TweetCard({ tweet, favoriteStatus, commentStatus, inProfile }) {
         </Card.Content>
         <Card.Content extra>
           {/* 리트윗 버튼 */}
-          <RetweetButton tweet={tweet} cancelPopup={cancelPopup} />
+          <RetweetButton
+            tweet={tweet}
+            cancelPopup={cancelPopup}
+            inProfile={inProfile}
+          />
           <span ref={afterClickRef}></span>
 
           {/* 좋아요 버튼 */}

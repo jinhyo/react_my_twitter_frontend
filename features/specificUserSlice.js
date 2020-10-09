@@ -120,31 +120,45 @@ const specificUserSlice = createSlice({
 
     increaseRetweetCount: (state, { payload: tweetId }) => {
       // 리트윗된 원본 트윗의 카운트 변경
-      const targetTweet = state.tweets.find(tweet => tweet.id === tweetId);
-      if (targetTweet) {
-        targetTweet.retweetedCount++;
-      }
+      TWEET_KEYS.forEach(key => {
+        const retweetOrigin = state.specificUser[key].find(
+          tweet => tweet.id === tweetId
+        );
+        if (retweetOrigin) {
+          retweetOrigin.retweetedCount++;
+        }
+      });
 
       // 기존에 리트윗한 트윗들의 카운트 변경
-      for (let i = 0; i < state.tweets.length; i++) {
-        if (state.tweets[i].retweetOriginId === tweetId) {
-          state.tweets[i].retweetOrigin.retweetedCount++;
+      TWEET_KEYS.forEach(key => {
+        const retweet = state.specificUser[key].find(
+          tweet => tweet.retweetOriginId === tweetId
+        );
+        if (retweet) {
+          retweet.retweetedCount++;
         }
-      }
+      });
     },
     decreaseRetweetCount: (state, { payload: tweetId }) => {
       // 리트윗된 원본 트윗의 카운트 변경
-      const targetTweet = state.tweets.find(tweet => tweet.id === tweetId);
-      if (targetTweet) {
-        targetTweet.retweetedCount--;
-      }
+      TWEET_KEYS.forEach(key => {
+        const retweetOrigin = state.specificUser[key].find(
+          tweet => tweet.id === tweetId
+        );
+        if (retweetOrigin) {
+          retweetOrigin.retweetedCount--;
+        }
+      });
 
       // 기존에 리트윗한 트윗들의 카운트 변경
-      for (let i = 0; i < state.tweets.length; i++) {
-        if (state.tweets[i].retweetOriginId === tweetId) {
-          state.tweets[i].retweetOrigin.retweetedCount--;
+      TWEET_KEYS.forEach(key => {
+        const retweet = state.specificUser[key].find(
+          tweet => tweet.retweetOriginId === tweetId
+        );
+        if (retweet) {
+          retweet.retweetedCount--;
         }
-      }
+      });
     },
     addComment: (
       state,
