@@ -11,7 +11,10 @@ import ExtraDropdown from "./ExtraDropdown";
 import RetweetButton from "./RetweetButton";
 import QuotedTweetCard from "./QuotedTweetCard";
 import Link from "next/link";
-import { specificUserSelector } from "../../../features/specificUserSlice";
+import {
+  specificUserSelector,
+  specificUserActions
+} from "../../../features/specificUserSlice";
 
 // in <ShowTweets />
 function PureRetweetCard({ tweet, retweet, favoriteStatus, inProfile }) {
@@ -38,7 +41,7 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus, inProfile }) {
     if (favoriteStatus) {
       // 좋아요 삭제
       try {
-        await tweetFunctions.unlikeTweets(tweet.id);
+        await tweetFunctions.unlikeTweets(retweet.id);
       } catch (error) {
         console.error(error);
       }
@@ -49,10 +52,10 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus, inProfile }) {
         dispatch(
           specificUserActions.unlikeTweet({
             myId: currentUserId,
-            tweetId: tweet.id
+            tweetId: retweet.id
           })
         );
-        dispatch(userActions.removeFavoriteTweetsFromMe(tweet.id));
+        dispatch(userActions.removeFavoriteTweetsFromMe(retweet.id));
 
         // 내가 내 프로필을 보고 있을 경우 프로필 화면의 좋아요 카운트 변경
         if (currentUserId === specificUserId) {
@@ -61,14 +64,14 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus, inProfile }) {
       } else {
         // currentUser에게 적용
         dispatch(
-          tweetActions.unlikeTweet({ myId: currentUserId, tweetId: tweet.id })
+          tweetActions.unlikeTweet({ myId: currentUserId, tweetId: retweet.id })
         );
-        dispatch(userActions.removeFavoriteTweetsFromMe(tweet.id));
+        dispatch(userActions.removeFavoriteTweetsFromMe(retweet.id));
       }
     } else {
       // 좋아요 등록
       try {
-        await tweetFunctions.likeTweets(tweet.id);
+        await tweetFunctions.likeTweets(retweet.id);
       } catch (error) {
         console.error(error);
       }
@@ -79,10 +82,10 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus, inProfile }) {
         dispatch(
           specificUserActions.likeTweet({
             myId: currentUserId,
-            tweetId: tweet.id
+            tweetId: retweet.id
           })
         );
-        dispatch(userActions.addFavoriteTweetsToMe(tweet.id));
+        dispatch(userActions.addFavoriteTweetsToMe(retweet.id));
 
         // 내가 내 프로필을 보고 있을 경우 프로필 화면의 좋아요 카운트 변경
         if (currentUserId === specificUserId) {
@@ -91,9 +94,9 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus, inProfile }) {
       } else {
         // currentUser에게 적용
         dispatch(
-          tweetActions.likeTweet({ myId: currentUserId, tweetId: tweet.id })
+          tweetActions.likeTweet({ myId: currentUserId, tweetId: retweet.id })
         );
-        dispatch(userActions.addFavoriteTweetsToMe(tweet.id));
+        dispatch(userActions.addFavoriteTweetsToMe(retweet.id));
       }
     }
   }, [favoriteStatus, currentUserId, specificUserId]);

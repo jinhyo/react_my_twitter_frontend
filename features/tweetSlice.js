@@ -58,7 +58,9 @@ const tweetSlice = createSlice({
     increaseRetweetCount: (state, { payload: tweetId }) => {
       // 리트윗된 원본 트윗의 카운트 변경
       const targetTweet = state.tweets.find(tweet => tweet.id === tweetId);
-      targetTweet.retweetedCount++;
+      if (targetTweet) {
+        targetTweet.retweetedCount++;
+      }
 
       // 기존에 리트윗한 트윗들의 카운트 변경
       for (let i = 0; i < state.tweets.length; i++) {
@@ -70,7 +72,9 @@ const tweetSlice = createSlice({
     decreaseRetweetCount: (state, { payload: tweetId }) => {
       // 리트윗된 원본 트윗의 카운트 변경
       const targetTweet = state.tweets.find(tweet => tweet.id === tweetId);
-      targetTweet.retweetedCount--;
+      if (targetTweet) {
+        targetTweet.retweetedCount--;
+      }
 
       // 기존에 리트윗한 트윗들의 카운트 변경
       for (let i = 0; i < state.tweets.length; i++) {
