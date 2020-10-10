@@ -72,6 +72,11 @@ function ExtraDropdown({
     try {
       await userFunctions.followUser(writerId);
       dispatch(userActions.addFollowing(writerId));
+
+      if (specificUserId) {
+        // specificUser 용
+        dispatch(specificUserActions.addFollowing(writerId));
+      }
     } catch (error) {
       console.error(error);
     }
@@ -82,6 +87,11 @@ function ExtraDropdown({
     try {
       await userFunctions.unfollowUser(writerId);
       dispatch(userActions.removeFollowing(writerId));
+
+      if (specificUserId) {
+        // currentUser 용
+        dispatch(specificUserActions.removeFollowing(writerId));
+      }
     } catch (error) {
       console.error(error);
     }

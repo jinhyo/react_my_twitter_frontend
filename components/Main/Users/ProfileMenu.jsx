@@ -13,6 +13,7 @@ function ProfileMenu({ handleItemClick, activeItem }) {
   const dispatch = useDispatch();
 
   const specificUser = useSelector(specificUserSelector.user);
+  const specificUserId = useSelector(specificUserSelector.userId);
   console.log("specificUser", specificUser);
 
   const count = useSelector(specificUserSelector.tweetCounts);
@@ -20,7 +21,7 @@ function ProfileMenu({ handleItemClick, activeItem }) {
 
   //// 매뉴 항목들의 개수 파악
   useEffect(() => {
-    if (specificUser) {
+    if (specificUserId) {
       let tweetCount = 0;
       let commentCount = 0;
       let mediaCount = 0;
@@ -45,7 +46,7 @@ function ProfileMenu({ handleItemClick, activeItem }) {
         )
       );
     }
-  }, [specificUser]);
+  }, [specificUserId]);
 
   return (
     <Menu pointing widths={4}>

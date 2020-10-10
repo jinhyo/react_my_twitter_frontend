@@ -4,11 +4,11 @@ import { Comment, Button, Divider, Image, Card, Feed } from "semantic-ui-react";
 import { userSelector, userActions } from "../../../features/userSlice";
 import Link from "next/link";
 import userFunctions from "../../../lib/userFunctions";
+import { specificUserActions } from "../../../features/specificUserSlice";
 
-// in <TweetInfoCard />
+// in <TweetInfoCard />, <Profile />
 function UserCard({ user }) {
   const dispatch = useDispatch();
-  const cancelRef = useRef();
 
   const followings = useSelector(userSelector.followings);
   const currentUserId = useSelector(userSelector.currentUserId);
@@ -56,6 +56,7 @@ function UserCard({ user }) {
     try {
       await userFunctions.followUser(user.id);
       dispatch(userActions.addFollowing(user.id));
+      dispatch(specificUserActions.addFollowing(user.id));
     } catch (error) {
       console.error(error);
     }
@@ -66,6 +67,7 @@ function UserCard({ user }) {
     try {
       await userFunctions.unfollowUser(user.id);
       dispatch(userActions.removeFollowing(user.id));
+      dispatch(specificUserActions.removeFollowing(user.id));
     } catch (error) {
       console.error(error);
     }

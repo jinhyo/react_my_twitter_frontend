@@ -284,6 +284,21 @@ const specificUserSlice = createSlice({
       );
       state.totalTweetCount--;
       state.count.tweets--;
+    },
+    removeFollowing: (state, { payload: followerId }) => {
+      // 카운트 변경
+      state.specificUser.user.followings = state.specificUser.user.followings.filter(
+        follower => follower.id !== followerId
+      );
+
+      // 팔로잉 메뉴에서 제거
+      state.specificUser.followings = state.specificUser.followings.filter(
+        follower => follower.id !== followerId
+      );
+    },
+    addFollowing: (state, { payload: followerId }) => {
+      // 카운트 변경
+      state.specificUser.user.followings.unshift({ id: followerId });
     }
   }
 });
