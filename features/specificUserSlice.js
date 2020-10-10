@@ -167,8 +167,12 @@ const specificUserSlice = createSlice({
     },
     addComment: (
       state,
-      { payload: { currentRetweetId, commentedOriginId, commentTweetId } }
+      {
+        payload: { currentRetweetId, commentedOriginId, commentTweetId, tweet }
+      }
     ) => {
+      state.specificUser.commentTweets.unshift(tweet);
+
       if (currentRetweetId) {
         // 리트윗 트윗에서 댓글을 추가하는 경우
         TWEET_KEYS.forEach(key => {
@@ -200,6 +204,12 @@ const specificUserSlice = createSlice({
           retweet.retweetOrigin.comments.push({ id: commentTweetId });
         }
       });
+
+      // 전체 카운트 증가
+      state.totalTweetCount++;
+
+      // 댓글 매뉴 카운트 증가
+      state.count.commentTweets++;
     },
     removeComment: (
       state,

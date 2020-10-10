@@ -126,7 +126,7 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
           >
             <a>트윗</a>
           </Link>
-          에 보내는 답글
+          에 보내는 댓글
         </Feed.Summary>
       );
     } else {

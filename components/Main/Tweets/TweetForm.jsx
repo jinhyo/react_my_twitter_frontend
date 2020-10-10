@@ -87,7 +87,8 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
             specificUserActions.addComment({
               currentRetweetId,
               commentedOriginId: commentedTweetId,
-              commentTweetId: tweetWithOthers.id
+              commentTweetId: tweetWithOthers.id,
+              tweet: tweetWithOthers
             })
           );
         } else {
