@@ -14,6 +14,7 @@ const tweetSlice = createSlice({
       state.tweets.unshift(tweet);
     },
     removeTweet: (state, { payload: tweetId }) => {
+      // 현재 트윗삭제 or 현재 트윗을 리트윗한 트윗 삭제
       state.tweets = state.tweets.filter(
         tweet => tweet.id !== tweetId && tweet.retweetOriginId !== tweetId
       );

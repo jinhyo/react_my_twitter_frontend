@@ -6,6 +6,7 @@ import { tweetActions } from "../../../features/tweetSlice";
 import userFunctions from "../../../lib/userFunctions";
 import { userActions, userSelector } from "../../../features/userSlice";
 import Link from "next/link";
+import { specificUserActions } from "../../../features/specificUserSlice";
 
 // in <TweetCard />, <PureRetweetCard />
 function ExtraDropdown({
@@ -13,35 +14,50 @@ function ExtraDropdown({
   writerNickname,
   writerId,
   tweetId,
-  tweet
+  tweet,
+  inProfile
 }) {
   const dispatch = useDispatch();
 
   const followings = useSelector(userSelector.followings);
 
-  //// 트윗 삭제
+  /* 트윗 삭제 */
   const handleRemoveTweet = useCallback(async () => {
     if (confirm("정말로 삭제하시겠습니까?")) {
       try {
         const deltedTweetIds = await tweetFunctions.removeTweet(tweetId);
 
-        dispatch(tweetActions.removeTweet(tweetId));
+        if (inProfile) {
+          // specificUser에게 적용
+          dispatch(specificUserActions.removeTweet(tweetId));
+
+          // 인용한 트윗인 경우 인용된 트윗의 리트윗 카운트 감소
+          if (tweet.quotedOriginId) {
+            dispatch(
+              specificUserActions.decreaseRetweetCount(tweet.quotedOriginId)
+            );
+          }
+        } else {
+          // currentUser에게 적용
+          dispatch(tweetActions.removeTweet(tweetId));
+
+          // 인용한 트윗인 경우 인용된 트윗의 리트윗 카운트 감소
+          if (tweet.quotedOriginId) {
+            dispatch(tweetActions.decreaseRetweetCount(tweet.quotedOriginId));
+          }
+
+          // 댓글인 경우 댓글을 단 트윗의 댓글 state를 변경 in redux
+          if (tweet.commentedOriginId) {
+            dispatch(
+              tweetActions.removeComment({
+                commentedOriginId: tweet.commentedOriginId,
+                commentTweetId: tweetId
+              })
+            );
+          }
+        }
+
         dispatch(userActions.removeMyTweet(deltedTweetIds));
-
-        // 인용한 트윗인 경우 인용된 트윗의 리트윗 카운트 감소
-        if (tweet.quotedOriginId) {
-          dispatch(tweetActions.decreaseRetweetCount(tweet.quotedOriginId));
-        }
-
-        // 댓글인 경우 댓글을 단 트윗의 댓글 state를 변경 in redux
-        if (tweet.commentedOriginId) {
-          dispatch(
-            tweetActions.removeComment({
-              commentedOriginId: tweet.commentedOriginId,
-              commentTweetId: tweetId
-            })
-          );
-        }
       } catch (error) {
         console.error(error);
       }

@@ -205,6 +205,7 @@ function PureRetweetCard({
                       writerId={retweet.user.id}
                       tweetId={retweet.id}
                       tweet={tweet}
+                      inProfile={inProfile}
                     />
                   )}
                 </Feed.Summary>

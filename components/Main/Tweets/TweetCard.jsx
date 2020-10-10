@@ -170,6 +170,7 @@ function TweetCard({ tweet, favoriteStatus, commentStatus, inProfile }) {
                         writerId={tweet.user.id}
                         tweetId={tweet.id}
                         tweet={tweet}
+                        inProfile={inProfile}
                       />
                     )}
                   </Feed.Summary>
