@@ -1,33 +1,40 @@
 import React, { useCallback, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import TweetCard from "./TweetCard";
 import { Menu, Label, Loader } from "semantic-ui-react";
 import userFunctions from "../../../lib/userFunctions";
 import UserCard from "../Users/UserCard";
 import tweetFunctions from "../../../lib/tweetFunctions";
 import ShowTweets from "./ShowTweets";
+import { tweetActions, tweetSelector } from "../../../features/tweetSlice";
+import { specificTweetActions } from "../../../features/specificTweetSlice";
 
 // in <TweetStatus />
 function TweetInfoCard({ tweet }) {
+  const dispatch = useDispatch();
+
+  const tweets = useSelector(tweetSelector.tweets);
+
   const [activeItem, setActiveItem] = useState("comments");
   const [loading, setLoading] = useState(false);
   const [retweetUsers, setRetweetUsers] = useState([]);
   const [likers, setLikers] = useState([]);
-  const [quotations, setQuotations] = useState([]);
-  const [comments, setComments] = useState([]);
 
   useEffect(() => {
     getComments(tweet.id);
-  }, [tweet]);
+  }, []);
 
   const handleItemClick = useCallback(
     async (e, { name }) => {
       setActiveItem(name);
 
       if (name === "comments") {
+        dispatch(tweetActions.clearTweets());
         getComments(tweet.id);
       } else if (name === "retweetUsers") {
         getRetweetUsers(tweet.id);
       } else if (name === "quotations") {
+        dispatch(tweetActions.clearTweets());
         getQuotaions(tweet.id);
       } else if (name === "likers") {
         getLikers(tweet.id);
@@ -41,7 +48,7 @@ function TweetInfoCard({ tweet }) {
       setLoading(true);
       const commentTweets = await tweetFunctions.getComments(tweetId);
 
-      setComments(commentTweets);
+      dispatch(tweetActions.setTweets(commentTweets));
     } catch (error) {
       console.error(error);
     } finally {
@@ -78,9 +85,8 @@ function TweetInfoCard({ tweet }) {
     try {
       setLoading(true);
       const quotationTweets = await tweetFunctions.getQuotations(tweetId);
-      console.log("quotationTweets", quotationTweets);
 
-      setQuotations(quotationTweets);
+      dispatch(tweetActions.setTweets(quotationTweets));
     } catch (error) {
       console.error(error);
     } finally {
@@ -146,14 +152,14 @@ function TweetInfoCard({ tweet }) {
       <Loader size="small" active={loading} />
 
       {/* 댓글 트윗들 */}
-      {activeItem === "comments" && <ShowTweets tweets={comments} />}
+      {activeItem === "comments" && <ShowTweets tweets={tweets} />}
 
       {/* 리트윗한 유저들 */}
       {activeItem === "retweetUsers" &&
         retweetUsers.map(user => <UserCard key={user.id} user={user} />)}
 
       {/* 인용한 트윗들 */}
-      {activeItem === "quotations" && <ShowTweets tweets={quotations} />}
+      {activeItem === "quotations" && <ShowTweets tweets={tweets} />}
 
       {/* 좋아요 누른 유저들 */}
       {activeItem === "likers" &&

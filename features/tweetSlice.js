@@ -10,6 +10,9 @@ const tweetSlice = createSlice({
     setTweets: (state, { payload: tweets }) => {
       state.tweets.push(...tweets);
     },
+    clearTweets: state => {
+      state.tweets = [];
+    },
     addTweet: (state, { payload: tweet }) => {
       state.tweets.unshift(tweet);
     },

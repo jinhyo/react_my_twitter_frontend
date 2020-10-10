@@ -10,18 +10,25 @@ import tweetFunctions from "../lib/tweetFunctions";
 import { tweetActions, tweetSelector } from "../features/tweetSlice";
 import authFunctions from "../lib/authFunctions";
 import ShowTweets from "../components/Main/Tweets/ShowTweets";
+import {
+  specificTweetActions,
+  specificTweetSelector
+} from "../features/specificTweetSlice";
 
 function Index() {
   const dispatch = useDispatch();
   const currentUser = useSelector(userSelector.currentUser);
 
   const tweets = useSelector(tweetSelector.tweets);
+  const specificTweetId = useSelector(specificTweetSelector.specificTweetId);
+
   const [hasMorePosts, setHasMorePosts] = useState(false);
   const [loadTweetLoading, setLoadTweetLoading] = useState(true);
   const [clear, setClear] = useState(null);
 
   console.log("tweets", tweets);
   console.log("currentUser", currentUser);
+  console.log("specificTweetId", specificTweetId);
 
   // 회원가입 or 로그인 시 유저정보 가져오기
   useEffect(() => {
@@ -38,7 +45,12 @@ function Index() {
     if (!tweets.length) {
       getTweets();
     }
-  }, []);
+
+    return () => {
+      console.log("in Index");
+      dispatch(tweetActions.clearTweets());
+    };
+  }, [specificTweetId]);
 
   useEffect(() => {
     window.addEventListener("scroll", getMoreTweets);

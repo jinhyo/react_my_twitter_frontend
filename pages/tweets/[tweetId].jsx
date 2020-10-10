@@ -9,6 +9,10 @@ import { useRouter } from "next/router";
 import tweetFunctions from "../../lib/tweetFunctions";
 import TweetInfoCard from "../../components/Main/Tweets/TweetInfoCard";
 import { tweetSelector, tweetActions } from "../../features/tweetSlice";
+import {
+  specificTweetActions,
+  specificTweetSelector
+} from "../../features/specificTweetSlice";
 
 function TweetStatus() {
   const router = useRouter();
@@ -16,20 +20,28 @@ function TweetStatus() {
   const { tweetId } = router.query;
 
   const currentUser = useSelector(userSelector.currentUser);
-  const tweetStatus = useSelector(tweetSelector.tweetStatus);
+  const specificTweet = useSelector(specificTweetSelector.specificTweet);
 
-  console.log("~~~tweetStatus", tweetStatus);
+  console.log("~~~specificTweet", specificTweet);
 
   useEffect(() => {
     if (tweetId) {
       getTweetStatus(tweetId);
     }
+
+    return () => {
+      // <Index />에서 다시 트윗들 가져오기 위해; <Index />의 useEffect[specificTweetId]을 콜
+      console.log("in TweetStatus");
+
+      dispatch(specificTweetActions.clearTweet());
+      dispatch(tweetActions.clearTweets());
+    };
   }, [tweetId]);
 
   async function getTweetStatus(tweetId) {
     try {
       const tweet = await tweetFunctions.getTweetStatus(tweetId);
-      dispatch(tweetActions.setTweetStatus(tweet));
+      dispatch(specificTweetActions.setTweet(tweet));
     } catch (error) {
       console.error(error.response.data || error);
     }
@@ -44,7 +56,7 @@ function TweetStatus() {
         <WhoToFollow />
       </Grid.Column>
       <Grid.Column tablet={11} computer={10}>
-        {tweetStatus && <TweetInfoCard tweet={tweetStatus} />}
+        {specificTweet && <TweetInfoCard tweet={specificTweet} />}
       </Grid.Column>
     </Grid>
   );
