@@ -205,7 +205,13 @@ const specificUserSlice = createSlice({
         }
       });
 
-      // 전체 카운트 증가
+      // 댓글에 이미지가 있을 경우 미디어 매뉴의 카운트 및 미디어 트윗 추가
+      if (tweet.hasMedia) {
+        state.count.mediaTweets++;
+        state.specificUser.mediaTweets.unshift(tweet);
+      }
+
+      // 전체 트윗 카운트 증가
       state.totalTweetCount++;
 
       // 댓글 매뉴 카운트 증가

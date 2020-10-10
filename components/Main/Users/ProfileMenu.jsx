@@ -27,13 +27,18 @@ function ProfileMenu({ handleItemClick, activeItem }) {
       let mediaCount = 0;
 
       specificUser.tweets.forEach(tweet => {
-        if (tweet.commentedOriginId) {
+        if (tweet.commentedOriginId === null) {
+          tweetCount++;
+          if (tweet.hasMedia) {
+            mediaCount++;
+          }
+        } else if (tweet.commentedOriginId) {
           commentCount++;
+          if (tweet.hasMedia) {
+            mediaCount++;
+          }
         } else if (tweet.hasMedia) {
           mediaCount++;
-          tweetCount++;
-        } else {
-          tweetCount++;
         }
       });
 
