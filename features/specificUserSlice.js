@@ -230,11 +230,9 @@ const specificUserSlice = createSlice({
           // 현재 트윗삭제 or 현재 트윗을 리트윗한 트윗 삭제
           const result =
             tweet.id !== tweetId && tweet.retweetOriginId !== tweetId;
-          // 트윗, 댓글, 미디어, 좋아요 중 해당하는 메뉴항목의 카운트 감소 & 전체 카운트 감소
-          console.log("~~1!result", result);
-          console.log("~~22!tweet", original(tweet));
 
           if (!result) {
+            // 트윗, 댓글, 미디어, 좋아요 중 해당하는 메뉴항목의 카운트 감소 & 전체 카운트 감소
             state.count[key]--;
             state.totalTweetCount--;
 
@@ -246,9 +244,6 @@ const specificUserSlice = createSlice({
                 mediatTweet => mediatTweet.id !== tweet.id
               );
             }
-
-            console.log("~~1!tweet", original(tweet));
-            console.log("~~1!reulst", result);
 
             // 좋아요 누른 트윗을 삭제할 경우 트윗과 좋아요 메뉴항목 모두 카운트 감소
             // 리트윗한 트윗과 리트윗된 트윗에 좋아요가 있을 경우 좋아요 카운트는 하나만 감소
@@ -267,6 +262,18 @@ const specificUserSlice = createSlice({
           return result;
         });
       });
+    },
+    addTweet: (state, { payload: tweet }) => {
+      state.specificUser.tweets.unshift(tweet);
+      state.totalTweetCount++;
+      state.count.tweets++;
+    },
+    cancelRetweet: (state, { payload: tweetId }) => {
+      state.specificUser.tweets = state.specificUser.tweets.filter(
+        tweet => tweet.id !== tweetId
+      );
+      state.totalTweetCount--;
+      state.count.tweets--;
     }
   }
 });

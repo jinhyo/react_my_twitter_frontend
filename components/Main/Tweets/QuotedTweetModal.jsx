@@ -4,18 +4,14 @@ import TweetForm from "./TweetForm";
 import QuotationForm from "./QuotationForm";
 
 // in <RetweetButton />
-function QuotedTweetModal({ modal, closeModal, tweet, inProfile }) {
+function QuotedTweetModal({ modal, closeModal, tweet }) {
   return (
     <Modal open={modal} onClose={closeModal} size="small">
       <Modal.Header style={{ backgroundColor: "#fffff0" }}>
         트윗 인용하기
       </Modal.Header>
       <Modal.Content style={{ backgroundColor: "#fffff0" }}>
-        <QuotationForm
-          quotedTweet={tweet}
-          closeModal={closeModal}
-          inProfile={inProfile}
-        />
+        <QuotationForm quotedTweet={tweet} closeModal={closeModal} />
       </Modal.Content>
     </Modal>
   );

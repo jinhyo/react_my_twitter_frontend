@@ -18,13 +18,7 @@ import {
 import TweetForm from "./TweetForm";
 
 // in <ShowTweets />
-function PureRetweetCard({
-  tweet,
-  retweet,
-  favoriteStatus,
-  commentStatus,
-  inProfile
-}) {
+function PureRetweetCard({ tweet, retweet, favoriteStatus, commentStatus }) {
   const dispatch = useDispatch();
   const afterClickRef = useRef();
 
@@ -56,7 +50,7 @@ function PureRetweetCard({
       }
 
       // redux state change
-      if (inProfile) {
+      if (specificUserId) {
         // specificUser에게 적용
         dispatch(
           specificUserActions.unlikeTweet({
@@ -86,7 +80,7 @@ function PureRetweetCard({
       }
 
       // redux state change
-      if (inProfile) {
+      if (specificUserId) {
         // specificUser에게 적용
         dispatch(
           specificUserActions.likeTweet({
@@ -205,7 +199,6 @@ function PureRetweetCard({
                       writerId={retweet.user.id}
                       tweetId={retweet.id}
                       tweet={tweet}
-                      inProfile={inProfile}
                     />
                   )}
                 </Feed.Summary>

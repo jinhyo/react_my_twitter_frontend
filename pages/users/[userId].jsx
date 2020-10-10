@@ -197,23 +197,21 @@ function Profile() {
           ))}
 
         {/* 트윗들  */}
-        {activeItem === "tweets" && (
-          <ShowTweets tweets={specificUsersTweets} inProfile={true} />
-        )}
+        {activeItem === "tweets" && <ShowTweets tweets={specificUsersTweets} />}
 
         {/* 댓글들 */}
         {activeItem === "comments" && (
-          <ShowTweets tweets={specificUsersComments} inProfile={true} />
+          <ShowTweets tweets={specificUsersComments} />
         )}
 
         {/* 미디어 트윗들 */}
         {activeItem === "medias" && (
-          <ShowTweets tweets={specificUsersMediaTweets} inProfile={true} />
+          <ShowTweets tweets={specificUsersMediaTweets} />
         )}
 
         {/* 좋아요 누른 트윗들 */}
         {activeItem === "favoriteTweets" && (
-          <ShowTweets tweets={specificUsersFavorites} inProfile={true} />
+          <ShowTweets tweets={specificUsersFavorites} />
         )}
 
         <Loader size="small" active={loading} />

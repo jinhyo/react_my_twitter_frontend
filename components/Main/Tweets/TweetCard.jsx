@@ -18,7 +18,7 @@ import {
 } from "../../../features/specificUserSlice";
 
 // in <ShowTweets />
-function TweetCard({ tweet, favoriteStatus, commentStatus, inProfile }) {
+function TweetCard({ tweet, favoriteStatus, commentStatus }) {
   const dispatch = useDispatch();
   const afterClickRef = useRef();
 
@@ -50,7 +50,7 @@ function TweetCard({ tweet, favoriteStatus, commentStatus, inProfile }) {
 
       dispatch(userActions.removeFavoriteTweetsFromMe(tweet.id));
 
-      if (inProfile) {
+      if (specificUserId) {
         // specificUser에게 적용
         dispatch(
           specificUserActions.unlikeTweet({
@@ -80,7 +80,7 @@ function TweetCard({ tweet, favoriteStatus, commentStatus, inProfile }) {
 
       dispatch(userActions.addFavoriteTweetsToMe(tweet.id));
 
-      if (inProfile) {
+      if (specificUserId) {
         // specificUser에게 적용
         dispatch(
           specificUserActions.likeTweet({
@@ -170,7 +170,6 @@ function TweetCard({ tweet, favoriteStatus, commentStatus, inProfile }) {
                         writerId={tweet.user.id}
                         tweetId={tweet.id}
                         tweet={tweet}
-                        inProfile={inProfile}
                       />
                     )}
                   </Feed.Summary>
@@ -196,11 +195,7 @@ function TweetCard({ tweet, favoriteStatus, commentStatus, inProfile }) {
         </Card.Content>
         <Card.Content extra>
           {/* 리트윗 버튼 */}
-          <RetweetButton
-            tweet={tweet}
-            cancelPopup={cancelPopup}
-            inProfile={inProfile}
-          />
+          <RetweetButton tweet={tweet} cancelPopup={cancelPopup} />
           <span ref={afterClickRef}></span>
 
           {/* 좋아요 버튼 */}
@@ -228,7 +223,6 @@ function TweetCard({ tweet, favoriteStatus, commentStatus, inProfile }) {
         <TweetForm
           commentedTweetId={tweet.id}
           setCommentInput={setCommentInput}
-          inProfile={inProfile}
         />
       )}
     </>

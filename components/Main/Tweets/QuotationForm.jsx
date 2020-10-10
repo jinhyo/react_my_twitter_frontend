@@ -9,15 +9,19 @@ import tweetFunctions from "../../../lib/tweetFunctions";
 import { userActions, userSelector } from "../../../features/userSlice";
 import { tweetSelector, tweetActions } from "../../../features/tweetSlice";
 import QuotedTweet from "./QuotedTweet";
-import { specificUserActions } from "../../../features/specificUserSlice";
+import {
+  specificUserActions,
+  specificUserSelector
+} from "../../../features/specificUserSlice";
 
 //  in <QuotedTweetModal />
-function QuotationForm({ quotedTweet, closeModal, inProfile }) {
+function QuotationForm({ quotedTweet, closeModal }) {
   const dispatch = useDispatch();
   const inputRef = useRef();
   const fileRef = useRef();
 
   const currentUser = useSelector(userSelector.currentUser);
+  const specificUserId = useSelector(specificUserSelector.userId);
   const tweets = useSelector(tweetSelector.tweets);
 
   const [previewImages, setPreviewImages] = useState([]);
@@ -68,9 +72,10 @@ function QuotationForm({ quotedTweet, closeModal, inProfile }) {
         })
       );
 
-      if (inProfile) {
+      if (specificUserId) {
         // specificUser에게 적용
         dispatch(specificUserActions.increaseRetweetCount(quotedTweet.id));
+        dispatch(specificUserActions.addTweet(tweetWithOthers));
       } else {
         // currentUser에게 적용
         dispatch(tweetActions.increaseRetweetCount(quotedTweet.id));

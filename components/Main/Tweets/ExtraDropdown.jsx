@@ -6,7 +6,10 @@ import { tweetActions } from "../../../features/tweetSlice";
 import userFunctions from "../../../lib/userFunctions";
 import { userActions, userSelector } from "../../../features/userSlice";
 import Link from "next/link";
-import { specificUserActions } from "../../../features/specificUserSlice";
+import {
+  specificUserActions,
+  specificUserSelector
+} from "../../../features/specificUserSlice";
 
 // in <TweetCard />, <PureRetweetCard />
 function ExtraDropdown({
@@ -14,12 +17,12 @@ function ExtraDropdown({
   writerNickname,
   writerId,
   tweetId,
-  tweet,
-  inProfile
+  tweet
 }) {
   const dispatch = useDispatch();
 
   const followings = useSelector(userSelector.followings);
+  const specificUserId = useSelector(specificUserSelector.userId);
 
   /* 트윗 삭제 */
   const handleRemoveTweet = useCallback(async () => {
@@ -27,7 +30,7 @@ function ExtraDropdown({
       try {
         const deltedTweetIds = await tweetFunctions.removeTweet(tweetId);
 
-        if (inProfile) {
+        if (specificUserId) {
           // specificUser에게 적용
           dispatch(specificUserActions.removeTweet(tweetId));
 

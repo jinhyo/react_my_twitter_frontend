@@ -5,13 +5,17 @@ import tweetFunctions from "../../../lib/tweetFunctions";
 import { tweetActions } from "../../../features/tweetSlice";
 import { userSelector, userActions } from "../../../features/userSlice";
 import QuotedTweetModal from "./QuotedTweetModal";
-import { specificUserActions } from "../../../features/specificUserSlice";
+import {
+  specificUserActions,
+  specificUserSelector
+} from "../../../features/specificUserSlice";
 
 // in <TweetCard />, <PureRetweetCard />
-function RetweetButton({ tweet, cancelPopup, inProfile }) {
+function RetweetButton({ tweet, cancelPopup }) {
   const dispatch = useDispatch();
 
   const myRetweets = useSelector(userSelector.myRetweets);
+  const specificUserId = useSelector(specificUserSelector.userId);
 
   const [modal, setModal] = useState(false);
 
@@ -43,21 +47,22 @@ function RetweetButton({ tweet, cancelPopup, inProfile }) {
         tweet.retweetOriginId || tweet.id // 원본을 리트윗 || 리트윗한 트윗을 리트윗
       );
 
-      if (inProfile) {
+      if (specificUserId) {
         // specificUser에게 적용
         dispatch(
           specificUserActions.increaseRetweetCount(
             tweet.retweetOriginId || tweet.id
           )
         );
+        dispatch(specificUserActions.addTweet(newTweet));
       } else {
         // currentUser에게 적용
         dispatch(
           tweetActions.increaseRetweetCount(tweet.retweetOriginId || tweet.id)
         );
+        dispatch(tweetActions.addTweet(newTweet));
       }
 
-      dispatch(tweetActions.addTweet(newTweet));
       dispatch(userActions.addRetweetToMe(tweet.retweetOriginId || tweet.id));
       dispatch(
         userActions.addMyTweet({
@@ -81,21 +86,23 @@ function RetweetButton({ tweet, cancelPopup, inProfile }) {
       const deletedTweetId = await tweetFunctions.cancelRetweet(
         retweetOriginId
       );
+      console.log("~~specificUserId", specificUserId);
 
-      if (inProfile) {
+      if (specificUserId) {
         // specificUser에게 적용
         dispatch(
           specificUserActions.decreaseRetweetCount(
             tweet.retweetOriginId || tweet.id
           )
         );
+        dispatch(specificUserActions.cancelRetweet(tweet.id));
       } else {
         // currentUser에게 적용
         dispatch(
           tweetActions.decreaseRetweetCount(tweet.retweetOriginId || tweet.id)
         );
+        dispatch(tweetActions.removeTweet(deletedTweetId));
       }
-      dispatch(tweetActions.removeTweet(deletedTweetId));
       dispatch(userActions.removeRtweetFromMe(retweetOriginId));
       dispatch(userActions.removeMyTweet([deletedTweetId]));
 
@@ -160,12 +167,7 @@ function RetweetButton({ tweet, cancelPopup, inProfile }) {
           onClick={handleOpenModal}
         />
       </Popup>
-      <QuotedTweetModal
-        modal={modal}
-        closeModal={closeModal}
-        tweet={tweet}
-        inProfile={inProfile}
-      />
+      <QuotedTweetModal modal={modal} closeModal={closeModal} tweet={tweet} />
     </>
   );
 }

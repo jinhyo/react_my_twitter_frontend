@@ -15,21 +15,20 @@ import { toast } from "react-toastify";
 import tweetFunctions from "../../../lib/tweetFunctions";
 import { userActions, userSelector } from "../../../features/userSlice";
 import { tweetSelector, tweetActions } from "../../../features/tweetSlice";
-import { specificUserActions } from "../../../features/specificUserSlice";
+import {
+  specificUserActions,
+  specificUserSelector
+} from "../../../features/specificUserSlice";
 
 // in <Index />, <TweetCard />, <PureRetweetCard />
-function TweetForm({
-  commentedTweetId,
-  setCommentInput,
-  currentRetweetId,
-  inProfile
-}) {
+function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
   const dispatch = useDispatch();
   const inputRef = useRef();
   const fileRef = useRef();
 
   const currentUser = useSelector(userSelector.currentUser);
   const tweets = useSelector(tweetSelector.tweets);
+  const specificUserId = useSelector(specificUserSelector.userId);
 
   const [previewImages, setPreviewImages] = useState([]);
   const [imageTypes] = useState(["image/jpeg", "image/png", "image/gif"]);
@@ -82,7 +81,7 @@ function TweetForm({
           })
         );
 
-        if (inProfile) {
+        if (specificUserId) {
           // specificUser에게 적용
           dispatch(
             specificUserActions.addComment({

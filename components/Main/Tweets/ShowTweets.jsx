@@ -5,7 +5,7 @@ import PureRetweetCard from "./PureRetweetCard";
 import TweetCard from "./TweetCard";
 
 // in <TweetInfoCard />, <Index />, <Profile />
-function ShowTweets({ tweets, inProfile }) {
+function ShowTweets({ tweets }) {
   const favoriteTweets = useSelector(userSelector.favoriteTweets);
   const myTweets = useSelector(userSelector.myTweets);
 
@@ -46,7 +46,6 @@ function ShowTweets({ tweets, inProfile }) {
             retweet={tweet.retweetOrigin}
             favoriteStatus={isFavoriteTweet(tweet.retweetOriginId)}
             commentStatus={didIComment(tweet.retweetOriginId)}
-            inProfile={inProfile}
           />
         ) : (
           <TweetCard
@@ -54,7 +53,6 @@ function ShowTweets({ tweets, inProfile }) {
             tweet={tweet}
             favoriteStatus={isFavoriteTweet(tweet.id)}
             commentStatus={didIComment(tweet.id)}
-            inProfile={inProfile}
           />
         )
       )}
