@@ -77,7 +77,7 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
         );
       }
 
-      if (specificTweetId) {
+      if (specificTweetId === tweet.id) {
         // 트윗 상세보기에 적용
         dispatch(specificTweetActions.removeLiker(currentUserId));
       }
@@ -111,7 +111,7 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
         );
       }
 
-      if (specificTweetId) {
+      if (specificTweetId === tweet.id) {
         // 트윗 상세보기에 적용
         dispatch(specificTweetActions.addLiker(userCardInfo));
       }

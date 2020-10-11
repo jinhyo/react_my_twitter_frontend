@@ -45,12 +45,7 @@ function Index() {
     if (!tweets.length) {
       getTweets();
     }
-
-    return () => {
-      console.log("in Index");
-      // dispatch(tweetActions.clearTweets());
-    };
-  }, [specificTweetId]);
+  }, []);
 
   useEffect(() => {
     window.addEventListener("scroll", getMoreTweets);

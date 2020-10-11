@@ -43,6 +43,7 @@ function TweetStatus() {
     return () => {
       // <Index />에서 다시 트윗들을 가져오기 위해; <Index />의 useEffect[specificTweetId]을 콜
       dispatch(specificTweetActions.clearTweet());
+      dispatch(specificTweetActions.setCurrentMenuItem(null));
       dispatch(tweetActions.clearTweets());
     };
   }, [tweetId]);

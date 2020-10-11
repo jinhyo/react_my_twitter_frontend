@@ -6,6 +6,7 @@ import { tweetActions } from "../../../features/tweetSlice";
 import userFunctions from "../../../lib/userFunctions";
 import { userActions, userSelector } from "../../../features/userSlice";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import {
   specificUserActions,
   specificUserSelector
@@ -24,6 +25,7 @@ function ExtraDropdown({
   tweet
 }) {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const followings = useSelector(userSelector.followings);
   const specificUserId = useSelector(specificUserSelector.userId);
@@ -71,11 +73,12 @@ function ExtraDropdown({
         if (specificTweetId && tweet.quotedOriginId) {
           // 트윗 상세보기에서 인용한 트윗 카운트 감소
           dispatch(specificTweetActions.removeQuotation(tweetId));
-        }
-
-        if (specificTweetId && currentMenuItem === "comments") {
+        } else if (specificTweetId && currentMenuItem === "comments") {
           // 트윗 상세보기에서 해당 트윗의 댓글 삭제 시 카운트 감소
           dispatch(specificTweetActions.removeComment(tweetId));
+        } else if (specificTweetId && specificTweetId === tweetId) {
+          // 트윗 상세보기에서 해당 트윗을 삭제하면 홈으로 이동
+          router.push("/");
         }
       } catch (error) {
         console.error(error);

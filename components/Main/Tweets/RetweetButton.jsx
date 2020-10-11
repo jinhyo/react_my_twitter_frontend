@@ -67,7 +67,7 @@ function RetweetButton({ tweet, cancelPopup }) {
           tweetActions.increaseRetweetCount(tweet.retweetOriginId || tweet.id)
         );
 
-        if (specificTweetId) {
+        if (specificTweetId === tweet.id) {
           // 트윗 상세보기에 적용
           dispatch(
             specificTweetActions.addRetweet({
@@ -75,7 +75,8 @@ function RetweetButton({ tweet, cancelPopup }) {
               userInfo: userCardInfo
             })
           );
-        } else {
+        } else if (!specificTweetId) {
+          // 메인에 트윗 추가
           dispatch(tweetActions.addTweet(newTweet));
         }
       }
@@ -115,7 +116,7 @@ function RetweetButton({ tweet, cancelPopup }) {
       } else {
         // currentUser에게 적용
 
-        if (specificTweetId) {
+        if (specificTweetId === tweet.id) {
           // 트윗 상세보기에 적용
           dispatch(
             specificTweetActions.removeRetweet({
@@ -123,7 +124,7 @@ function RetweetButton({ tweet, cancelPopup }) {
               userId: userCardInfo.id
             })
           );
-        } else {
+        } else if (!specificTweetId) {
           dispatch(
             tweetActions.decreaseRetweetCount(tweet.retweetOriginId || tweet.id)
           );

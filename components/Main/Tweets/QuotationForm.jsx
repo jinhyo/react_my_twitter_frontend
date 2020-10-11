@@ -85,7 +85,7 @@ function QuotationForm({ quotedTweet, closeModal }) {
         dispatch(tweetActions.addTweet(tweetWithOthers));
       }
 
-      if (specificTweetId) {
+      if (specificTweetId === quotedTweet.id) {
         // 트윗 상세보기에서 카운트 증가
         dispatch(specificTweetActions.addQuotation(tweetWithOthers.id));
       }

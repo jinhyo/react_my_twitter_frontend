@@ -109,10 +109,13 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
         }
 
         // 트윗 상세보기에서 댓글을 작성할 경우에는 댓글 매뉴에는 추가
-        if (specificTweetId && currentMenuItem === "comments") {
+        if (
+          specificTweetId === commentedTweetId &&
+          currentMenuItem === "comments"
+        ) {
           dispatch(tweetActions.addTweet(tweetWithOthers));
           dispatch(specificTweetActions.addComment(tweetWithOthers.id));
-        } else if (specificTweetId) {
+        } else if (specificTweetId === commentedTweetId) {
           // 다른 매뉴를 클릭한 상태에서 댓글을 작성할 경우 카운트만 추가
           dispatch(specificTweetActions.addComment(tweetWithOthers.id));
         }
