@@ -246,6 +246,16 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus, commentStatus }) {
           )}
           {retweet.comments.length}
         </Button>
+
+        {/* 댓글 보기 버튼 */}
+        {tweet.retweetOrigin.comments.length > 0 && (
+          <Link
+            href={`/tweets/[tweetId]`}
+            as={`/tweets/${tweet.retweetOriginId}`}
+          >
+            <a className="item"> &nbsp; 댓글 보기</a>
+          </Link>
+        )}
         {commentInput && (
           <TweetForm
             commentedTweetId={retweet.id}

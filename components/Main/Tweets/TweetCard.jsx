@@ -233,6 +233,13 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
             )}
             {tweet.comments.length}
           </Button>
+
+          {/* 댓글 보기 버튼 */}
+          {tweet.comments.length > 0 && (
+            <Link href={`/tweets/[tweetId]`} as={`/tweets/${tweet.id}`}>
+              <a className="item"> &nbsp; 댓글 보기</a>
+            </Link>
+          )}
         </Card.Content>
       </Card>
       {commentInput && (
