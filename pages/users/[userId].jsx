@@ -34,11 +34,6 @@ function Profile() {
     specificUserSelector.favoriteTweets
   );
 
-  console.log("specificUsersTweets", specificUsersTweets);
-  console.log("specificUsersComments", specificUsersComments);
-  console.log("specificUsersMediaTweets", specificUsersMediaTweets);
-  console.log("specificUsersFavorites", specificUsersFavorites);
-
   const [loading, setLoading] = useState(false);
   const [activeItem, setActiveItem] = useState("tweets");
 

@@ -42,10 +42,11 @@ function Index() {
   }, []);
 
   useEffect(() => {
-    if (!tweets.length) {
+    if (!tweets.length && !specificTweetId) {
+      console.log("~~~~~getTweets()");
       getTweets();
     }
-  }, []);
+  }, [specificTweetId]);
 
   useEffect(() => {
     window.addEventListener("scroll", getMoreTweets);
