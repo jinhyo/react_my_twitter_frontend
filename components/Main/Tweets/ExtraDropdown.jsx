@@ -28,6 +28,7 @@ function ExtraDropdown({
   const followings = useSelector(userSelector.followings);
   const specificUserId = useSelector(specificUserSelector.userId);
   const specificTweetId = useSelector(specificTweetSelector.specificTweetId);
+  const currentMenuItem = useSelector(specificTweetSelector.currentMenuItem);
 
   /* 트윗 삭제 */
   const handleRemoveTweet = useCallback(async () => {
@@ -67,9 +68,14 @@ function ExtraDropdown({
 
         dispatch(userActions.removeMyTweet(deltedTweetIds));
 
-        if (specificTweetId) {
-          // 트윗 상세보기에서 카운트 감소
-          dispatch(specificTweetActions.removeQuotation(deltedTweetIds));
+        if (specificTweetId && tweet.quotedOriginId) {
+          // 트윗 상세보기에서 인용한 트윗 카운트 감소
+          dispatch(specificTweetActions.removeQuotation(tweetId));
+        }
+
+        if (specificTweetId && currentMenuItem === "comments") {
+          // 트윗 상세보기에서 해당 트윗의 댓글 삭제 시 카운트 감소
+          dispatch(specificTweetActions.removeComment(tweetId));
         }
       } catch (error) {
         console.error(error);

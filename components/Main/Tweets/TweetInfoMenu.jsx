@@ -10,6 +10,8 @@ function TweetInfoMenu({ activeItem, setActiveItem, setLoading, tweet }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    setActiveItem("comments");
+    dispatch(specificTweetActions.setCurrentMenuItem("comments"));
     getComments(tweet.id);
   }, [tweet.id]);
 

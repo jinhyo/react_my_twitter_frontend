@@ -19,6 +19,10 @@ import {
   specificUserActions,
   specificUserSelector
 } from "../../../features/specificUserSlice";
+import {
+  specificTweetSelector,
+  specificTweetActions
+} from "../../../features/specificTweetSlice";
 
 // in <Index />, <TweetCard />, <PureRetweetCard />
 function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
@@ -29,6 +33,8 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
   const currentUser = useSelector(userSelector.currentUser);
   const tweets = useSelector(tweetSelector.tweets);
   const specificUserId = useSelector(specificUserSelector.userId);
+  const specificTweetId = useSelector(specificTweetSelector.specificTweetId);
+  const currentMenuItem = useSelector(specificTweetSelector.currentMenuItem);
 
   const [previewImages, setPreviewImages] = useState([]);
   const [imageTypes] = useState(["image/jpeg", "image/png", "image/gif"]);
@@ -101,6 +107,14 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
             })
           );
         }
+
+        // 댓글일 경우 메인화면에서는 추가하지 않고 트윗 상세보기 댓글 매뉴에는 추가
+        if (specificTweetId && currentMenuItem === "comments") {
+          dispatch(tweetActions.addTweet(tweetWithOthers));
+          dispatch(specificTweetActions.addComment(tweetWithOthers.id));
+        } else if (specificTweetId) {
+          dispatch(specificTweetActions.addComment(tweetWithOthers.id));
+        }
       } else {
         // 일반 트윗 전송
         tweetWithOthers = await tweetFunctions.sendTweet(tweetFormData);
@@ -112,11 +126,6 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
             commentedOriginId: null
           })
         );
-      }
-
-      // 댓글일 경우 메인화면에 표시되지 않도록
-      if (!tweetWithOthers.commentedOriginId) {
-        dispatch(tweetActions.addTweet(tweetWithOthers));
       }
     } catch (error) {
       console.error(error);

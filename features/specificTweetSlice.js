@@ -63,16 +63,31 @@ const specificTweetSlice = createSlice({
 
     /* 인용한 트윗 제어 */
 
-    addQuotation: (state, { payload: { retweetId } }) => {
+    addQuotation: (state, { payload: tweetId }) => {
       // 카운트 증가용
       state.specificTweet.retweetedCount++;
-      state.specificTweet.quotations.push({ id: retweetId });
+      state.specificTweet.quotations.push({ id: tweetId });
     },
-    removeQuotation: (state, { payload: { retweetId } }) => {
+    removeQuotation: (state, { payload: tweetId }) => {
       // 카운트 감소용용
+      console.log("tweetId", tweetId, typeof tweetId);
+
       state.specificTweet.retweetedCount--;
       state.specificTweet.quotations = state.specificTweet.quotations.filter(
-        tweet => tweet.id !== retweetId
+        tweet => tweet.id !== tweetId
+      );
+    },
+
+    /* 댓글  제어 */
+
+    addComment: (state, { payload: commentTweetId }) => {
+      // 카운트 증가용
+      state.specificTweet.comments.push({ id: commentTweetId });
+    },
+    removeComment: (state, { payload: commentTweetId }) => {
+      // 카운트 감소용용
+      state.specificTweet.comments = state.specificTweet.comments.filter(
+        tweet => tweet.id !== commentTweetId
       );
     }
   }
