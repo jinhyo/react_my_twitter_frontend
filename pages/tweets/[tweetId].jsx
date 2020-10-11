@@ -24,14 +24,15 @@ function TweetStatus() {
   const tweets = useSelector(tweetSelector.tweets);
   const currentUser = useSelector(userSelector.currentUser);
   const specificTweet = useSelector(specificTweetSelector.specificTweet);
-  const likersOrRetweeters = useSelector(
-    specificTweetSelector.likersOrRetweeters
-  );
+  const likers = useSelector(specificTweetSelector.likers);
+  const retweetUsers = useSelector(specificTweetSelector.retweetUsers);
 
   const [activeItem, setActiveItem] = useState("comments");
   const [loading, setLoading] = useState(false);
 
   console.log("~~~specificTweet", specificTweet);
+  console.log("~~~retweetUsers", retweetUsers);
+  console.log("~~~likers", likers);
 
   useEffect(() => {
     if (tweetId) {
@@ -85,20 +86,14 @@ function TweetStatus() {
 
         {/* 리트윗한 유저들 */}
         {activeItem === "retweetUsers" &&
-          !loading &&
-          likersOrRetweeters.map(user => (
-            <UserCard key={user.id} user={user} />
-          ))}
+          retweetUsers.map(user => <UserCard key={user.id} user={user} />)}
 
         {/* 인용한 트윗들 */}
         {activeItem === "quotations" && <ShowTweets tweets={tweets} />}
 
         {/* 좋아요 누른 유저들 */}
         {activeItem === "likers" &&
-          !loading &&
-          likersOrRetweeters.map(user => (
-            <UserCard key={user.id} user={user} />
-          ))}
+          likers.map(user => <UserCard key={user.id} user={user} />)}
       </Grid.Column>
     </Grid>
   );

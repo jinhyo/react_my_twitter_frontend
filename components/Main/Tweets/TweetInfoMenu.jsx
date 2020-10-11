@@ -11,7 +11,7 @@ function TweetInfoMenu({ activeItem, setActiveItem, setLoading, tweet }) {
 
   useEffect(() => {
     getComments(tweet.id);
-  }, [tweet]);
+  }, [tweet.id]);
 
   const handleItemClick = useCallback(
     async (e, { name }) => {
@@ -50,7 +50,7 @@ function TweetInfoMenu({ activeItem, setActiveItem, setLoading, tweet }) {
       setLoading(true);
       const users = await userFunctions.getRetweetUsers(tweetId);
 
-      dispatch(specificTweetActions.setlikersOrRetweeters(users));
+      dispatch(specificTweetActions.setRetweetUsers(users));
     } catch (error) {
       console.error(error);
     } finally {
@@ -63,7 +63,7 @@ function TweetInfoMenu({ activeItem, setActiveItem, setLoading, tweet }) {
       setLoading(true);
       const users = await userFunctions.getLikers(tweetId);
 
-      dispatch(specificTweetActions.setlikersOrRetweeters(users));
+      dispatch(specificTweetActions.setLikers(users));
     } catch (error) {
       console.error(error);
     } finally {

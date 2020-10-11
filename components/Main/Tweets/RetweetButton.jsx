@@ -9,6 +9,10 @@ import {
   specificUserActions,
   specificUserSelector
 } from "../../../features/specificUserSlice";
+import {
+  specificTweetSelector,
+  specificTweetActions
+} from "../../../features/specificTweetSlice";
 
 // in <TweetCard />, <PureRetweetCard />
 function RetweetButton({ tweet, cancelPopup }) {
@@ -16,6 +20,9 @@ function RetweetButton({ tweet, cancelPopup }) {
 
   const myRetweets = useSelector(userSelector.myRetweets);
   const specificUserId = useSelector(specificUserSelector.userId);
+  const specificTweetId = useSelector(specificTweetSelector.specificTweetId);
+  const userCardInfo = useSelector(userSelector.userCardInfo);
+  console.log("userCardInfo", userCardInfo);
 
   const [modal, setModal] = useState(false);
 
@@ -60,7 +67,18 @@ function RetweetButton({ tweet, cancelPopup }) {
         dispatch(
           tweetActions.increaseRetweetCount(tweet.retweetOriginId || tweet.id)
         );
-        dispatch(tweetActions.addTweet(newTweet));
+
+        if (specificTweetId) {
+          // 트윗 상세보기에 적용
+          dispatch(
+            specificTweetActions.addRetweet({
+              retweetId: newTweet.id,
+              userInfo: userCardInfo
+            })
+          );
+        } else {
+          dispatch(tweetActions.addTweet(newTweet));
+        }
       }
 
       dispatch(userActions.addRetweetToMe(tweet.retweetOriginId || tweet.id));
@@ -98,11 +116,23 @@ function RetweetButton({ tweet, cancelPopup }) {
         dispatch(specificUserActions.cancelRetweet(tweet.id));
       } else {
         // currentUser에게 적용
-        dispatch(
-          tweetActions.decreaseRetweetCount(tweet.retweetOriginId || tweet.id)
-        );
-        dispatch(tweetActions.removeTweet(deletedTweetId));
+
+        if (specificTweetId) {
+          // 트윗 상세보기에 적용
+          dispatch(
+            specificTweetActions.removeRetweet({
+              retweetId: deletedTweetId,
+              userId: userCardInfo.id
+            })
+          );
+        } else {
+          dispatch(
+            tweetActions.decreaseRetweetCount(tweet.retweetOriginId || tweet.id)
+          );
+          dispatch(tweetActions.removeTweet(deletedTweetId));
+        }
       }
+
       dispatch(userActions.removeRtweetFromMe(retweetOriginId));
       dispatch(userActions.removeMyTweet([deletedTweetId]));
 

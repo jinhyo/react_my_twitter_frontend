@@ -93,6 +93,20 @@ const selectMyTweets = createSelector(
   tweets => (tweets ? tweets : [])
 );
 
+const selectUserCardInfo = createSelector(
+  state => state.currentUser?.id,
+  state => state.currentUser?.nickname,
+  state => state.currentUser?.avatarURL,
+  state => state.currentUser?.selfIntro,
+
+  (id, nickname, avatarURL, selfIntro) => ({
+    id,
+    nickname,
+    avatarURL,
+    selfIntro
+  })
+);
+
 export const userActions = userSlice.actions;
 export const userReducer = userSlice.reducer;
 export const USER = userSlice.name;
@@ -102,5 +116,6 @@ export const userSelector = {
   currentUserId: state => selectCurrentUserId(state[USER]),
   followings: state => selectFollowings(state[USER]),
   myRetweets: state => selectRetweets(state[USER]),
-  myTweets: state => selectMyTweets(state[USER])
+  myTweets: state => selectMyTweets(state[USER]),
+  userCardInfo: state => selectUserCardInfo(state[USER])
 };

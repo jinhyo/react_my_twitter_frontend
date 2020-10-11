@@ -4,7 +4,8 @@ const specificTweetSlice = createSlice({
   name: "specificTweetSlice",
   initialState: {
     specificTweet: null,
-    likersOrRetweeters: []
+    likers: [],
+    retweetUsers: []
   },
   reducers: {
     setTweet: (state, { payload: tweet }) => {
@@ -13,15 +14,52 @@ const specificTweetSlice = createSlice({
     clearTweet: state => {
       state.specificTweet = null;
     },
-    setlikersOrRetweeters: (state, { payload: users }) => {
-      state.likersOrRetweeters = users;
+
+    setLikers: (state, { payload: users }) => {
+      state.likers = users;
     },
-    addlikersOrRetweeters: (state, { payload: user }) => {
-      state.likersOrRetweeters.unshift(user);
+    addLikers: (state, { payload: user }) => {
+      state.likers.unshift(user);
     },
-    removelikersOrRetweeters: (state, { payload: userId }) => {
-      state.likersOrRetweeters = state.likersOrRetweeters.filter(
+    removeLikers: (state, { payload: userId }) => {
+      state.likers = state.likers.filter(user => user.id !== userId);
+    },
+
+    setRetweetUsers: (state, { payload: users }) => {
+      state.retweetUsers = users;
+    },
+    addRetweetUsers: (state, { payload: user }) => {
+      state.retweetUsers.unshift(user);
+    },
+    removeRetweetUsers: (state, { payload: userId }) => {
+      state.retweetUsers = state.RetweetUsers.filter(
         user => user.id !== userId
+      );
+    },
+
+    /* 리트윗 제어 */
+
+    addRetweet: (state, { payload: { retweetId, userInfo } }) => {
+      const index = state.retweetUsers.findIndex(
+        user => user.id === userInfo.id
+      );
+      if (index === -1) {
+        state.retweetUsers.unshift(userInfo);
+      }
+
+      // 카운트 증가용
+      state.specificTweet.retweetedCount++;
+      state.specificTweet.retweets.push({ id: retweetId });
+    },
+    removeRetweet: (state, { payload: { retweetId, userId } }) => {
+      state.retweetUsers = state.retweetUsers.filter(
+        user => user.id !== userId
+      );
+
+      // 카운트 감소용
+      state.specificTweet.retweetedCount--;
+      state.specificTweet.retweets = state.specificTweet.retweets.filter(
+        retweet => retweet.id !== retweetId
       );
     }
   }
@@ -39,10 +77,16 @@ const selectSpecificTweet = createSelector(
   specificTweet => specificTweet
 );
 
-const selectlikersOrRetweeters = createSelector(
-  state => state.likersOrRetweeters,
+const selectLikers = createSelector(
+  state => state.likers,
 
-  likersOrRetweeters => likersOrRetweeters
+  likers => likers
+);
+
+const selectRetweetUsers = createSelector(
+  state => state.retweetUsers,
+
+  retweetUsers => retweetUsers
 );
 
 export const specificTweetActions = specificTweetSlice.actions;
@@ -51,5 +95,6 @@ export const SPECIFIC_TWEET = specificTweetSlice.name;
 export const specificTweetSelector = {
   specificTweetId: state => selectSpecificTweetId(state[SPECIFIC_TWEET]),
   specificTweet: state => selectSpecificTweet(state[SPECIFIC_TWEET]),
-  likersOrRetweeters: state => selectlikersOrRetweeters(state[SPECIFIC_TWEET])
+  likers: state => selectLikers(state[SPECIFIC_TWEET]),
+  retweetUsers: state => selectRetweetUsers(state[SPECIFIC_TWEET])
 };
