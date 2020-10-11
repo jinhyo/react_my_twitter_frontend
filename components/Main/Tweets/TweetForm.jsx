@@ -108,11 +108,12 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
           );
         }
 
-        // 댓글일 경우 메인화면에서는 추가하지 않고 트윗 상세보기 댓글 매뉴에는 추가
+        // 트윗 상세보기에서 댓글을 작성할 경우에는 댓글 매뉴에는 추가
         if (specificTweetId && currentMenuItem === "comments") {
           dispatch(tweetActions.addTweet(tweetWithOthers));
           dispatch(specificTweetActions.addComment(tweetWithOthers.id));
         } else if (specificTweetId) {
+          // 다른 매뉴를 클릭한 상태에서 댓글을 작성할 경우 카운트만 추가
           dispatch(specificTweetActions.addComment(tweetWithOthers.id));
         }
       } else {
@@ -126,6 +127,7 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
             commentedOriginId: null
           })
         );
+        dispatch(tweetActions.addTweet(tweetWithOthers));
       }
     } catch (error) {
       console.error(error);

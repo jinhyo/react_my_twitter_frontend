@@ -224,7 +224,7 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus, commentStatus }) {
       </Card.Content>
       <Card.Content extra>
         {/* 리트윗 버튼 */}
-        <RetweetButton tweet={tweet} cancelPopup={cancelPopup} />
+        <RetweetButton tweet={tweet.retweetOrigin} cancelPopup={cancelPopup} />
         <span ref={afterClickRef}></span>
 
         {/* 좋아요 버튼 */}
