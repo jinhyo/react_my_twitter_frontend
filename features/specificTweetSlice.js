@@ -5,7 +5,8 @@ const specificTweetSlice = createSlice({
   initialState: {
     specificTweet: null,
     likers: [],
-    retweetUsers: []
+    retweetUsers: [],
+    currentMenuItem: null
   },
   reducers: {
     setTweet: (state, { payload: tweet }) => {
@@ -14,6 +15,12 @@ const specificTweetSlice = createSlice({
     clearTweet: state => {
       state.specificTweet = null;
     },
+    // 트윗 상세보기 매뉴 선택
+    setCurrentMenuItem: (state, { payload: item }) => {
+      state.currentMenuItem = item;
+    },
+
+    /* 좋아요 유저 제어 */
 
     setLikers: (state, { payload: users }) => {
       state.likers = users;
@@ -24,6 +31,8 @@ const specificTweetSlice = createSlice({
     removeLikers: (state, { payload: userId }) => {
       state.likers = state.likers.filter(user => user.id !== userId);
     },
+
+    /* 리트윗 유저 제어 */
 
     setRetweetUsers: (state, { payload: users }) => {
       state.retweetUsers = users;
@@ -37,7 +46,7 @@ const specificTweetSlice = createSlice({
       );
     },
 
-    /* 리트윗 제어 */
+    /* 리트윗 트윗 제어 */
 
     addRetweet: (state, { payload: { retweetId, userInfo } }) => {
       const index = state.retweetUsers.findIndex(
@@ -60,6 +69,21 @@ const specificTweetSlice = createSlice({
       state.specificTweet.retweetedCount--;
       state.specificTweet.retweets = state.specificTweet.retweets.filter(
         retweet => retweet.id !== retweetId
+      );
+    },
+
+    /* 인용한 트윗 제어 */
+
+    addQuotation: (state, { payload: { retweetId } }) => {
+      // 카운트 증가용
+      state.specificTweet.retweetedCount++;
+      state.specificTweet.quotations.push({ id: retweetId });
+    },
+    removeQuotation: (state, { payload: { retweetId } }) => {
+      // 카운트 감소용용
+      state.specificTweet.retweetedCount--;
+      state.specificTweet.quotations = state.specificTweet.quotations.filter(
+        tweet => tweet.id !== retweetId
       );
     }
   }
@@ -89,6 +113,12 @@ const selectRetweetUsers = createSelector(
   retweetUsers => retweetUsers
 );
 
+const selectCurrentMenuItem = createSelector(
+  state => state.currentMenuItem,
+
+  currentMenuItem => currentMenuItem
+);
+
 export const specificTweetActions = specificTweetSlice.actions;
 export const specificTweetReducer = specificTweetSlice.reducer;
 export const SPECIFIC_TWEET = specificTweetSlice.name;
@@ -96,5 +126,6 @@ export const specificTweetSelector = {
   specificTweetId: state => selectSpecificTweetId(state[SPECIFIC_TWEET]),
   specificTweet: state => selectSpecificTweet(state[SPECIFIC_TWEET]),
   likers: state => selectLikers(state[SPECIFIC_TWEET]),
-  retweetUsers: state => selectRetweetUsers(state[SPECIFIC_TWEET])
+  retweetUsers: state => selectRetweetUsers(state[SPECIFIC_TWEET]),
+  currentMenuItem: state => selectCurrentMenuItem(state[SPECIFIC_TWEET])
 };

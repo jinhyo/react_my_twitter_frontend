@@ -22,7 +22,6 @@ function RetweetButton({ tweet, cancelPopup }) {
   const specificUserId = useSelector(specificUserSelector.userId);
   const specificTweetId = useSelector(specificTweetSelector.specificTweetId);
   const userCardInfo = useSelector(userSelector.userCardInfo);
-  console.log("userCardInfo", userCardInfo);
 
   const [modal, setModal] = useState(false);
 
@@ -104,7 +103,6 @@ function RetweetButton({ tweet, cancelPopup }) {
       const deletedTweetId = await tweetFunctions.cancelRetweet(
         retweetOriginId
       );
-      console.log("~~specificUserId", specificUserId);
 
       if (specificUserId) {
         // specificUser에게 적용

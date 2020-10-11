@@ -13,6 +13,10 @@ import {
   specificUserActions,
   specificUserSelector
 } from "../../../features/specificUserSlice";
+import {
+  specificTweetSelector,
+  specificTweetActions
+} from "../../../features/specificTweetSlice";
 
 //  in <QuotedTweetModal />
 function QuotationForm({ quotedTweet, closeModal }) {
@@ -22,7 +26,9 @@ function QuotationForm({ quotedTweet, closeModal }) {
 
   const currentUser = useSelector(userSelector.currentUser);
   const specificUserId = useSelector(specificUserSelector.userId);
+  const specificTweetId = useSelector(specificTweetSelector.specificTweetId);
   const tweets = useSelector(tweetSelector.tweets);
+  const currentMenuItem = useSelector(specificTweetSelector.currentMenuItem);
 
   const [previewImages, setPreviewImages] = useState([]);
   const [imageTypes] = useState(["image/jpeg", "image/png", "image/gif"]);
@@ -62,7 +68,6 @@ function QuotationForm({ quotedTweet, closeModal }) {
         quotedTweet.id,
         tweetFormData
       );
-      dispatch(tweetActions.addTweet(tweetWithOthers));
       dispatch(
         userActions.addMyTweet({
           tweetId: tweetWithOthers.id,
@@ -71,6 +76,19 @@ function QuotationForm({ quotedTweet, closeModal }) {
           commentedOriginId: null
         })
       );
+
+      if (
+        !specificTweetId ||
+        (specificTweetId && currentMenuItem === "quotations")
+      ) {
+        // 트윗 상세보기의 댓글 매뉴에서는 인용트윗 추가 안함(인용한 트윗에만 추가)
+        dispatch(tweetActions.addTweet(tweetWithOthers));
+      }
+
+      if (specificTweetId) {
+        // 트윗 상세보기에서 카운트 증가
+        dispatch(specificTweetActions.addQuotation(tweetWithOthers.id));
+      }
 
       if (specificUserId) {
         // specificUser에게 적용

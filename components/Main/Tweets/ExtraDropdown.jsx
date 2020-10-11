@@ -10,6 +10,10 @@ import {
   specificUserActions,
   specificUserSelector
 } from "../../../features/specificUserSlice";
+import {
+  specificTweetSelector,
+  specificTweetActions
+} from "../../../features/specificTweetSlice";
 
 // in <TweetCard />, <PureRetweetCard />
 function ExtraDropdown({
@@ -23,6 +27,7 @@ function ExtraDropdown({
 
   const followings = useSelector(userSelector.followings);
   const specificUserId = useSelector(specificUserSelector.userId);
+  const specificTweetId = useSelector(specificTweetSelector.specificTweetId);
 
   /* 트윗 삭제 */
   const handleRemoveTweet = useCallback(async () => {
@@ -61,13 +66,18 @@ function ExtraDropdown({
         }
 
         dispatch(userActions.removeMyTweet(deltedTweetIds));
+
+        if (specificTweetId) {
+          // 트윗 상세보기에서 카운트 감소
+          dispatch(specificTweetActions.removeQuotation(deltedTweetIds));
+        }
       } catch (error) {
         console.error(error);
       }
     }
   }, []);
 
-  //// 팔로우
+  /*  팔로우 */
   const handleFollowUser = useCallback(async () => {
     try {
       await userFunctions.followUser(writerId);
@@ -82,7 +92,7 @@ function ExtraDropdown({
     }
   }, []);
 
-  //// 언팔로우
+  /*  언팔로우 */
   const handleUnfollowUser = useCallback(async () => {
     try {
       await userFunctions.unfollowUser(writerId);

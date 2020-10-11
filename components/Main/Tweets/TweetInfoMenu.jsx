@@ -19,11 +19,13 @@ function TweetInfoMenu({ activeItem, setActiveItem, setLoading, tweet }) {
 
       if (name === "comments") {
         dispatch(tweetActions.clearTweets());
+        dispatch(specificTweetActions.setCurrentMenuItem(name));
         getComments(tweet.id);
       } else if (name === "retweetUsers") {
         getRetweetUsers(tweet.id);
       } else if (name === "quotations") {
         dispatch(tweetActions.clearTweets());
+        dispatch(specificTweetActions.setCurrentMenuItem(name));
         getQuotaions(tweet.id);
       } else if (name === "likers") {
         getLikers(tweet.id);
