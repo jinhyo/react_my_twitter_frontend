@@ -6,6 +6,8 @@ import TweetCard from "./TweetCard";
 
 // in <TweetInfoCard />, <Index />, <Profile />
 function ShowTweets({ tweets }) {
+  console.log("~~tweets", tweets);
+
   const favoriteTweets = useSelector(userSelector.favoriteTweets);
   const myTweets = useSelector(userSelector.myTweets);
 

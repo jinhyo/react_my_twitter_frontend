@@ -48,7 +48,7 @@ function Index() {
 
     return () => {
       console.log("in Index");
-      dispatch(tweetActions.clearTweets());
+      // dispatch(tweetActions.clearTweets());
     };
   }, [specificTweetId]);
 
