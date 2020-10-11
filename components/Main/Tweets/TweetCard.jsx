@@ -16,6 +16,10 @@ import {
   specificUserActions,
   specificUserSelector
 } from "../../../features/specificUserSlice";
+import {
+  specificTweetActions,
+  specificTweetSelector
+} from "../../../features/specificTweetSlice";
 
 // in <ShowTweets />
 function TweetCard({ tweet, favoriteStatus, commentStatus }) {
@@ -24,6 +28,8 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
 
   const currentUserId = useSelector(userSelector.currentUserId);
   const specificUserId = useSelector(specificUserSelector.userId);
+  const userCardInfo = useSelector(userSelector.userCardInfo);
+  const specificTweetId = useSelector(specificTweetSelector.specificTweetId);
 
   const [commentInput, setCommentInput] = useState(false);
 
@@ -70,6 +76,11 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
           tweetActions.unlikeTweet({ myId: currentUserId, tweetId: tweet.id })
         );
       }
+
+      if (specificTweetId) {
+        // 트윗 상세보기에 적용
+        dispatch(specificTweetActions.removeLiker(currentUserId));
+      }
     } else {
       // 좋아요 등록
       try {
@@ -98,6 +109,11 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
         dispatch(
           tweetActions.likeTweet({ myId: currentUserId, tweetId: tweet.id })
         );
+      }
+
+      if (specificTweetId) {
+        // 트윗 상세보기에 적용
+        dispatch(specificTweetActions.addLiker(userCardInfo));
       }
     }
   }, [favoriteStatus, currentUserId, specificUserId]);

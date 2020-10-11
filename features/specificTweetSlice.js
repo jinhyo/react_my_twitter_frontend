@@ -20,41 +20,30 @@ const specificTweetSlice = createSlice({
       state.currentMenuItem = item;
     },
 
-    /* 좋아요 유저 제어 */
+    /* 좋아요 제어 */
 
     setLikers: (state, { payload: users }) => {
       state.likers = users;
     },
-    addLikers: (state, { payload: user }) => {
-      state.likers.unshift(user);
+    addLiker: (state, { payload: userInfo }) => {
+      state.likers.unshift(userInfo);
+      state.specificTweet.likers.push({ id: userInfo.id });
     },
-    removeLikers: (state, { payload: userId }) => {
+    removeLiker: (state, { payload: userId }) => {
       state.likers = state.likers.filter(user => user.id !== userId);
-    },
-
-    /* 리트윗 유저 제어 */
-
-    setRetweetUsers: (state, { payload: users }) => {
-      state.retweetUsers = users;
-    },
-    addRetweetUsers: (state, { payload: user }) => {
-      state.retweetUsers.unshift(user);
-    },
-    removeRetweetUsers: (state, { payload: userId }) => {
-      state.retweetUsers = state.RetweetUsers.filter(
+      state.specificTweet.likers = state.specificTweet.likers.filter(
         user => user.id !== userId
       );
     },
 
-    /* 리트윗 트윗 제어 */
+    /* 리트윗  제어 */
+
+    setRetweetUsers: (state, { payload: users }) => {
+      state.retweetUsers = users;
+    },
 
     addRetweet: (state, { payload: { retweetId, userInfo } }) => {
-      const index = state.retweetUsers.findIndex(
-        user => user.id === userInfo.id
-      );
-      if (index === -1) {
-        state.retweetUsers.unshift(userInfo);
-      }
+      state.retweetUsers.unshift(userInfo);
 
       // 카운트 증가용
       state.specificTweet.retweetedCount++;
