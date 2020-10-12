@@ -3,7 +3,8 @@ import { createSelector, createSlice } from "@reduxjs/toolkit";
 const userSlice = createSlice({
   name: "userSlice",
   initialState: {
-    currentUser: null
+    currentUser: null,
+    nowWhere: "main"
   },
   reducers: {
     setCurrentUser: (state, { payload: user }) => {
@@ -11,6 +12,9 @@ const userSlice = createSlice({
     },
     clearCurrentUser: state => {
       state.currentUser = null;
+    },
+    setNowWhere: (state, { payload: where }) => {
+      state.nowWhere = where;
     },
     addMyTweet: (
       state,
@@ -107,6 +111,12 @@ const selectUserCardInfo = createSelector(
   })
 );
 
+const selectNowWhere = createSelector(
+  state => state.nowWhere,
+
+  nowWhere => nowWhere
+);
+
 export const userActions = userSlice.actions;
 export const userReducer = userSlice.reducer;
 export const USER = userSlice.name;
@@ -117,5 +127,6 @@ export const userSelector = {
   followings: state => selectFollowings(state[USER]),
   myRetweets: state => selectRetweets(state[USER]),
   myTweets: state => selectMyTweets(state[USER]),
-  userCardInfo: state => selectUserCardInfo(state[USER])
+  userCardInfo: state => selectUserCardInfo(state[USER]),
+  nowWhere: state => selectNowWhere(state[USER])
 };

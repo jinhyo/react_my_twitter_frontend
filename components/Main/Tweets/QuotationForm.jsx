@@ -29,6 +29,7 @@ function QuotationForm({ quotedTweet, closeModal }) {
   const specificTweetId = useSelector(specificTweetSelector.specificTweetId);
   const tweets = useSelector(tweetSelector.tweets);
   const currentMenuItem = useSelector(specificTweetSelector.currentMenuItem);
+  const nowWhere = useSelector(userSelector.nowWhere);
 
   const [previewImages, setPreviewImages] = useState([]);
   const [imageTypes] = useState(["image/jpeg", "image/png", "image/gif"]);
@@ -78,10 +79,10 @@ function QuotationForm({ quotedTweet, closeModal }) {
       );
 
       if (
-        !specificTweetId ||
-        (specificTweetId && currentMenuItem === "quotations")
+        (specificTweetId && currentMenuItem === "quotations") ||
+        nowWhere === "main"
       ) {
-        // 트윗 상세보기의 댓글 매뉴에서는 인용트윗 추가 안함(인용한 트윗에만 추가)
+        // 트윗 상세보기의 댓글 매뉴에서는 인용트윗 추가 안함(인용한 트윗 매뉴에서만 추가)
         dispatch(tweetActions.addTweet(tweetWithOthers));
       }
 

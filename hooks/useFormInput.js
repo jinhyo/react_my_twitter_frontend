@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 
+// in <Register />
 function useFormInput(initialState, validateFunc, cbFunc) {
   const [values, setValues] = useState(initialState);
   const [isSubmitting, setIsSubmitting] = useState(false);

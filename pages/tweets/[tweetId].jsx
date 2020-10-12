@@ -4,7 +4,7 @@ import { Grid, Loader, Header } from "semantic-ui-react";
 import ProfileCard from "../../components/LeftSide/ProfileCard";
 import Trends from "../../components/LeftSide/Trends/Trends";
 import WhoToFollow from "../../components/LeftSide/WhoToFollow/WhoToFollow";
-import { userSelector } from "../../features/userSlice";
+import { userSelector, userActions } from "../../features/userSlice";
 import { useRouter } from "next/router";
 import tweetFunctions from "../../lib/tweetFunctions";
 import { tweetSelector, tweetActions } from "../../features/tweetSlice";
@@ -32,8 +32,6 @@ function TweetStatus() {
   const [errorMessage, setErrorMessage] = useState("");
 
   console.log("~~~specificTweet", specificTweet);
-  console.log("~~~retweetUsers", retweetUsers);
-  console.log("~~~likers", likers);
 
   useEffect(() => {
     if (tweetId) {
@@ -46,6 +44,7 @@ function TweetStatus() {
       dispatch(specificTweetActions.clearTweet());
       dispatch(specificTweetActions.setCurrentMenuItem(null));
       dispatch(tweetActions.clearTweets());
+      dispatch(userActions.setNowWhere("main"));
 
       setErrorMessage("");
     };

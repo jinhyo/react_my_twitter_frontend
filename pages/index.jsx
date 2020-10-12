@@ -7,25 +7,19 @@ import WhoToFollow from "../components/LeftSide/WhoToFollow/WhoToFollow";
 import TweetForm from "../components/Main/Tweets/TweetForm";
 import { userSelector, userActions } from "../features/userSlice";
 import tweetFunctions from "../lib/tweetFunctions";
-import { tweetActions, tweetSelector } from "../features/tweetSlice";
 import authFunctions from "../lib/authFunctions";
 import ShowTweets from "../components/Main/Tweets/ShowTweets";
 import { specificTweetSelector } from "../features/specificTweetSlice";
+import useTweetGetter from "../hooks/useTweetGetter";
 
 function Index() {
   const dispatch = useDispatch();
+
   const currentUser = useSelector(userSelector.currentUser);
-
-  const tweets = useSelector(tweetSelector.tweets);
-  const specificTweetId = useSelector(specificTweetSelector.specificTweetId);
-
-  const [hasMorePosts, setHasMorePosts] = useState(false);
-  const [loadTweetLoading, setLoadTweetLoading] = useState(true);
-  const [clear, setClear] = useState(null);
-
-  console.log("tweets", tweets);
+  const nowWhere = useSelector(userSelector.nowWhere);
   console.log("currentUser", currentUser);
-  console.log("hasMorePosts", hasMorePosts);
+
+  const { tweets, getTweets } = useTweetGetter(tweetFunctions.getTweets);
 
   // 회원가입 or 로그인 시 유저정보 가져오기
   useEffect(() => {
@@ -39,60 +33,18 @@ function Index() {
   }, []);
 
   useEffect(() => {
-    if (!tweets.length && !specificTweetId) {
+    if (nowWhere === "main") {
       getTweets();
     }
-  }, [specificTweetId]);
 
-  useEffect(() => {
-    window.addEventListener("scroll", getMoreTweets);
     return () => {
-      window.removeEventListener("scroll", getMoreTweets);
+      dispatch(userActions.setNowWhere(null));
     };
-  }, [tweets, loadTweetLoading, hasMorePosts]);
-
-  useEffect(() => {
-    return () => {
-      clearTimeout(clear);
-    };
-  }, [clear]);
+  }, [nowWhere]);
 
   async function getLoginUserInfo() {
     const user = await authFunctions.getLoginUserInfo();
     dispatch(userActions.setCurrentUser(user));
-  }
-
-  /*  스크롤이 최하단에 가까워지면 트윗들을 추가로 가져옴 */
-  async function getMoreTweets() {
-    if (
-      window.scrollY + document.documentElement.clientHeight >
-      document.documentElement.scrollHeight - 300
-    ) {
-      if (hasMorePosts && !loadTweetLoading) {
-        const lastId = tweets[tweets.length - 1]?.id;
-        await getTweets(lastId);
-      }
-    }
-  }
-
-  function setTweetLoading() {
-    setLoadTweetLoading(true);
-    const clear = setTimeout(() => {
-      setLoadTweetLoading(false);
-    }, 3000);
-
-    setClear(clear);
-  }
-
-  async function getTweets(lastId = null) {
-    try {
-      setTweetLoading();
-      const newTweets = await tweetFunctions.getTweets(lastId);
-      setHasMorePosts(newTweets.length === 10);
-      dispatch(tweetActions.setTweets(newTweets));
-    } catch (error) {
-      console.error(error);
-    }
   }
 
   return (

@@ -22,6 +22,7 @@ function RetweetButton({ tweet, cancelPopup }) {
   const specificUserId = useSelector(specificUserSelector.userId);
   const specificTweetId = useSelector(specificTweetSelector.specificTweetId);
   const userCardInfo = useSelector(userSelector.userCardInfo);
+  const nowWhere = useSelector(userSelector.nowWhere);
 
   const [modal, setModal] = useState(false);
 
@@ -75,7 +76,7 @@ function RetweetButton({ tweet, cancelPopup }) {
               userInfo: userCardInfo
             })
           );
-        } else if (!specificTweetId) {
+        } else if (nowWhere === "main") {
           // 메인에 트윗 추가
           dispatch(tweetActions.addTweet(newTweet));
         }

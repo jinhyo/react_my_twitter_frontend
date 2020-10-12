@@ -136,6 +136,8 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
         );
         dispatch(tweetActions.addTweet(tweetWithOthers));
       }
+
+      setTextLimit(0);
     } catch (error) {
       console.error(error);
     } finally {
