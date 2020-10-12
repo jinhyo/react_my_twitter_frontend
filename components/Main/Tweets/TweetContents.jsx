@@ -8,13 +8,21 @@ function TweetContents({ contents }) {
       {contents.split(/(#[^\s#]+|@[^\s@]+)/g).map((content, index) => {
         if (content.match(/(#[^\s#]+)/g)) {
           return (
-            <Link key={index} href={`/hashtags/${content.slice(1)}`}>
+            <Link
+              key={index}
+              href={`/hashtags/[tagName]`}
+              as={`/hashtags/${content.slice(1)}`}
+            >
               <a>{content}</a>
             </Link>
           );
         } else if (content.match(/(@[^\s@]+)/g)) {
           return (
-            <Link key={index} href={`/users/${content.slice(1)}`}>
+            <Link
+              key={index}
+              href="/users/[userId]"
+              as={`/users/${content.slice(1)}`}
+            >
               <a>{content}</a>
             </Link>
           );

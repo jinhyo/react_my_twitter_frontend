@@ -10,10 +10,7 @@ import tweetFunctions from "../lib/tweetFunctions";
 import { tweetActions, tweetSelector } from "../features/tweetSlice";
 import authFunctions from "../lib/authFunctions";
 import ShowTweets from "../components/Main/Tweets/ShowTweets";
-import {
-  specificTweetActions,
-  specificTweetSelector
-} from "../features/specificTweetSlice";
+import { specificTweetSelector } from "../features/specificTweetSlice";
 
 function Index() {
   const dispatch = useDispatch();
@@ -28,7 +25,7 @@ function Index() {
 
   console.log("tweets", tweets);
   console.log("currentUser", currentUser);
-  console.log("specificTweetId", specificTweetId);
+  console.log("hasMorePosts", hasMorePosts);
 
   // 회원가입 or 로그인 시 유저정보 가져오기
   useEffect(() => {
@@ -43,7 +40,6 @@ function Index() {
 
   useEffect(() => {
     if (!tweets.length && !specificTweetId) {
-      console.log("~~~~~getTweets()");
       getTweets();
     }
   }, [specificTweetId]);
@@ -66,7 +62,7 @@ function Index() {
     dispatch(userActions.setCurrentUser(user));
   }
 
-  //// 스크롤이 최하단에 가까워지면 트윗들을 추가로 가져옴
+  /*  스크롤이 최하단에 가까워지면 트윗들을 추가로 가져옴 */
   async function getMoreTweets() {
     if (
       window.scrollY + document.documentElement.clientHeight >

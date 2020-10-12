@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Grid, Loader } from "semantic-ui-react";
+import { Grid, Loader, Header } from "semantic-ui-react";
 import ProfileCard from "../../components/LeftSide/ProfileCard";
 import Trends from "../../components/LeftSide/Trends/Trends";
 import WhoToFollow from "../../components/LeftSide/WhoToFollow/WhoToFollow";
@@ -29,6 +29,7 @@ function TweetStatus() {
 
   const [activeItem, setActiveItem] = useState("comments");
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   console.log("~~~specificTweet", specificTweet);
   console.log("~~~retweetUsers", retweetUsers);
@@ -45,6 +46,8 @@ function TweetStatus() {
       dispatch(specificTweetActions.clearTweet());
       dispatch(specificTweetActions.setCurrentMenuItem(null));
       dispatch(tweetActions.clearTweets());
+
+      setErrorMessage("");
     };
   }, [tweetId]);
 
@@ -54,6 +57,7 @@ function TweetStatus() {
       dispatch(specificTweetActions.setTweet(tweet));
     } catch (error) {
       console.error(error.response.data || error);
+      setErrorMessage(error.response.data);
     }
   }
 
@@ -66,6 +70,8 @@ function TweetStatus() {
         <WhoToFollow />
       </Grid.Column>
       <Grid.Column tablet={11} computer={10}>
+        <Header as="h1" content={errorMessage} color="red" />
+
         {/* 트윗 인포 */}
         {specificTweet && <ShowTweets tweets={[specificTweet]} />}
 
