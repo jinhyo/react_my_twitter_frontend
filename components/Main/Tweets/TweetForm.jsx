@@ -27,7 +27,6 @@ import {
 // in <Index />, <TweetCard />, <PureRetweetCard />
 function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
   const dispatch = useDispatch();
-  const inputRef = useRef();
   const fileRef = useRef();
 
   const currentUser = useSelector(userSelector.currentUser);
@@ -40,6 +39,7 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
   const [imageTypes] = useState(["image/jpeg", "image/png", "image/gif"]);
   const [uploadLoading, setUploadLoading] = useState(false);
   const [text, setText] = useState("");
+  const [textLimit, setTextLimit] = useState(0);
   const [emoji, setEmoji] = useState(false);
 
   const handleEmojiToggle = useCallback(() => {
@@ -47,7 +47,11 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
   }, []);
 
   const handleTextChange = useCallback(e => {
-    setText(e.target.value);
+    const text = e.target.value;
+    if (text.length <= 150) {
+      setText(e.target.value);
+      setTextLimit(text.length);
+    }
   }, []);
 
   //// 트윗 전송
@@ -146,12 +150,15 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
   }, [text, previewImages, currentUser, tweets]);
 
   //// 이모티콘 입력
-  const handleAddEmoji = useCallback(emoji => {
-    setText(prev => prev + emoji.native);
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
+  const handleAddEmoji = useCallback(
+    emoji => {
+      if (text.length < 149) {
+        setText(prev => prev + emoji.native);
+        setTextLimit(prev => prev + emoji.native.length);
+      }
+    },
+    [text]
+  );
 
   //// 이미지 버튼 클릭
   const handleClickFileInput = useCallback(() => {
@@ -167,7 +174,6 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
       if (e.target.files.length > 5) {
         return toast.warn("최대 5개의 파일을 업로드 할 수 있습니다.");
       }
-      console.log("e.target", e.target);
 
       let files = [];
       [].forEach.call(e.target.files, file => {
@@ -202,8 +208,8 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
           set="apple"
           style={{
             position: "absolute",
-            top: "130px",
-            left: "10px",
+            top: "140px",
+            left: "70px",
             zIndex: 10
           }}
           onSelect={handleAddEmoji}
@@ -215,7 +221,6 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
         encType="multipart/form-data"
       >
         <TextArea
-          ref={inputRef}
           name="message"
           type="text"
           autoComplete="off"
@@ -246,6 +251,16 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
         onClick={handleEmojiToggle}
       />
       <Button icon="picture" color="green" onClick={handleClickFileInput} />
+      <span
+        style={{
+          marginLeft: 20,
+          fontSize: 17,
+          color: "green",
+          fontWeight: "bold"
+        }}
+      >
+        {textLimit}/150
+      </span>
       <input
         type="file"
         multiple
