@@ -305,6 +305,12 @@ const specificUserSlice = createSlice({
     addFollowing: (state, { payload: followerId }) => {
       // 카운트 변경
       state.specificUser.user.followings.unshift({ id: followerId });
+    },
+
+    editProfile: (state, { payload: profile }) => {
+      state.specificUser.user.nickname = profile.nickname;
+      state.specificUser.user.location = profile.location;
+      state.specificUser.user.selfIntro = profile.selfIntro;
     }
   }
 });

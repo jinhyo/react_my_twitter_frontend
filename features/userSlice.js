@@ -57,6 +57,12 @@ const userSlice = createSlice({
       state.currentUser.retweets = state.currentUser.retweets.filter(
         tweet => tweet.id !== tweetId
       );
+    },
+
+    editProfile: (state, { payload: profile }) => {
+      state.currentUser.nickname = profile.nickname;
+      state.currentUser.location = profile.location;
+      state.currentUser.selfIntro = profile.selfIntro;
     }
   }
 });
@@ -102,12 +108,14 @@ const selectUserCardInfo = createSelector(
   state => state.currentUser?.nickname,
   state => state.currentUser?.avatarURL,
   state => state.currentUser?.selfIntro,
+  state => state.currentUser?.location,
 
-  (id, nickname, avatarURL, selfIntro) => ({
+  (id, nickname, avatarURL, selfIntro, location) => ({
     id,
     nickname,
     avatarURL,
-    selfIntro
+    selfIntro,
+    location
   })
 );
 

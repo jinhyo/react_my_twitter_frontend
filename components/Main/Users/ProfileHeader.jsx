@@ -1,21 +1,27 @@
 import React, { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Card,
-  Image,
-  Button,
-  Icon,
-  Menu,
-  Label,
-  Loader
-} from "semantic-ui-react";
+import { Card, Image, Button, Icon, Menu, Label } from "semantic-ui-react";
 import moment from "moment";
 import { specificUserSelector } from "../../../features/specificUserSlice";
+import ProfileEditModal from "./ProfileEditModal";
+import { userSelector } from "../../../features/userSlice";
 
 // in <Profile />
 function ProfileHeader({ handleItemClick, activeItem }) {
   const specificUser = useSelector(specificUserSelector.user);
+  const currentUserId = useSelector(userSelector.currentUserId);
   const totalTweetCount = useSelector(specificUserSelector.totalTweetCount);
+
+  const [modal, setModal] = useState(false);
+
+  const openModal = useCallback(() => {
+    setModal(true);
+  }, []);
+
+  const closeModal = useCallback(() => {
+    setModal(false);
+  }, []);
+
   return (
     <>
       <Card fluid>
@@ -28,16 +34,18 @@ function ProfileHeader({ handleItemClick, activeItem }) {
             height={200}
             className="picture__circle"
           />
-          <Button floated="right" primary size="small">
-            프로필 수정
-          </Button>
+          {currentUserId === specificUser.id && (
+            <Button floated="right" primary size="small" onClick={openModal}>
+              프로필 수정
+            </Button>
+          )}
         </Card.Content>
         <Card.Content>
           <Card.Header>@{specificUser.nickname}</Card.Header>
           <Card.Meta>
             {specificUser.location && (
               <>
-                <Icon name="map marker alternate" /> specificUser.location
+                <Icon name="map marker alternate" /> {specificUser.location}
                 &emsp;
               </>
             )}
@@ -77,6 +85,7 @@ function ProfileHeader({ handleItemClick, activeItem }) {
             </Menu.Item>
           </Menu>
         </Card.Content>
+        <ProfileEditModal modal={modal} closeModal={closeModal} />
       </Card>
     </>
   );

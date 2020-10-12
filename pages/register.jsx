@@ -12,7 +12,7 @@ import {
   TextArea,
   Checkbox
 } from "semantic-ui-react";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import validateRegisterForm from "../lib/validateRegisterForm";
 import useFormInput from "../hooks/useFormInput";
 import { toast } from "react-toastify";
@@ -29,8 +29,9 @@ const INITIAL_VALUES = {
 };
 
 function Register(props) {
+  const router = useRouter();
   const [isLogin, setIsLogin] = useState(false);
-  const [IDcheckLoading, setIDcheckLoading] = useState(false);
+  // const [IDcheckLoading, setIDcheckLoading] = useState(false);
   const [emailCheckLoading, setemailCheckLoading] = useState(false);
   const {
     values,
@@ -40,7 +41,9 @@ function Register(props) {
     handleSubmit,
     setIsSubmitting,
     setErrors,
-    setValues
+    setValues,
+    IDcheckLoading,
+    checkUniqueNickname
   } = useFormInput(INITIAL_VALUES, validateRegisterForm, createUser);
 
   // useEffect(() => {
@@ -50,7 +53,7 @@ function Register(props) {
   //   }
   // }, [isLogin]);
 
-  // 회원가입
+  /* 회원가입 */
   async function createUser() {
     const { email, password, nickname, location, selfIntro } = values;
     setIsSubmitting(true);
@@ -60,12 +63,11 @@ function Register(props) {
         email,
         password,
         nickname,
-        location,
-        selfIntro
+        selfIntro,
+        location
       );
-
       setValues(INITIAL_VALUES);
-      Router.push("/");
+      router.push("/");
     } catch (error) {
       // 중복 닉네임 & 이메일 에러처리
       console.error(error);
@@ -78,29 +80,6 @@ function Register(props) {
       setIsSubmitting(false);
     }
   }
-
-  // 중복 닉네임 확인
-  const checkUniqueNickname = useCallback(async () => {
-    if (values.nickname.length > 0) {
-      try {
-        setIDcheckLoading(true);
-        const isAvailable = await authFunctions.checkDuplicateNickname(
-          values.nickname
-        );
-        if (isAvailable) {
-          toast.success("사용 가능한 닉네임 입니다.");
-        } else {
-          toast.warn("이미 사용 중인 닉네임 입니다.");
-        }
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIDcheckLoading(false);
-      }
-    } else {
-      alert("닉네임을 입력하세요.");
-    }
-  }, [values.nickname]);
 
   const checkUniqueEmail = useCallback(async () => {
     if (values.email.length > 0) {
