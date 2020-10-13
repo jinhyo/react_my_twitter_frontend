@@ -59,10 +59,15 @@ const userSlice = createSlice({
       );
     },
 
+    /* 프로필 변경 */
+
     editProfile: (state, { payload: profile }) => {
       state.currentUser.nickname = profile.nickname;
       state.currentUser.location = profile.location;
       state.currentUser.selfIntro = profile.selfIntro;
+    },
+    updateAvatarURL: (state, { payload: url }) => {
+      state.currentUser.avatarURL = url;
     }
   }
 });

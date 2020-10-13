@@ -307,10 +307,14 @@ const specificUserSlice = createSlice({
       state.specificUser.user.followings.unshift({ id: followerId });
     },
 
+    /* 프로필 변경 */
     editProfile: (state, { payload: profile }) => {
       state.specificUser.user.nickname = profile.nickname;
       state.specificUser.user.location = profile.location;
       state.specificUser.user.selfIntro = profile.selfIntro;
+    },
+    updateAvatarURL: (state, { payload: url }) => {
+      state.specificUser.user.avatarURL = url;
     }
   }
 });

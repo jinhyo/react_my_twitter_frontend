@@ -5,6 +5,7 @@ import moment from "moment";
 import { specificUserSelector } from "../../../features/specificUserSlice";
 import ProfileEditModal from "./ProfileEditModal";
 import { userSelector } from "../../../features/userSlice";
+import AvatarModal from "./AvatarModal";
 
 // in <Profile />
 function ProfileHeader({ handleItemClick, activeItem }) {
@@ -12,16 +13,24 @@ function ProfileHeader({ handleItemClick, activeItem }) {
   const currentUserId = useSelector(userSelector.currentUserId);
   const totalTweetCount = useSelector(specificUserSelector.totalTweetCount);
 
-  const [modal, setModal] = useState(false);
+  const [profileModal, setProfileModal] = useState(false);
+  const [avatarModal, setAvatarModal] = useState(false);
 
-  const openModal = useCallback(() => {
-    setModal(true);
+  const openProfileModal = useCallback(() => {
+    setProfileModal(true);
   }, []);
 
-  const closeModal = useCallback(() => {
-    setModal(false);
+  const closeProfileModal = useCallback(() => {
+    setProfileModal(false);
   }, []);
 
+  const openAvatarModal = useCallback(() => {
+    setAvatarModal(true);
+  }, []);
+
+  const closeAvatarModal = useCallback(() => {
+    setAvatarModal(false);
+  }, []);
   return (
     <>
       <Card fluid>
@@ -35,9 +44,24 @@ function ProfileHeader({ handleItemClick, activeItem }) {
             className="picture__circle"
           />
           {currentUserId === specificUser.id && (
-            <Button floated="right" primary size="small" onClick={openModal}>
-              프로필 수정
-            </Button>
+            <>
+              <Button
+                floated="right"
+                primary
+                size="small"
+                onClick={openProfileModal}
+              >
+                프로필 수정
+              </Button>
+              <Button
+                floated="right"
+                primary
+                size="small"
+                onClick={openAvatarModal}
+              >
+                아바타 수정
+              </Button>
+            </>
           )}
         </Card.Content>
         <Card.Content>
@@ -85,7 +109,9 @@ function ProfileHeader({ handleItemClick, activeItem }) {
             </Menu.Item>
           </Menu>
         </Card.Content>
-        <ProfileEditModal modal={modal} closeModal={closeModal} />
+
+        <ProfileEditModal modal={profileModal} closeModal={closeProfileModal} />
+        <AvatarModal modal={avatarModal} closeModal={closeAvatarModal} />
       </Card>
     </>
   );

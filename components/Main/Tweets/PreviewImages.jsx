@@ -1,13 +1,9 @@
 import React, { useCallback, useState } from "react";
-import { useDispatch } from "react-redux";
 import { Image, Segment, Label, Button } from "semantic-ui-react";
-import { tweetActions } from "../../../features/tweetSlice";
 import TweetImageModal from "./TweetImageModal";
 
 // in <TweetForm />
 function PreviewImages({ previewImages, cancelPicture, setPreviewImages }) {
-  console.log("previewImages", previewImages);
-
   const [modal, setModal] = useState(false);
   const [targetImage, setTargetImage] = useState(false);
   const closeModal = useCallback(() => {

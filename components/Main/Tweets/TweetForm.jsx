@@ -54,7 +54,7 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
     }
   }, []);
 
-  //// 트윗 전송
+  /*  트윗 전송 */
   const handleSendTweet = useCallback(async () => {
     // empty tweet 제한
     if (!text.trim() && !previewImages) {
@@ -72,7 +72,7 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
       });
     }
 
-    //// 트윗 전송
+    /*  트윗 전송 */
     try {
       let tweetWithOthers;
 
@@ -151,7 +151,7 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
     }
   }, [text, previewImages, currentUser, tweets]);
 
-  //// 이모티콘 입력
+  /*  이모티콘 입력 */
   const handleAddEmoji = useCallback(
     emoji => {
       if (text.length < 149) {
@@ -162,14 +162,14 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
     [text]
   );
 
-  //// 이미지 버튼 클릭
+  /*  이미지 버튼 클릭 */
   const handleClickFileInput = useCallback(() => {
     if (fileRef.current) {
       fileRef.current.click();
     }
   }, [fileRef]);
 
-  //// 이미지 파일 선택
+  /*  이미지 파일 선택 */
   const handleFileInput = useCallback(
     e => {
       // 5개로 제한
@@ -181,6 +181,8 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
       [].forEach.call(e.target.files, file => {
         if (isAuthorized(file, imageTypes)) {
           files.push(file);
+        } else {
+          return toast.warn("jpeg, png, gif 파일만 가능합니다.");
         }
       });
 
@@ -189,7 +191,7 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
     [previewImages]
   );
 
-  //// 이미지 파일 타입 검증
+  /*  이미지 파일 타입 검증 */
   function isAuthorized(file, imageTypes) {
     return imageTypes.includes(mime.lookup(file.name));
   }
