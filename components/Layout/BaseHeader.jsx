@@ -48,7 +48,7 @@ function BaseHeader() {
               </a>
             </Link>
           </Menu.Item>
-          <Menu.Item>
+          {/* <Menu.Item>
             <Link href="/notification" className="item">
               <a>
                 <Icon name="bell outline" color="teal" /> 알림
@@ -62,7 +62,7 @@ function BaseHeader() {
                 메시지
               </a>
             </Link>
-          </Menu.Item>
+          </Menu.Item> */}
         </>
       )}
 

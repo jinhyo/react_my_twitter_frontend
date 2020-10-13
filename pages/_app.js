@@ -1,12 +1,9 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 import Head from "next/head";
 import wrapper from "../store/configureStore";
 import Layout from "../components/Layout/Layout";
 import { ToastContainer } from "react-toastify";
 import axios from "axios";
-import authFunctions from "../lib/authFunctions";
-import { userActions, userSelector } from "../features/userSlice";
 
 import "semantic-ui-css/semantic.min.css";
 import "emoji-mart/css/emoji-mart.css";
