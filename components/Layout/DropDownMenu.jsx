@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import authFunctions from "../../lib/authFunctions";
 import { userActions, userSelector } from "../../features/userSlice";
 
+// in <BaseHeader />
 function DropDownMenu() {
   const dispatch = useDispatch();
   const router = useRouter();
