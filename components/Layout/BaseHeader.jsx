@@ -6,24 +6,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { userSelector, userActions } from "../../features/userSlice";
 import authFunctions from "../../lib/authFunctions";
 import { toast } from "react-toastify";
+import SearchInput from "./SearchInput";
+import DropDownMenu from "./DropDownMenu";
 
 function BaseHeader() {
-  const dispatch = useDispatch();
   const currentUserId = useSelector(userSelector.currentUserId);
   console.log("currentUserId", currentUserId);
-
-  const handleLogout = useCallback(async () => {
-    if (currentUserId) {
-      try {
-        await authFunctions.logout();
-        dispatch(userActions.clearCurrentUser());
-        Router.push("/");
-      } catch (error) {
-        console.error(error);
-        toast.error(error.response.data);
-      }
-    }
-  }, [currentUserId]);
 
   return (
     <Menu className="baseHeader">
@@ -70,28 +58,12 @@ function BaseHeader() {
         {currentUserId ? (
           <>
             <Menu.Item>
-              <Input
-                icon={{ name: "search", circular: true, link: true }}
-                placeholder="Search..."
-              />
+              {/* 검색창 */}
+              <SearchInput />
             </Menu.Item>
             <Menu.Item>
-              <Dropdown size="large" icon="cog" className="icon">
-                <Dropdown.Menu>
-                  <Dropdown.Item>
-                    <Link
-                      href={`/users/[userId]`}
-                      as={`/users/${currentUserId}`}
-                      className="item"
-                    >
-                      <a>
-                        <span style={{ color: "black" }}>프로필</span>
-                      </a>
-                    </Link>
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={handleLogout}>로그아웃</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+              {/* 유저 드랍다운 매뉴 */}
+              <DropDownMenu />
             </Menu.Item>
           </>
         ) : (
