@@ -15,6 +15,7 @@ import {
   specificUserSelector,
   specificUserActions
 } from "../../features/specificUserSlice";
+import { searchActions } from "../../features/searchSlice";
 
 function Profile() {
   const router = useRouter();
@@ -37,6 +38,8 @@ function Profile() {
   const [loading, setLoading] = useState(false);
   const [activeItem, setActiveItem] = useState("tweets");
 
+  console.log("specificUser", specificUser);
+
   useEffect(() => {
     if (userId) {
       getSpecificUser(userId);
@@ -50,9 +53,16 @@ function Profile() {
     };
   }, [userId]);
 
+  useEffect(() => {
+    return () => {
+      dispatch(searchActions.setSearchWord(""));
+    };
+  }, []);
+
   async function getSpecificUser(userId) {
     try {
       const user = await userFunctions.getSpecificUser(userId);
+      dispatch(searchActions.setSearchWord("@" + user.nickname));
       dispatch(specificUserActions.setUser(user));
       dispatch(specificUserActions.changeTotalTweetCount(user.tweets.length));
     } catch (error) {

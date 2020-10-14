@@ -10,6 +10,7 @@ import {
   SPECIFIC_TWEET,
   specificTweetReducer
 } from "../features/specificTweetSlice";
+import { SEARCH, searchReducer } from "../features/searchSlice";
 
 const rootReducer = (state, action) => {
   switch (action.type) {
@@ -21,7 +22,8 @@ const rootReducer = (state, action) => {
         [USER]: userReducer,
         [TWEET]: tweetReducer,
         [SPECIFIC_USER]: specificUserReducer,
-        [SPECIFIC_TWEET]: specificTweetReducer
+        [SPECIFIC_TWEET]: specificTweetReducer,
+        [SEARCH]: searchReducer
       });
       return combineReducer(state, action);
     }

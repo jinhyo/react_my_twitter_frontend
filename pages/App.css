@@ -40,3 +40,17 @@
   opacity: 0.5;
   font-size: 0.9em;
 }
+
+.baseHeader {
+  position: relative;
+}
+
+.searchResults {
+  position: absolute;
+  right: 20px;
+  top: 40px;
+  z-index: 5;
+  width: 245px;
+  background-color: #e9ebeca4;
+  border-radius: 5%;
+}

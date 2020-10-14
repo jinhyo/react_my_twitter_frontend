@@ -12,6 +12,7 @@ import { userSelector, userActions } from "../../features/userSlice";
 import { specificTweetSelector } from "../../features/specificTweetSlice";
 import { useRouter } from "next/router";
 import useTweetGetter from "../../hooks/useTweetGetter";
+import { searchActions } from "../../features/searchSlice";
 
 function TweetsWithHashtag() {
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ function TweetsWithHashtag() {
       dispatch(tweetActions.clearTweets());
       dispatch(userActions.setNowWhere("hashtag"));
       dispatch(userActions.setNowWhere("hashtag"));
+      dispatch(searchActions.setSearchWord("#" + tagName));
 
       getTweets();
     }
@@ -42,6 +44,12 @@ function TweetsWithHashtag() {
       dispatch(userActions.setNowWhere("main"));
     };
   }, [tagName]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(searchActions.setSearchWord(""));
+    };
+  }, []);
 
   return (
     <Grid stackable padded relaxed>

@@ -1,13 +1,14 @@
 import React, { useCallback } from "react";
-import { Menu, Icon, Image, Header, Dropdown, Input } from "semantic-ui-react";
+import { Menu, Icon } from "semantic-ui-react";
 import Router from "next/router";
 import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { userSelector, userActions } from "../../features/userSlice";
 import authFunctions from "../../lib/authFunctions";
 import { toast } from "react-toastify";
-import SearchInput from "./SearchInput";
+import SearchBar from "./SearchBar";
 import DropDownMenu from "./DropDownMenu";
+import SearchResults from "./SearchResults";
 
 function BaseHeader() {
   const currentUserId = useSelector(userSelector.currentUserId);
@@ -59,7 +60,7 @@ function BaseHeader() {
           <>
             <Menu.Item>
               {/* 검색창 */}
-              <SearchInput />
+              <SearchBar />
             </Menu.Item>
             <Menu.Item>
               {/* 유저 드랍다운 매뉴 */}
@@ -81,6 +82,7 @@ function BaseHeader() {
           </>
         )}
       </Menu.Menu>
+      {/* <SearchResults /> */}
     </Menu>
   );
 }
