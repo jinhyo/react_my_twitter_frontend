@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Input } from "semantic-ui-react";
+import { Input, Icon } from "semantic-ui-react";
 import searchFunctions from "../../lib/searchFunctions";
 import SearchResults from "./SearchResults";
 import { useRouter } from "next/router";
@@ -57,18 +57,40 @@ function SearchBar() {
     } else if (text[0] === "@") {
       // 유저 닉네임 검색
       router.push(`/users/${text.slice(1)}`);
+    } else {
+      // 앞에 # 또는 @을 붙이지 않고 엔터를 누를 경우 기본적으로 해시태그를 검색
+      dispatch(searchActions.setSearchWord(`#${text}`));
+      router.push(`/hashtags/${text}`);
     }
   }, []);
+
+  const handleInputKeyPress = useCallback(
+    e => {
+      console.log("handleInputKeyPress");
+
+      if (e.key === "Enter") {
+        console.log("~~~~handleInputKeyPress");
+        handleSearchWord(searchWord);
+      }
+    },
+    [searchWord]
+  );
 
   return (
     <>
       <Input
-        icon={{ name: "search", link: true, loading }}
+        icon={{
+          name: "search",
+          link: true,
+          loading,
+          onClick: () => handleSearchWord(searchWord)
+        }}
         onChange={handleInputChange}
         value={searchWord}
         style={{ width: 250 }}
         placeholder="#해시태그, @닉네임 검색"
-      />
+        onKeyPress={handleInputKeyPress}
+      ></Input>
 
       {/* 검색 결과 */}
       {showSearchResults && searchResults && (

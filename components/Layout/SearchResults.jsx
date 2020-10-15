@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { List, Image, Divider, Button } from "semantic-ui-react";
 import { searchActions } from "../../features/searchSlice";
@@ -7,6 +7,12 @@ import { userSelector } from "../../features/userSlice";
 function SearchResults({ hashtags, users, handleSearchWord }) {
   const dispatch = useDispatch();
   const followings = useSelector(userSelector.followings);
+
+  useEffect(() => {
+    return () => {
+      dispatch(searchActions.setSearchWord(""));
+    };
+  }, []);
 
   const handleClickLink = useCallback((searchWord, userNickname) => {
     dispatch(searchActions.setSearchWord(userNickname || searchWord));

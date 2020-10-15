@@ -53,16 +53,9 @@ function Profile() {
     };
   }, [userId]);
 
-  useEffect(() => {
-    return () => {
-      dispatch(searchActions.setSearchWord(""));
-    };
-  }, []);
-
   async function getSpecificUser(userId) {
     try {
       const user = await userFunctions.getSpecificUser(userId);
-      dispatch(searchActions.setSearchWord("@" + user.nickname));
       dispatch(specificUserActions.setUser(user));
       dispatch(specificUserActions.changeTotalTweetCount(user.tweets.length));
     } catch (error) {
