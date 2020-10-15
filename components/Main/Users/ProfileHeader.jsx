@@ -2,16 +2,24 @@ import React, { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, Image, Button, Icon, Menu, Label } from "semantic-ui-react";
 import moment from "moment";
-import { specificUserSelector } from "../../../features/specificUserSlice";
+import {
+  specificUserSelector,
+  specificUserActions
+} from "../../../features/specificUserSlice";
 import ProfileEditModal from "./ProfileEditModal";
-import { userSelector } from "../../../features/userSlice";
+import { userSelector, userActions } from "../../../features/userSlice";
 import AvatarModal from "./AvatarModal";
+import userFunctions from "../../../lib/userFunctions";
 
 // in <Profile />
 function ProfileHeader({ handleItemClick, activeItem }) {
+  const dispatch = useDispatch();
+
   const specificUser = useSelector(specificUserSelector.user);
+  const userCardInfo = useSelector(userSelector.userCardInfo);
   const currentUserId = useSelector(userSelector.currentUserId);
   const totalTweetCount = useSelector(specificUserSelector.totalTweetCount);
+  const followings = useSelector(userSelector.followings);
 
   const [profileModal, setProfileModal] = useState(false);
   const [avatarModal, setAvatarModal] = useState(false);
@@ -31,6 +39,86 @@ function ProfileHeader({ handleItemClick, activeItem }) {
   const closeAvatarModal = useCallback(() => {
     setAvatarModal(false);
   }, []);
+
+  function didIFollow(userId, followings) {
+    const index = followings.findIndex(following => following.id === userId);
+    return index !== -1;
+  }
+
+  // 현재  <UserCard />의 정보가 나인지 확인
+  function isMe(userId, currentUserId) {
+    return currentUserId === userId;
+  }
+
+  const displayButtons = useCallback(() => {
+    if (isMe(specificUser.id, currentUserId)) {
+      // 나인경우
+      return (
+        <>
+          <Button
+            floated="right"
+            primary
+            size="small"
+            onClick={openProfileModal}
+          >
+            프로필 수정
+          </Button>
+          <Button
+            floated="right"
+            primary
+            size="small"
+            onClick={openAvatarModal}
+          >
+            아바타 수정
+          </Button>
+        </>
+      );
+    } else if (didIFollow(specificUser.id, followings)) {
+      // 이미 팔로우 중
+      return (
+        <Button
+          animated
+          floated="right"
+          color="teal"
+          size="small"
+          onClick={handleUnfollowUser}
+        >
+          <Button.Content visible>팔로잉</Button.Content>
+          <Button.Content hidden>언팔로우</Button.Content>
+        </Button>
+      );
+    } else {
+      // 언팔로오 중
+      return (
+        <Button floated="right" primary size="small" onClick={handleFollowUser}>
+          팔로우
+        </Button>
+      );
+    }
+  }, [specificUser, currentUserId, followings]);
+
+  //// 팔로우
+  const handleFollowUser = useCallback(async () => {
+    try {
+      await userFunctions.followUser(specificUser.id);
+      dispatch(userActions.addFollowing(specificUser.id));
+      dispatch(specificUserActions.addFollower(userCardInfo));
+    } catch (error) {
+      console.error(error);
+    }
+  }, [specificUser]);
+
+  //// 언팔로우
+  const handleUnfollowUser = useCallback(async () => {
+    try {
+      await userFunctions.unfollowUser(specificUser.id);
+      dispatch(userActions.removeFollowing(specificUser.id));
+      dispatch(specificUserActions.removeFollower(currentUserId));
+    } catch (error) {
+      console.error(error);
+    }
+  }, [specificUser]);
+
   return (
     <>
       <Card fluid>
@@ -43,26 +131,8 @@ function ProfileHeader({ handleItemClick, activeItem }) {
             height={200}
             className="picture__circle"
           />
-          {currentUserId === specificUser.id && (
-            <>
-              <Button
-                floated="right"
-                primary
-                size="small"
-                onClick={openProfileModal}
-              >
-                프로필 수정
-              </Button>
-              <Button
-                floated="right"
-                primary
-                size="small"
-                onClick={openAvatarModal}
-              >
-                아바타 수정
-              </Button>
-            </>
-          )}
+
+          {displayButtons()}
         </Card.Content>
         <Card.Content>
           <Card.Header>@{specificUser.nickname}</Card.Header>

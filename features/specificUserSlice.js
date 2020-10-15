@@ -306,6 +306,22 @@ const specificUserSlice = createSlice({
       // 카운트 변경
       state.specificUser.user.followings.unshift({ id: followerId });
     },
+    removeFollower: (state, { payload: followerId }) => {
+      // 카운트 변경
+      state.specificUser.user.followers = state.specificUser.user.followers.filter(
+        follower => follower.id !== followerId
+      );
+
+      // 팔로워 메뉴에서 제거
+      state.specificUser.followers = state.specificUser.followers.filter(
+        follower => follower.id !== followerId
+      );
+    },
+    addFollower: (state, { payload: userCardInfo }) => {
+      // 카운트 변경
+      state.specificUser.user.followers.unshift({ id: userCardInfo.id });
+      state.specificUser.followers.unshift(userCardInfo);
+    },
 
     /* 프로필 변경 */
     editProfile: (state, { payload: profile }) => {
