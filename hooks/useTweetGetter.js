@@ -10,6 +10,7 @@ function useTweetGetter(getTweetsFromDB, tagName = null) {
 
   const [hasMorePosts, setHasMorePosts] = useState(false);
   const [loadTweetLoading, setLoadTweetLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
   const [clear, setClear] = useState(null);
 
   console.log("hasMorePosts", hasMorePosts);
@@ -59,13 +60,16 @@ function useTweetGetter(getTweetsFromDB, tagName = null) {
       setHasMorePosts(tweets.length === 10);
       dispatch(tweetActions.setTweets(tweets));
     } catch (error) {
-      console.error(error);
+      console.error(error.response.data || error);
+      setErrorMessage(error.response.data);
     }
   }
 
   return {
     tweets,
-    getTweets
+    getTweets,
+    errorMessage,
+    setErrorMessage
   };
 }
 

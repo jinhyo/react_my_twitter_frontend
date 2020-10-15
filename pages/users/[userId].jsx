@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Grid, Loader } from "semantic-ui-react";
+import { Grid, Loader, Message } from "semantic-ui-react";
 import Trends from "../../components/LeftSide/Trends/Trends";
 import WhoToFollow from "../../components/LeftSide/WhoToFollow/WhoToFollow";
 import ProfileHeader from "../../components/Main/Users/ProfileHeader";
@@ -37,6 +37,7 @@ function Profile() {
 
   const [loading, setLoading] = useState(false);
   const [activeItem, setActiveItem] = useState("tweets");
+  const [errorMessage, setErrorMessage] = useState("");
 
   console.log("specificUser", specificUser);
 
@@ -50,6 +51,7 @@ function Profile() {
     return () => {
       dispatch(specificUserActions.clearUserInfos());
       dispatch(specificUserActions.clearCounts());
+      setErrorMessage("");
     };
   }, [userId]);
 
@@ -59,7 +61,8 @@ function Profile() {
       dispatch(specificUserActions.setUser(user));
       dispatch(specificUserActions.changeTotalTweetCount(user.tweets.length));
     } catch (error) {
-      console.error(error);
+      console.error(error.response.data || error);
+      setErrorMessage(error.response.data);
     }
   }
 
@@ -211,6 +214,9 @@ function Profile() {
         {activeItem === "favoriteTweets" && (
           <ShowTweets tweets={specificUsersFavorites} />
         )}
+
+        {/* 해당 유저가 없을 경우 */}
+        {errorMessage && <Message size="huge" error header={errorMessage} />}
 
         <Loader size="small" active={loading} />
       </Grid.Column>

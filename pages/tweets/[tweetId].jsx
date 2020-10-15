@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Grid, Loader, Header } from "semantic-ui-react";
+import { Grid, Loader, Header, Message } from "semantic-ui-react";
 import ProfileCard from "../../components/LeftSide/ProfileCard";
 import Trends from "../../components/LeftSide/Trends/Trends";
 import WhoToFollow from "../../components/LeftSide/WhoToFollow/WhoToFollow";
@@ -69,8 +69,6 @@ function TweetStatus() {
         <WhoToFollow />
       </Grid.Column>
       <Grid.Column tablet={11} computer={10}>
-        <Header as="h1" content={errorMessage} color="red" />
-
         {/* 트윗 인포 */}
         {specificTweet && <ShowTweets tweets={[specificTweet]} />}
 
@@ -100,6 +98,9 @@ function TweetStatus() {
         {/* 좋아요 누른 유저들 */}
         {activeItem === "likers" &&
           likers.map(user => <UserCard key={user.id} user={user} />)}
+
+        {/* 해당 트윗이 없을 경우 */}
+        {errorMessage && <Message size="huge" error header={errorMessage} />}
       </Grid.Column>
     </Grid>
   );
