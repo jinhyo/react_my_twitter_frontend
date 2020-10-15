@@ -8,12 +8,6 @@ function SearchResults({ hashtags, users, handleSearchWord }) {
   const dispatch = useDispatch();
   const followings = useSelector(userSelector.followings);
 
-  useEffect(() => {
-    return () => {
-      dispatch(searchActions.setSearchWord(""));
-    };
-  }, []);
-
   const handleClickLink = useCallback((searchWord, userNickname) => {
     dispatch(searchActions.setSearchWord(userNickname || searchWord));
 
@@ -44,7 +38,7 @@ function SearchResults({ hashtags, users, handleSearchWord }) {
         </List.Item>
       ))}
 
-      <Divider fitted />
+      {hashtags.length > 0 && <Divider fitted />}
 
       {/* 유저 닉네임 검색 결과 */}
       {users.map(user => (

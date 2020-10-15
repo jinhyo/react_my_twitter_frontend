@@ -15,6 +15,7 @@ import {
 import TweetInfoMenu from "../../components/Main/Tweets/TweetInfoMenu";
 import ShowTweets from "../../components/Main/Tweets/ShowTweets";
 import UserCard from "../../components/Main/Users/UserCard";
+import { searchActions } from "../../features/searchSlice";
 
 function TweetStatus() {
   const router = useRouter();
