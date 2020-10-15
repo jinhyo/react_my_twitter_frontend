@@ -8,6 +8,8 @@ import axios from "axios";
 import "semantic-ui-css/semantic.min.css";
 import "emoji-mart/css/emoji-mart.css";
 import "react-toastify/dist/ReactToastify.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import "./App.css";
 
 axios.defaults.baseURL = "http://localhost:3001";

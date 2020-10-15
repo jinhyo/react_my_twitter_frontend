@@ -200,7 +200,10 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
         </Card.Content>
         <Card.Content>
           <Card.Description>
+            {/* 트윗 내용 */}
             <TweetContents contents={tweet.contents} />
+
+            {/* 트윗 이미지 */}
             {tweet.hasMedia && <TweetImages images={tweet.images} />}
 
             {/* 인용 트윗인 경우 */}

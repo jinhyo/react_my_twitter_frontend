@@ -54,3 +54,15 @@
   background-color: #e9ebeca4;
   border-radius: 5%;
 }
+
+/* 이미지 */
+.slick-dots li button::before {
+  font-size: 16px;
+  color: #fff;
+  opacity: 0.7;
+}
+
+.slick-dots li.slick-active button::before {
+  color: #fff;
+  opacity: 1;
+}
