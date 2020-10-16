@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from "react";
-import { Image, Segment } from "semantic-ui-react";
+import { Image } from "semantic-ui-react";
+
 import ImageZoomModal from "./ImageZoomModal";
 
 // in <TweetCard />

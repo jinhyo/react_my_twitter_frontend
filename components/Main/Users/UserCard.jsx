@@ -1,8 +1,9 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Comment, Button, Divider, Image, Card, Feed } from "semantic-ui-react";
-import { userSelector, userActions } from "../../../features/userSlice";
+import { Button, Image, Card, Feed } from "semantic-ui-react";
 import Link from "next/link";
+
+import { userSelector, userActions } from "../../../features/userSlice";
 import userFunctions from "../../../lib/userFunctions";
 import { specificUserActions } from "../../../features/specificUserSlice";
 
@@ -51,7 +52,7 @@ function UserCard({ user }) {
     }
   }, [user, currentUserId, followings]);
 
-  //// 팔로우
+  /*  팔로우 */
   const handleFollowUser = useCallback(async () => {
     if (!currentUserId) {
       return alert("로그인이 필요합니다.");
@@ -65,7 +66,7 @@ function UserCard({ user }) {
     }
   }, [user]);
 
-  //// 언팔로우
+  /*  언팔로우 */
   const handleUnfollowUser = useCallback(async () => {
     if (!currentUserId) {
       return alert("로그인이 필요합니다.");

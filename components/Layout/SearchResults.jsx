@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { List, Image, Divider, Button } from "semantic-ui-react";
+
 import { searchActions } from "../../features/searchSlice";
 import { userSelector } from "../../features/userSlice";
 

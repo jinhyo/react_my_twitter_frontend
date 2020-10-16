@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Label, Menu } from "semantic-ui-react";
+
 import { specificTweetActions } from "../../../features/specificTweetSlice";
 import tweetFunctions from "../../../lib/tweetFunctions";
 import { tweetActions } from "../../../features/tweetSlice";

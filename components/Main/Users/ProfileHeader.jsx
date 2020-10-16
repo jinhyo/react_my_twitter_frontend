@@ -2,6 +2,7 @@ import React, { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, Image, Button, Icon, Menu, Label } from "semantic-ui-react";
 import moment from "moment";
+
 import {
   specificUserSelector,
   specificUserActions
@@ -45,7 +46,7 @@ function ProfileHeader({ handleItemClick, activeItem }) {
     return index !== -1;
   }
 
-  // 현재  <UserCard />의 정보가 나인지 확인
+  /*  현재  <UserCard />의 정보가 나인지 확인 */
   function isMe(userId, currentUserId) {
     return currentUserId === userId;
   }
@@ -97,7 +98,7 @@ function ProfileHeader({ handleItemClick, activeItem }) {
     }
   }, [specificUser, currentUserId, followings]);
 
-  //// 팔로우
+  /*  팔로우 */
   const handleFollowUser = useCallback(async () => {
     if (!currentUserId) {
       return alert("로그인이 필요합니다.");
@@ -112,7 +113,7 @@ function ProfileHeader({ handleItemClick, activeItem }) {
     }
   }, [specificUser]);
 
-  //// 언팔로우
+  /*  언팔로우 */
   const handleUnfollowUser = useCallback(async () => {
     try {
       await userFunctions.unfollowUser(specificUser.id);

@@ -1,7 +1,8 @@
 import React, { useCallback, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Card, Button, Icon, Feed, Image, IconGroup } from "semantic-ui-react";
+import { Card, Button, Icon, Feed, Image } from "semantic-ui-react";
 import moment from "moment";
+
 import TweetImages from "./TweetImages";
 import TweetContents from "./TweetContents";
 import tweetFunctions from "../../../lib/tweetFunctions";

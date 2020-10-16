@@ -10,11 +10,11 @@ import {
   Image
 } from "semantic-ui-react";
 import { useRouter } from "next/router";
+
 import authFunctions from "../lib/authFunctions";
 import { userActions, userSelector } from "../features/userSlice";
 import { toast } from "react-toastify";
 import wrapper from "../store/configureStore";
-import axios from "axios";
 
 const INITIAL_VALUE = { email: "", password: "" };
 
@@ -107,8 +107,6 @@ function Login() {
     }
   }, []);
 
-  // if (isLogin) return null;
-
   if (currentUserId) return null;
 
   return (
@@ -195,7 +193,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const cookie = req ? req.headers.cookie : "";
     axios.defaults.headers.Cookie = "";
     if (req && cookie) {
-      // if - 서버일 떄와 쿠키가 있을 경우
+      // 서버일 떄와 쿠키가 있을 경우
       axios.defaults.headers.Cookie = cookie; // 로그인 정보가 백엔드 서버로 넘어감
     }
 

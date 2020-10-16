@@ -1,6 +1,6 @@
 import React from "react";
-import { Modal, Button } from "semantic-ui-react";
-import TweetForm from "./TweetForm";
+import { Modal } from "semantic-ui-react";
+
 import QuotationForm from "./QuotationForm";
 
 // in <RetweetButton />

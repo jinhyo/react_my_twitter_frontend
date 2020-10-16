@@ -1,9 +1,10 @@
 import React from "react";
 import { Card, Feed, Image } from "semantic-ui-react";
 import moment from "moment";
+import Link from "next/link";
+
 import TweetImages from "./TweetImages";
 import TweetContents from "./TweetContents";
-import Link from "next/link";
 
 // in <TweetCard />
 function QuotedTweetCard({ tweet }) {

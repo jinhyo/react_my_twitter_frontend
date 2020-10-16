@@ -1,6 +1,6 @@
 import React from "react";
 import Slider from "react-slick";
-import { Modal, Button, Image } from "semantic-ui-react";
+import { Modal, Image } from "semantic-ui-react";
 
 const SETTINGS = {
   dots: true,

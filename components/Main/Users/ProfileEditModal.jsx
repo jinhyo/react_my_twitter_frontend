@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Modal,
@@ -9,11 +9,12 @@ import {
   TextArea,
   Message
 } from "semantic-ui-react";
+import { toast } from "react-toastify";
+
 import useFormInput from "../../../hooks/useFormInput";
 import validateEitProfileForm from "../../../lib/validateEitProfileForm";
 import { userSelector, userActions } from "../../../features/userSlice";
 import userFunctions from "../../../lib/userFunctions";
-import { toast } from "react-toastify";
 import { specificUserActions } from "../../../features/specificUserSlice";
 
 const INITIAL_VALUES = {

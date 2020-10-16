@@ -1,10 +1,12 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Grid, Loader, Header, Message } from "semantic-ui-react";
+import { Grid, Loader, Message } from "semantic-ui-react";
+import { useRouter } from "next/router";
+import axios from "axios";
+
 import ProfileCard from "../../components/LeftSide/ProfileCard";
 import Trends from "../../components/LeftSide/Trends/Trends";
 import { userSelector, userActions } from "../../features/userSlice";
-import { useRouter } from "next/router";
 import tweetFunctions from "../../lib/tweetFunctions";
 import { tweetSelector, tweetActions } from "../../features/tweetSlice";
 import {
@@ -16,7 +18,6 @@ import ShowTweets from "../../components/Main/Tweets/ShowTweets";
 import UserCard from "../../components/Main/Users/UserCard";
 import { searchActions } from "../../features/searchSlice";
 import wrapper from "../../store/configureStore";
-import axios from "axios";
 import authFunctions from "../../lib/authFunctions";
 
 function TweetStatus() {
@@ -33,8 +34,6 @@ function TweetStatus() {
   const [activeItem, setActiveItem] = useState("comments");
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
-  console.log("~~~specificTweet", specificTweet);
 
   useEffect(() => {
     if (tweetId) {
@@ -117,13 +116,12 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const cookie = req ? req.headers.cookie : "";
     axios.defaults.headers.Cookie = "";
     if (req && cookie) {
-      // if - 서버일 떄와 쿠키가 있을 경우
+      // 서버일 떄와 쿠키가 있을 경우
       axios.defaults.headers.Cookie = cookie; // 로그인 정보가 백엔드 서버로 넘어감
     }
 
     try {
       const user = await authFunctions.getLoginUserInfo();
-      console.log("~~~getServerSideProps", user);
       store.dispatch(userActions.setCurrentUser(user));
     } catch (error) {
       console.error(error);

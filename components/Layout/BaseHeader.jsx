@@ -1,15 +1,14 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { Menu, Icon } from "semantic-ui-react";
 import Link from "next/link";
-import { useSelector, useDispatch } from "react-redux";
-import { userSelector, userActions } from "../../features/userSlice";
-import authFunctions from "../../lib/authFunctions";
+import { useSelector } from "react-redux";
+
+import { userSelector } from "../../features/userSlice";
 import SearchBar from "./SearchBar";
 import DropDownMenu from "./DropDownMenu";
 
 function BaseHeader() {
   const currentUserId = useSelector(userSelector.currentUserId);
-  console.log("currentUserId", currentUserId);
 
   return (
     <Menu className="baseHeader">
@@ -83,7 +82,6 @@ function BaseHeader() {
           </>
         )}
       </Menu.Menu>
-      {/* <SearchResults /> */}
     </Menu>
   );
 }

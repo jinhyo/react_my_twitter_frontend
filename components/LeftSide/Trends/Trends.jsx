@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Card } from "semantic-ui-react";
+
 import TrendComponent from "./TrendComponent";
 import { tweetSelector } from "../../../features/tweetSlice";
 

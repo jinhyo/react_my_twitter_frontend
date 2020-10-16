@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+
 import { userSelector } from "../../../features/userSlice";
 import PureRetweetCard from "./PureRetweetCard";
 import TweetCard from "./TweetCard";

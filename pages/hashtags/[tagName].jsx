@@ -1,28 +1,26 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Grid, Divider, Message } from "semantic-ui-react";
+import { Grid, Message } from "semantic-ui-react";
+import axios from "axios";
+import { useRouter } from "next/router";
+
 import ProfileCard from "../../components/LeftSide/ProfileCard";
 import Trends from "../../components/LeftSide/Trends/Trends";
 import ShowTweets from "../../components/Main/Tweets/ShowTweets";
 import hashtagFunctions from "../../lib/hashtagFunctions";
 import { tweetActions } from "../../features/tweetSlice";
 import { userSelector, userActions } from "../../features/userSlice";
-import { useRouter } from "next/router";
 import useTweetGetter from "../../hooks/useTweetGetter";
 import { searchActions } from "../../features/searchSlice";
 import wrapper from "../../store/configureStore";
-import axios from "axios";
 import authFunctions from "../../lib/authFunctions";
 
 function TweetsWithHashtag() {
   const dispatch = useDispatch();
   const router = useRouter();
   const { tagName } = router.query;
-  console.log("tagName", tagName);
 
   const currentUser = useSelector(userSelector.currentUser);
-
-  console.log("currentUser", currentUser);
 
   const { tweets, getTweets, errorMessage, setErrorMessage } = useTweetGetter(
     hashtagFunctions.getTweetsWithHashtag,
@@ -72,13 +70,12 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const cookie = req ? req.headers.cookie : "";
     axios.defaults.headers.Cookie = "";
     if (req && cookie) {
-      // if - 서버일 떄와 쿠키가 있을 경우
+      // 서버일 떄와 쿠키가 있을 경우
       axios.defaults.headers.Cookie = cookie; // 로그인 정보가 백엔드 서버로 넘어감
     }
 
     try {
       const user = await authFunctions.getLoginUserInfo();
-      console.log("~~~getServerSideProps", user);
       store.dispatch(userActions.setCurrentUser(user));
     } catch (error) {
       console.error(error);

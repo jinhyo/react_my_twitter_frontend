@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Grid, Loader, Message } from "semantic-ui-react";
-import wrapper from "../../store/configureStore";
 import axios from "axios";
+import { useRouter } from "next/router";
+
+import wrapper from "../../store/configureStore";
 import Trends from "../../components/LeftSide/Trends/Trends";
 import ProfileHeader from "../../components/Main/Users/ProfileHeader";
-import { useRouter } from "next/router";
 import userFunctions from "../../lib/userFunctions";
 import ProfileMenu from "../../components/Main/Users/ProfileMenu";
 import { userSelector, userActions } from "../../features/userSlice";
@@ -40,8 +41,6 @@ function Profile() {
   const [loading, setLoading] = useState(false);
   const [activeItem, setActiveItem] = useState("tweets");
   const [errorMessage, setErrorMessage] = useState("");
-
-  console.log("specificUser", specificUser);
 
   useEffect(() => {
     if (userId) {
@@ -235,7 +234,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const cookie = req ? req.headers.cookie : "";
     axios.defaults.headers.Cookie = "";
     if (req && cookie) {
-      // if - 서버일 떄와 쿠키가 있을 경우
+      // 서버일 떄와 쿠키가 있을 경우
       axios.defaults.headers.Cookie = cookie; // 로그인 정보가 백엔드 서버로 넘어감
     }
 

@@ -1,17 +1,12 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  Form,
-  Input,
-  Button,
-  Segment,
-  TextArea,
-  Divider
-} from "semantic-ui-react";
+import { Form, Button, TextArea, Divider } from "semantic-ui-react";
 import { Picker } from "emoji-mart";
-import PreviewImages from "./PreviewImages";
 import mime from "mime-types";
 import { toast } from "react-toastify";
+
+import PreviewImages from "./PreviewImages";
+
 import tweetFunctions from "../../../lib/tweetFunctions";
 import { userActions, userSelector } from "../../../features/userSlice";
 import { tweetSelector, tweetActions } from "../../../features/tweetSlice";

@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Dropdown } from "semantic-ui-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+
 import authFunctions from "../../lib/authFunctions";
 import { userActions, userSelector } from "../../features/userSlice";
 

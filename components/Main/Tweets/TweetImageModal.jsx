@@ -1,8 +1,8 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Modal, Button, Image, Divider } from "semantic-ui-react";
+import { useSelector } from "react-redux";
+import { Modal, Button, Image } from "semantic-ui-react";
 import AvatarEdit from "react-avatar-editor";
-import { tweetSelector, tweetActions } from "../../../features/tweetSlice";
+
 import { userSelector } from "../../../features/userSlice";
 
 // in <PreviewImage />

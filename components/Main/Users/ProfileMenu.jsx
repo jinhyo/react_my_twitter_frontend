@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import { Menu, Label } from "semantic-ui-react";
-import { userSelector } from "../../../features/userSlice";
+
 import {
   specificUserSelector,
   specificUserActions
@@ -14,12 +13,9 @@ function ProfileMenu({ handleItemClick, activeItem }) {
 
   const specificUser = useSelector(specificUserSelector.user);
   const specificUserId = useSelector(specificUserSelector.userId);
-  console.log("specificUser", specificUser);
-
   const count = useSelector(specificUserSelector.tweetCounts);
-  console.log("count", count);
 
-  //// 매뉴 항목들의 개수 파악
+  /*  매뉴 항목들의 개수 파악 */
   useEffect(() => {
     if (specificUserId) {
       let tweetCount = 0;

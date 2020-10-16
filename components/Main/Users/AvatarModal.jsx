@@ -1,10 +1,11 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Modal, Button, Image } from "semantic-ui-react";
 import AvatarEdit from "react-avatar-editor";
-import { userSelector, userActions } from "../../../features/userSlice";
 import mime from "mime-types";
 import { toast } from "react-toastify";
+
+import { userActions } from "../../../features/userSlice";
 import userFunctions from "../../../lib/userFunctions";
 import { specificUserActions } from "../../../features/specificUserSlice";
 

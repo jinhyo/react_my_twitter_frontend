@@ -2,6 +2,8 @@ import React, { useCallback, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, Button, Icon, Feed, Image } from "semantic-ui-react";
 import moment from "moment";
+import Link from "next/link";
+
 import TweetImages from "./TweetImages";
 import TweetContents from "./TweetContents";
 import tweetFunctions from "../../../lib/tweetFunctions";
@@ -11,7 +13,6 @@ import ExtraDropdown from "./ExtraDropdown";
 import RetweetButton from "./RetweetButton";
 import QuotedTweetCard from "./QuotedTweetCard";
 import TweetForm from "./TweetForm";
-import Link from "next/link";
 import {
   specificUserActions,
   specificUserSelector

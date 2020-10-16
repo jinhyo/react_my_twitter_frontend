@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Image, Button, Icon, Divider, Header } from "semantic-ui-react";
+import { Card, Image, Button, Divider } from "semantic-ui-react";
 import Link from "next/link";
 
 function ProfileCard({ currentUser }) {

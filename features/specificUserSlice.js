@@ -1,5 +1,4 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
-import { original } from "immer";
 
 const TWEET_KEYS = ["tweets", "commentTweets", "mediaTweets", "favoriteTweets"];
 

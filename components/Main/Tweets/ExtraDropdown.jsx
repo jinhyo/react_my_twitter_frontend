@@ -1,12 +1,13 @@
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Dropdown, Button, Icon } from "semantic-ui-react";
+import { Dropdown } from "semantic-ui-react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+
 import tweetFunctions from "../../../lib/tweetFunctions";
 import { tweetActions } from "../../../features/tweetSlice";
 import userFunctions from "../../../lib/userFunctions";
 import { userActions, userSelector } from "../../../features/userSlice";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import {
   specificUserActions,
   specificUserSelector

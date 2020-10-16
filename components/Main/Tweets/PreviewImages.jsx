@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from "react";
-import { Image, Segment, Label, Button } from "semantic-ui-react";
+import { Image, Segment, Label } from "semantic-ui-react";
+
 import TweetImageModal from "./TweetImageModal";
 
 // in <TweetForm />
