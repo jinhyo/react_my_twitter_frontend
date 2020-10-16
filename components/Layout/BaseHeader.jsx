@@ -70,6 +70,10 @@ function BaseHeader() {
         ) : (
           <>
             <Menu.Item>
+              {/* 검색창 */}
+              <SearchBar />
+            </Menu.Item>
+            <Menu.Item>
               <Link href="/register" className="item">
                 <a>회원가입</a>
               </Link>
