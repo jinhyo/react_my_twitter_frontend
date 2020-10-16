@@ -99,6 +99,10 @@ function ProfileHeader({ handleItemClick, activeItem }) {
 
   //// 팔로우
   const handleFollowUser = useCallback(async () => {
+    if (!currentUserId) {
+      return alert("로그인이 필요합니다.");
+    }
+
     try {
       await userFunctions.followUser(specificUser.id);
       dispatch(userActions.addFollowing(specificUser.id));

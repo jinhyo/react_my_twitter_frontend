@@ -18,6 +18,7 @@ import {
 function RetweetButton({ tweet, cancelPopup }) {
   const dispatch = useDispatch();
 
+  const currentUserId = useSelector(userSelector.currentUserId);
   const myRetweets = useSelector(userSelector.myRetweets);
   const specificUserId = useSelector(specificUserSelector.userId);
   const specificTweetId = useSelector(specificTweetSelector.specificTweetId);
@@ -49,6 +50,10 @@ function RetweetButton({ tweet, cancelPopup }) {
 
   //// 리트윗
   const handleRetweet = useCallback(async () => {
+    if (!currentUserId) {
+      cancelPopup();
+      return alert("로그인이 필요합니다.");
+    }
     try {
       const newTweet = await tweetFunctions.retweet(
         tweet.retweetOriginId || tweet.id // 원본을 리트윗 || 리트윗한 트윗을 리트윗
@@ -155,6 +160,9 @@ function RetweetButton({ tweet, cancelPopup }) {
 
   const handleOpenModal = useCallback(() => {
     cancelPopup();
+    if (!currentUserId) {
+      return alert("로그인이 필요합니다.");
+    }
     openModal();
   }, []);
 

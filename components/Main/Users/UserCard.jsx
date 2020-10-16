@@ -53,6 +53,9 @@ function UserCard({ user }) {
 
   //// 팔로우
   const handleFollowUser = useCallback(async () => {
+    if (!currentUserId) {
+      return alert("로그인이 필요합니다.");
+    }
     try {
       await userFunctions.followUser(user.id);
       dispatch(userActions.addFollowing(user.id));
@@ -64,6 +67,9 @@ function UserCard({ user }) {
 
   //// 언팔로우
   const handleUnfollowUser = useCallback(async () => {
+    if (!currentUserId) {
+      return alert("로그인이 필요합니다.");
+    }
     try {
       await userFunctions.unfollowUser(user.id);
       dispatch(userActions.removeFollowing(user.id));

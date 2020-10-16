@@ -119,6 +119,10 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
   }, [favoriteStatus, currentUserId, specificUserId]);
 
   const handleShowCommentInput = useCallback(() => {
+    if (!currentUserId) {
+      return alert("로그인이 필요합니다.");
+    }
+
     setCommentInput(prev => !prev);
   }, [commentInput]);
 
