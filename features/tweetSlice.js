@@ -4,7 +4,8 @@ const tweetSlice = createSlice({
   name: "tweetSlice",
   initialState: {
     tweets: [],
-    tweetStatus: null
+    tweetStatus: null,
+    hashtagTrend: []
   },
   reducers: {
     setTweets: (state, { payload: tweets }) => {
@@ -135,9 +136,11 @@ const tweetSlice = createSlice({
         );
       }
     },
-
     setTweetStatus: (state, { payload: tweet }) => {
       state.tweetStatus = tweet;
+    },
+    setHashtagTrend: (state, { payload: trend }) => {
+      state.hashtagTrend = trend;
     }
   }
 });
@@ -154,10 +157,17 @@ const selectTweetStatus = createSelector(
   tweetStatus => tweetStatus
 );
 
+const selectHashtagTrend = createSelector(
+  state => state.hashtagTrend,
+
+  hashtagTrend => hashtagTrend
+);
+
 export const tweetActions = tweetSlice.actions;
 export const tweetReducer = tweetSlice.reducer;
 export const TWEET = tweetSlice.name;
 export const tweetSelector = {
   tweets: state => selectTweets(state[TWEET]),
-  tweetStatus: state => selectTweetStatus(state[TWEET])
+  tweetStatus: state => selectTweetStatus(state[TWEET]),
+  hashtagTrend: state => selectHashtagTrend(state[TWEET])
 };

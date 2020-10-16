@@ -46,6 +46,8 @@ function TweetStatus() {
       dispatch(specificTweetActions.setCurrentMenuItem(null));
       dispatch(tweetActions.clearTweets());
       dispatch(userActions.setNowWhere("main"));
+      dispatch(searchActions.setSearchWord(""));
+      dispatch(searchActions.setSearchResults(null));
 
       setErrorMessage("");
     };

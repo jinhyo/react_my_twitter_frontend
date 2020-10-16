@@ -51,6 +51,9 @@ function Profile() {
     return () => {
       dispatch(specificUserActions.clearUserInfos());
       dispatch(specificUserActions.clearCounts());
+      dispatch(searchActions.setSearchWord(""));
+      dispatch(searchActions.setSearchResults(null));
+
       setErrorMessage("");
     };
   }, [userId]);
