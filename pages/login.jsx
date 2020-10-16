@@ -70,14 +70,13 @@ function Login() {
         password: initialState.password
       });
       dispatch(userActions.setCurrentUser(currentUser.data));
+      Router.push("/");
+      setInitialState(INITIAL_VALUE);
     } catch (error) {
       console.error(error);
       toast.error(error.response.data);
-      setError(error.response.data);
     } finally {
       setLoginLoading(false);
-      setInitialState(INITIAL_VALUE);
-      Router.push("/");
     }
   }, [initialState]);
 
