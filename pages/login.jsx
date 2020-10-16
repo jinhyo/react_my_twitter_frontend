@@ -10,10 +10,11 @@ import {
   Image
 } from "semantic-ui-react";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 import authFunctions from "../lib/authFunctions";
 import { userActions, userSelector } from "../features/userSlice";
-import { toast } from "react-toastify";
 import wrapper from "../store/configureStore";
 
 const INITIAL_VALUE = { email: "", password: "" };
@@ -70,11 +71,11 @@ function Login() {
         password: initialState.password
       });
       dispatch(userActions.setCurrentUser(currentUser.data));
-      Router.push("/");
+      router.push("/");
       setInitialState(INITIAL_VALUE);
     } catch (error) {
       console.error(error);
-      toast.error(error.response.data);
+      toast.error(error.response.data || error);
     } finally {
       setLoginLoading(false);
     }

@@ -15,8 +15,36 @@ import { SEARCH, searchReducer } from "../features/searchSlice";
 const rootReducer = (state, action) => {
   switch (action.type) {
     case HYDRATE:
-      // console.log("HYDRATE----------", action);
-      return action.payload;
+      const nextState = action.payload;
+      //// SSR이후 client state가 action.payload로 오버라이트 되는 것을 방지
+
+      // <Index />, <TweetsWithHashtag />
+      if (state[TWEET].hashtagTrend) {
+        nextState[TWEET].hashtagTrend = state[TWEET].hashtagTrend;
+      }
+      if (state[TWEET].tweets) {
+        nextState[TWEET].tweets = state[TWEET].tweets;
+      }
+
+      // <TweetStatus />
+      if (state[SPECIFIC_TWEET].specificTweet) {
+        nextState[SPECIFIC_TWEET].specificTweet =
+          state[SPECIFIC_TWEET].specificTweet;
+
+        nextState[SPECIFIC_TWEET].currentMenuItem =
+          state[SPECIFIC_TWEET].currentMenuItem;
+      }
+
+      // <Profile />
+      if (state[SPECIFIC_USER].specificUser) {
+        nextState[SPECIFIC_USER].specificUser =
+          state[SPECIFIC_USER].specificUser;
+        nextState[SPECIFIC_USER].totalTweetCount =
+          state[SPECIFIC_USER].totalTweetCount;
+        nextState[SPECIFIC_USER].count = state[SPECIFIC_USER].count;
+      }
+
+      return nextState;
     default: {
       const combineReducer = combineReducers({
         [USER]: userReducer,

@@ -18,7 +18,6 @@ function Index() {
 
   const currentUser = useSelector(userSelector.currentUser);
   const nowWhere = useSelector(userSelector.nowWhere);
-  console.log("currentUser", currentUser);
 
   const { tweets, getTweets } = useTweetGetter(tweetFunctions.getTweets);
 

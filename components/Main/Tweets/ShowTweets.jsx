@@ -7,12 +7,10 @@ import TweetCard from "./TweetCard";
 
 // in <TweetInfoCard />, <Index />, <Profile />
 function ShowTweets({ tweets }) {
-  console.log("~~tweets", tweets);
-
   const favoriteTweets = useSelector(userSelector.favoriteTweets);
   const myTweets = useSelector(userSelector.myTweets);
 
-  // 내가 좋아요 눌렀는지 확인
+  /*  내가 좋아요 눌렀는지 확인 */
   const isFavoriteTweet = useCallback(
     tweetId => {
       const index = favoriteTweets.findIndex(tweet => tweet.id === tweetId);
@@ -22,12 +20,12 @@ function ShowTweets({ tweets }) {
     [favoriteTweets]
   );
 
-  //// 리트윗인지 확인
+  /*  리트윗인지 확인 */
   function isRewteet(tweet) {
     return tweet.retweetOriginId;
   }
 
-  //// 내가 댓글을 달았는지 확인
+  /*  내가 댓글을 달았는지 확인 */
   const didIComment = useCallback(
     currentTweetId => {
       const index = myTweets.findIndex(
