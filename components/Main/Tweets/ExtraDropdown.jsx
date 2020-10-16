@@ -158,10 +158,10 @@ function ExtraDropdown({
               text={`'${writerNickname}'님을 언팔로우 합니다`}
               onClick={handleUnfollowUser}
             />
-            <Dropdown.Item
+            {/* <Dropdown.Item
               icon="ban"
               text={`'${writerNickname}'님을 차단 합니다.`}
-            />
+            /> */}
             <Link
               href={`/tweets/[tweetId]`}
               as={`/tweets/${tweet.retweetOriginId || tweet.id}`}
@@ -181,10 +181,10 @@ function ExtraDropdown({
               text={`'${writerNickname}'님을 팔로우 합니다`}
               onClick={handleFollowUser}
             />
-            <Dropdown.Item
+            {/* <Dropdown.Item
               icon="ban"
               text={`'${writerNickname}'님을 차단 합니다.`}
-            />
+            /> */}
             <Link
               href={`/tweets/[tweetId]`}
               as={`/tweets/${tweet.retweetOriginId || tweet.id}`}
