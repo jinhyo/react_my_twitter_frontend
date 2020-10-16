@@ -1,14 +1,11 @@
 import React, { useCallback } from "react";
 import { Menu, Icon } from "semantic-ui-react";
-import Router from "next/router";
 import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { userSelector, userActions } from "../../features/userSlice";
 import authFunctions from "../../lib/authFunctions";
-import { toast } from "react-toastify";
 import SearchBar from "./SearchBar";
 import DropDownMenu from "./DropDownMenu";
-import SearchResults from "./SearchResults";
 
 function BaseHeader() {
   const currentUserId = useSelector(userSelector.currentUserId);

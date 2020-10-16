@@ -1,23 +1,22 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   Grid,
-  Header,
-  Icon,
   Form,
   Segment,
   Button,
   Message,
   Input,
-  TextArea,
-  Checkbox
+  TextArea
 } from "semantic-ui-react";
 import { useRouter } from "next/router";
 import validateRegisterForm from "../lib/validateRegisterForm";
 import useFormInput from "../hooks/useFormInput";
 import { toast } from "react-toastify";
 import authFunctions from "../lib/authFunctions";
-import { userActions } from "../features/userSlice";
+import { userActions, userSelector } from "../features/userSlice";
+import wrapper from "../store/configureStore";
+import axios from "axios";
 
 const INITIAL_VALUES = {
   nickname: "",
@@ -28,10 +27,11 @@ const INITIAL_VALUES = {
   selfIntro: ""
 };
 
-function Register(props) {
+function Register() {
   const router = useRouter();
-  const [isLogin, setIsLogin] = useState(false);
-  // const [IDcheckLoading, setIDcheckLoading] = useState(false);
+
+  const currentUserId = useSelector(userSelector.currentUserId);
+
   const [emailCheckLoading, setemailCheckLoading] = useState(false);
   const {
     values,
@@ -46,12 +46,12 @@ function Register(props) {
     checkUniqueNickname
   } = useFormInput(INITIAL_VALUES, validateRegisterForm, createUser);
 
-  // useEffect(() => {
-  //   setValues(INITIAL_VALUES);
-  //   if (isLogin) {
-  //     Router.push("/");
-  //   }
-  // }, [isLogin]);
+  useEffect(() => {
+    if (currentUserId) {
+      alert("로그인 중에는 접근할 수 없습니다.");
+      router.push("/");
+    }
+  }, []);
 
   /* 회원가입 */
   async function createUser() {
@@ -103,7 +103,8 @@ function Register(props) {
     }
   }, [values.email]);
 
-  if (isLogin) return null;
+  if (currentUserId) return null;
+
   return (
     <Grid
       style={{ marginTop: 40 }}
@@ -250,5 +251,26 @@ function Register(props) {
     </Grid>
   );
 }
+
+/* 서버사이드 렌더링 */
+export const getServerSideProps = wrapper.getServerSideProps(
+  async ({ store, req }) => {
+    // 프론트 서버에서 백엔드에 쿠키 전달
+    const cookie = req ? req.headers.cookie : "";
+    axios.defaults.headers.Cookie = "";
+    if (req && cookie) {
+      // if - 서버일 떄와 쿠키가 있을 경우
+      axios.defaults.headers.Cookie = cookie; // 로그인 정보가 백엔드 서버로 넘어감
+    }
+
+    try {
+      const user = await authFunctions.getLoginUserInfo();
+      console.log("~~~getServerSideProps", user);
+      store.dispatch(userActions.setCurrentUser(user));
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
 
 export default Register;

@@ -2,8 +2,6 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Grid,
-  Header,
-  Icon,
   Form,
   Segment,
   Button,
@@ -11,29 +9,31 @@ import {
   Divider,
   Image
 } from "semantic-ui-react";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import authFunctions from "../lib/authFunctions";
-import { userActions } from "../features/userSlice";
+import { userActions, userSelector } from "../features/userSlice";
 import { toast } from "react-toastify";
+import wrapper from "../store/configureStore";
+import axios from "axios";
 
 const INITIAL_VALUE = { email: "", password: "" };
 
 function Login() {
   const dispatch = useDispatch();
-  // const isLogin = useSelector(userSelector.isLogin);
-  // To DO
-
-  // const [isLogin, setIsLogin] = useState(false);
+  const router = useRouter();
 
   const [error, setError] = useState("");
   const [initialState, setInitialState] = useState(INITIAL_VALUE);
   const [loginLoading, setLoginLoading] = useState(false);
+  const currentUserId = useSelector(userSelector.currentUserId);
 
-  // useEffect(() => {
-  //   if (isLogin) {
-  //     Router.push("/");
-  //   }
-  // }, [isLogin]);
+  useEffect(() => {
+    // 로그인 상태에서 접근하지 못하도록
+    if (currentUserId) {
+      alert("로그인 중에는 접근할 수 없습니다.");
+      router.push("/");
+    }
+  }, []);
 
   const handleInputChange = useCallback(e => {
     e.persist();
@@ -108,6 +108,8 @@ function Login() {
   }, []);
 
   // if (isLogin) return null;
+
+  if (currentUserId) return null;
 
   return (
     <Grid
@@ -185,5 +187,25 @@ function Login() {
     </Grid>
   );
 }
+
+/* 서버사이드 렌더링 */
+export const getServerSideProps = wrapper.getServerSideProps(
+  async ({ store, req }) => {
+    // 프론트 서버에서 백엔드에 쿠키 전달
+    const cookie = req ? req.headers.cookie : "";
+    axios.defaults.headers.Cookie = "";
+    if (req && cookie) {
+      // if - 서버일 떄와 쿠키가 있을 경우
+      axios.defaults.headers.Cookie = cookie; // 로그인 정보가 백엔드 서버로 넘어감
+    }
+
+    try {
+      const user = await authFunctions.getLoginUserInfo();
+      store.dispatch(userActions.setCurrentUser(user));
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
 
 export default Login;

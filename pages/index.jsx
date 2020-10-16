@@ -9,6 +9,8 @@ import tweetFunctions from "../lib/tweetFunctions";
 import authFunctions from "../lib/authFunctions";
 import ShowTweets from "../components/Main/Tweets/ShowTweets";
 import useTweetGetter from "../hooks/useTweetGetter";
+import wrapper from "../store/configureStore";
+import axios from "axios";
 
 function Index() {
   const dispatch = useDispatch();
@@ -19,17 +21,6 @@ function Index() {
 
   const { tweets, getTweets } = useTweetGetter(tweetFunctions.getTweets);
 
-  // 회원가입 or 로그인 시 유저정보 가져오기
-  useEffect(() => {
-    if (!currentUser) {
-      try {
-        getLoginUserInfo();
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  }, []);
-
   useEffect(() => {
     if (nowWhere === "main") {
       getTweets();
@@ -39,11 +30,6 @@ function Index() {
       dispatch(userActions.setNowWhere(null));
     };
   }, [nowWhere]);
-
-  async function getLoginUserInfo() {
-    const user = await authFunctions.getLoginUserInfo();
-    dispatch(userActions.setCurrentUser(user));
-  }
 
   return (
     <Grid stackable padded relaxed>
@@ -62,5 +48,26 @@ function Index() {
     </Grid>
   );
 }
+
+/* 서버사이드 렌더링 */
+export const getServerSideProps = wrapper.getServerSideProps(
+  async ({ store, req }) => {
+    // 프론트 서버에서 백엔드에 쿠키 전달
+    const cookie = req ? req.headers.cookie : "";
+    axios.defaults.headers.Cookie = "";
+    if (req && cookie) {
+      // if - 서버일 떄와 쿠키가 있을 경우
+      axios.defaults.headers.Cookie = cookie; // 로그인 정보가 백엔드 서버로 넘어감
+    }
+
+    try {
+      const user = await authFunctions.getLoginUserInfo();
+      console.log("~~~getServerSideProps", user);
+      store.dispatch(userActions.setCurrentUser(user));
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
 
 export default Index;

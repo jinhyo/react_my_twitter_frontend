@@ -1,10 +1,14 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import Head from "next/head";
-import wrapper from "../store/configureStore";
-import Layout from "../components/Layout/Layout";
 import { ToastContainer } from "react-toastify";
 import axios from "axios";
+
+import wrapper from "../store/configureStore";
+import Layout from "../components/Layout/Layout";
+import { searchActions } from "../features/searchSlice";
+import hashtagFunctions from "../lib/hashtagFunctions";
+import { tweetActions } from "../features/tweetSlice";
 
 import "semantic-ui-css/semantic.min.css";
 import "emoji-mart/css/emoji-mart.css";
@@ -12,9 +16,6 @@ import "react-toastify/dist/ReactToastify.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./App.css";
-import { searchActions } from "../features/searchSlice";
-import hashtagFunctions from "../lib/hashtagFunctions";
-import { tweetActions } from "../features/tweetSlice";
 
 axios.defaults.baseURL = "http://localhost:3001";
 axios.defaults.withCredentials = true;
