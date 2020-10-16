@@ -3,13 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { Grid, Divider } from "semantic-ui-react";
 import ProfileCard from "../components/LeftSide/ProfileCard";
 import Trends from "../components/LeftSide/Trends/Trends";
-import WhoToFollow from "../components/LeftSide/WhoToFollow/WhoToFollow";
 import TweetForm from "../components/Main/Tweets/TweetForm";
 import { userSelector, userActions } from "../features/userSlice";
 import tweetFunctions from "../lib/tweetFunctions";
 import authFunctions from "../lib/authFunctions";
 import ShowTweets from "../components/Main/Tweets/ShowTweets";
-import { specificTweetSelector } from "../features/specificTweetSlice";
 import useTweetGetter from "../hooks/useTweetGetter";
 
 function Index() {
@@ -53,7 +51,6 @@ function Index() {
         {currentUser && <ProfileCard currentUser={currentUser} />}
 
         <Trends />
-        <WhoToFollow />
       </Grid.Column>
       <Grid.Column tablet={10} computer={10}>
         {currentUser && <TweetForm />}

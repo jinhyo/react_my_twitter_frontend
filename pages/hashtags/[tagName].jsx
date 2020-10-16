@@ -3,13 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { Grid, Divider, Message } from "semantic-ui-react";
 import ProfileCard from "../../components/LeftSide/ProfileCard";
 import Trends from "../../components/LeftSide/Trends/Trends";
-import WhoToFollow from "../../components/LeftSide/WhoToFollow/WhoToFollow";
-import TweetForm from "../../components/Main/Tweets/TweetForm";
 import ShowTweets from "../../components/Main/Tweets/ShowTweets";
 import hashtagFunctions from "../../lib/hashtagFunctions";
 import { tweetActions } from "../../features/tweetSlice";
 import { userSelector, userActions } from "../../features/userSlice";
-import { specificTweetSelector } from "../../features/specificTweetSlice";
 import { useRouter } from "next/router";
 import useTweetGetter from "../../hooks/useTweetGetter";
 import { searchActions } from "../../features/searchSlice";
@@ -53,7 +50,6 @@ function TweetsWithHashtag() {
         {currentUser && <ProfileCard currentUser={currentUser} />}
 
         <Trends />
-        <WhoToFollow />
       </Grid.Column>
       <Grid.Column tablet={10} computer={10}>
         {/* 트윗들 랜더링 */}

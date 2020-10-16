@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { Grid, Loader, Header, Message } from "semantic-ui-react";
 import ProfileCard from "../../components/LeftSide/ProfileCard";
 import Trends from "../../components/LeftSide/Trends/Trends";
-import WhoToFollow from "../../components/LeftSide/WhoToFollow/WhoToFollow";
 import { userSelector, userActions } from "../../features/userSlice";
 import { useRouter } from "next/router";
 import tweetFunctions from "../../lib/tweetFunctions";
@@ -69,7 +68,6 @@ function TweetStatus() {
         {currentUser && <ProfileCard currentUser={currentUser} />}
 
         <Trends />
-        <WhoToFollow />
       </Grid.Column>
       <Grid.Column tablet={11} computer={10}>
         {/* 트윗 인포 */}

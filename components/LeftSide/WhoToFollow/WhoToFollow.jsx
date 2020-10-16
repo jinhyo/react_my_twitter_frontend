@@ -1,9 +1,8 @@
 import React from "react";
 import { Card, Comment } from "semantic-ui-react";
-import TrendComponent from "../Trends/TrendComponent";
 import FollowCard from "./FollowCard";
 
-function Trends(props) {
+function WhoToFollow(props) {
   const user = {
     nickname: "Jin",
     location: "서울",
@@ -26,4 +25,4 @@ function Trends(props) {
   );
 }
 
-export default Trends;
+export default WhoToFollow;

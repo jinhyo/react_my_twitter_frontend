@@ -2,12 +2,11 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Grid, Loader, Message } from "semantic-ui-react";
 import Trends from "../../components/LeftSide/Trends/Trends";
-import WhoToFollow from "../../components/LeftSide/WhoToFollow/WhoToFollow";
 import ProfileHeader from "../../components/Main/Users/ProfileHeader";
 import { useRouter } from "next/router";
 import userFunctions from "../../lib/userFunctions";
 import ProfileMenu from "../../components/Main/Users/ProfileMenu";
-import { userActions, userSelector } from "../../features/userSlice";
+import { userSelector } from "../../features/userSlice";
 import UserCard from "../../components/Main/Users/UserCard";
 import ProfileCard from "../../components/LeftSide/ProfileCard";
 import ShowTweets from "../../components/Main/Tweets/ShowTweets";
@@ -170,7 +169,6 @@ function Profile() {
         )}
 
         <Trends />
-        <WhoToFollow />
       </Grid.Column>
       <Grid.Column tablet={10} computer={10}>
         {specificUser && (
