@@ -16,8 +16,9 @@ import "react-toastify/dist/ReactToastify.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./App.css";
+import { BACKEND_URL } from "../lib/constValue";
 
-axios.defaults.baseURL = "http://localhost:3001";
+axios.defaults.baseURL = BACKEND_URL;
 axios.defaults.withCredentials = true;
 moment.locale("ko");
 
