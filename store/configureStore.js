@@ -59,9 +59,12 @@ const rootReducer = (state, action) => {
   }
 };
 
+console.log("process.env.NODE_ENV", process.env.NODE_ENV);
+
 const makeStore = context => {
   const store = configureStore({
-    reducer: rootReducer
+    reducer: rootReducer,
+    devTools: process.env.NODE_ENV !== "production"
   });
 
   return store;

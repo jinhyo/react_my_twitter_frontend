@@ -1,7 +1,9 @@
 {
   "name": "my-twitter-frontend",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Jin",
+  "license": "ISC",
   "dependencies": {
     "@reduxjs/toolkit": "^1.4.0",
     "@testing-library/jest-dom": "^4.2.4",
@@ -31,7 +33,7 @@
   },
   "scripts": {
     "dev": "next -p 3003",
-    "dev2": "cross-env NODE_ENV=production next -p 3003",
+    "dev-detail": "cross-env NODE_ENV=production next -p 3003",
     "start": "cross-env NODE_ENV=production next start -p 3003",
     "build": "cross-env NODE_ENV=production next build",
     "test": "react-scripts test",
