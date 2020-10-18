@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import Head from "next/head";
 import { ToastContainer } from "react-toastify";
 import axios from "axios";
+import moment from "moment";
 
 import wrapper from "../store/configureStore";
 import Layout from "../components/Layout/Layout";
@@ -19,6 +20,7 @@ import "./App.css";
 
 axios.defaults.baseURL = "http://localhost:3001";
 axios.defaults.withCredentials = true;
+moment.locale("ko");
 
 function Root({ Component }) {
   const dispatch = useDispatch();

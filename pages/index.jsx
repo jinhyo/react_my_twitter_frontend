@@ -12,6 +12,7 @@ import authFunctions from "../lib/authFunctions";
 import ShowTweets from "../components/Main/Tweets/ShowTweets";
 import useTweetGetter from "../hooks/useTweetGetter";
 import wrapper from "../store/configureStore";
+import { tweetActions } from "../features/tweetSlice";
 
 function Index() {
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ function Index() {
 
     return () => {
       dispatch(userActions.setNowWhere(null));
+      dispatch(tweetActions.clearTweets());
     };
   }, [nowWhere]);
 

@@ -13,9 +13,6 @@ function useTweetGetter(getTweetsFromDB, tagName = null) {
   const [errorMessage, setErrorMessage] = useState("");
   const [clear, setClear] = useState(null);
 
-  console.log("hasMorePosts", hasMorePosts);
-  console.log("tweets", tweets);
-
   useEffect(() => {
     window.addEventListener("scroll", getMoreTweets);
     return () => {

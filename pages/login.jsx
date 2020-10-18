@@ -60,7 +60,6 @@ function Login() {
   const handleSubmit = useCallback(async () => {
     const hasError = checkInputError(initialState);
     if (hasError) {
-      console.log("hasError", hasError);
       return;
     }
 

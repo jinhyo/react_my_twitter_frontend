@@ -15,8 +15,6 @@ function SearchBar() {
   const searchResults = useSelector(searchSelector.searchResults);
   const showSearchResults = useSelector(searchSelector.showSearchResults);
 
-  console.log("searchWord", searchWord);
-
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -68,10 +66,7 @@ function SearchBar() {
 
   const handleInputKeyPress = useCallback(
     e => {
-      console.log("handleInputKeyPress");
-
       if (e.key === "Enter") {
-        console.log("~~~~handleInputKeyPress");
         handleSearchWord(searchWord);
       }
     },

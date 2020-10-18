@@ -51,7 +51,6 @@ function TweetImageModal({
     if (imageRef.current) {
       imageRef.current.getImageScaledToCanvas().toBlob(blob => {
         const imageURL = URL.createObjectURL(blob);
-        console.log("!~blob", blob);
         setCroppedImageURL(imageURL);
         setBlob(blob);
       });

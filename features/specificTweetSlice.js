@@ -70,8 +70,6 @@ const specificTweetSlice = createSlice({
     },
     removeQuotation: (state, { payload: tweetId }) => {
       // 카운트 감소용용
-      console.log("tweetId", tweetId, typeof tweetId);
-
       state.specificTweet.retweetedCount--;
       state.specificTweet.quotations = state.specificTweet.quotations.filter(
         tweet => tweet.id !== tweetId

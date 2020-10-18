@@ -240,7 +240,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     try {
       const user = await authFunctions.getLoginUserInfo();
-      console.log("~~~getServerSideProps", user);
       store.dispatch(userActions.setCurrentUser(user));
     } catch (error) {
       console.error(error);

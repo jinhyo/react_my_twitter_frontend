@@ -59,7 +59,6 @@ const rootReducer = (state, action) => {
 };
 
 const makeStore = context => {
-  // console.log("context in configureStore", context);
   const store = configureStore({
     reducer: rootReducer
   });
@@ -69,8 +68,6 @@ const makeStore = context => {
 
 const wrapper = createWrapper(makeStore, {
   debug: process.env.NODE_ENV === "development"
-  // debug= true인 경우 설명이 자세하게 나오니
-  // 개발 환경에서는 true로 하는 것이 좋음
 });
 
 export default wrapper;

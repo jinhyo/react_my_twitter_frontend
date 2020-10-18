@@ -27,13 +27,12 @@
     "react-toastify": "^6.0.8",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^1.2.1",
-    "slick-carousel": "^1.8.1",
-    "swr": "^0.3.2"
+    "slick-carousel": "^1.8.1"
   },
   "scripts": {
     "dev": "next -p 3003",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "cross-env NODE_ENV=production next start -p 3003",
+    "build": "cross-env NODE_ENV=production next build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
