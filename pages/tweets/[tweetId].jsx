@@ -19,26 +19,27 @@ import UserCard from "../../components/Main/Users/UserCard";
 import { searchActions } from "../../features/searchSlice";
 import wrapper from "../../store/configureStore";
 import authFunctions from "../../lib/authFunctions";
+import { FRONTEND_URL } from "../../lib/constValue";
+import HtmlHead from "../../components/Layout/HtmlHead";
 
-function TweetStatus() {
+function TweetStatus({ error }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const { tweetId } = router.query;
 
   const tweets = useSelector(tweetSelector.tweets);
-  const currentUser = useSelector(userSelector.currentUser);
   const specificTweet = useSelector(specificTweetSelector.specificTweet);
+  const currentUser = useSelector(userSelector.currentUser);
   const likers = useSelector(specificTweetSelector.likers);
   const retweetUsers = useSelector(specificTweetSelector.retweetUsers);
 
   const [activeItem, setActiveItem] = useState("comments");
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(error);
 
   useEffect(() => {
     if (tweetId) {
       dispatch(tweetActions.clearTweets());
-      getTweetStatus(tweetId);
     }
 
     return () => {
@@ -54,64 +55,69 @@ function TweetStatus() {
     };
   }, [tweetId]);
 
-  async function getTweetStatus(tweetId) {
-    try {
-      const tweet = await tweetFunctions.getTweetStatus(tweetId);
-      dispatch(specificTweetActions.setTweet(tweet));
-    } catch (error) {
-      console.error(error.response.data || error);
-      setErrorMessage(error.response.data);
-    }
-  }
-
   return (
-    <Grid stackable padded relaxed>
-      <Grid.Column tablet={5} computer={6}>
-        {currentUser && <ProfileCard currentUser={currentUser} />}
+    <>
+      {specificTweet && (
+        <HtmlHead
+          title={`'${specificTweet.user.nickname}'님의 트윗`}
+          description={specificTweet.contents}
+          image={
+            specificTweet.images[0]
+              ? specificTweet.images[0].src
+              : FRONTEND_URL + "/favicon.ico"
+          }
+          url={`${FRONTEND_URL}/tweets/${tweetId}`}
+        />
+      )}
 
-        <Trends />
-      </Grid.Column>
-      <Grid.Column tablet={11} computer={10}>
-        {/* 트윗 인포 */}
-        {specificTweet && <ShowTweets tweets={[specificTweet]} />}
+      <Grid stackable padded relaxed>
+        <Grid.Column tablet={5} computer={6}>
+          {currentUser && <ProfileCard currentUser={currentUser} />}
 
-        {/* 트윗 인포 매뉴 */}
-        {specificTweet && (
-          <TweetInfoMenu
-            activeItem={activeItem}
-            setActiveItem={setActiveItem}
-            setLoading={setLoading}
-            tweet={specificTweet}
-          />
-        )}
+          <Trends />
+        </Grid.Column>
+        <Grid.Column tablet={11} computer={10}>
+          {/* 트윗 인포 */}
+          {specificTweet && <ShowTweets tweets={[specificTweet]} />}
 
-        {/* 로딩 */}
-        <Loader size="small" active={loading} />
+          {/* 트윗 인포 매뉴 */}
+          {specificTweet && (
+            <TweetInfoMenu
+              activeItem={activeItem}
+              setActiveItem={setActiveItem}
+              setLoading={setLoading}
+              tweet={specificTweet}
+            />
+          )}
 
-        {/* 댓글 트윗들 */}
-        {activeItem === "comments" && <ShowTweets tweets={tweets} />}
+          {/* 로딩 */}
+          <Loader size="small" active={loading} />
 
-        {/* 리트윗한 유저들 */}
-        {activeItem === "retweetUsers" &&
-          retweetUsers.map(user => <UserCard key={user.id} user={user} />)}
+          {/* 댓글 트윗들 */}
+          {activeItem === "comments" && <ShowTweets tweets={tweets} />}
 
-        {/* 인용한 트윗들 */}
-        {activeItem === "quotations" && <ShowTweets tweets={tweets} />}
+          {/* 리트윗한 유저들 */}
+          {activeItem === "retweetUsers" &&
+            retweetUsers.map(user => <UserCard key={user.id} user={user} />)}
 
-        {/* 좋아요 누른 유저들 */}
-        {activeItem === "likers" &&
-          likers.map(user => <UserCard key={user.id} user={user} />)}
+          {/* 인용한 트윗들 */}
+          {activeItem === "quotations" && <ShowTweets tweets={tweets} />}
 
-        {/* 해당 트윗이 없을 경우 */}
-        {errorMessage && <Message size="huge" error header={errorMessage} />}
-      </Grid.Column>
-    </Grid>
+          {/* 좋아요 누른 유저들 */}
+          {activeItem === "likers" &&
+            likers.map(user => <UserCard key={user.id} user={user} />)}
+
+          {/* 해당 트윗이 없을 경우 */}
+          {errorMessage && <Message size="huge" error header={errorMessage} />}
+        </Grid.Column>
+      </Grid>
+    </>
   );
 }
 
 /* 서버사이드 렌더링 */
 export const getServerSideProps = wrapper.getServerSideProps(
-  async ({ store, req }) => {
+  async ({ store, req, query }) => {
     //// 프론트 서버에서 백엔드에 쿠키 전달
     const cookie = req ? req.headers.cookie : "";
     axios.defaults.headers.Cookie = "";
@@ -120,11 +126,19 @@ export const getServerSideProps = wrapper.getServerSideProps(
       axios.defaults.headers.Cookie = cookie;
     }
 
+    const { tweetId } = query;
+
     try {
+      const specificTweet = await tweetFunctions.getTweetStatus(tweetId);
       const user = await authFunctions.getLoginUserInfo();
+      store.dispatch(specificTweetActions.setTweet(specificTweet));
       store.dispatch(userActions.setCurrentUser(user));
+
+      return { props: { specificTweet } };
     } catch (error) {
       console.error(error);
+
+      return { props: { error: error.response.data || error } };
     }
   }
 );

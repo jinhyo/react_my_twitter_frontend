@@ -11,7 +11,6 @@ import { searchActions } from "../features/searchSlice";
 import hashtagFunctions from "../lib/hashtagFunctions";
 import { tweetActions } from "../features/tweetSlice";
 
-import "semantic-ui-css/semantic.min.css";
 import "emoji-mart/css/emoji-mart.css";
 import "react-toastify/dist/ReactToastify.css";
 import "slick-carousel/slick/slick.css";
@@ -22,7 +21,7 @@ axios.defaults.baseURL = "http://localhost:3001";
 axios.defaults.withCredentials = true;
 moment.locale("ko");
 
-function Root({ Component }) {
+function Root({ Component, pageProps }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -49,10 +48,16 @@ function Root({ Component }) {
       <Head>
         <meta charSet="utf-8" />
         <title>My Twitter</title>
+
+        <link
+          async
+          rel="stylesheet"
+          href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.1/dist/semantic.min.css"
+        />
       </Head>
       <Layout>
         <ToastContainer autoClose={3000} />
-        <Component />
+        <Component {...pageProps} />
       </Layout>
     </>
   );

@@ -79,6 +79,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       store.dispatch(userActions.setCurrentUser(user));
     } catch (error) {
       console.error(error);
+      return error;
     }
   }
 );

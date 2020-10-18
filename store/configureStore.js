@@ -1,5 +1,6 @@
 import { createWrapper, HYDRATE } from "next-redux-wrapper";
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
+
 import { USER, userReducer } from "../features/userSlice";
 import { TWEET, tweetReducer } from "../features/tweetSlice";
 import {
@@ -36,7 +37,7 @@ const rootReducer = (state, action) => {
       }
 
       // <Profile />
-      if (state[SPECIFIC_USER].specificUser) {
+      if (state[SPECIFIC_USER].specificUser.user) {
         nextState[SPECIFIC_USER].specificUser =
           state[SPECIFIC_USER].specificUser;
         nextState[SPECIFIC_USER].totalTweetCount =
@@ -66,8 +67,10 @@ const makeStore = context => {
   return store;
 };
 
-const wrapper = createWrapper(makeStore, {
+const wrapper = createWrapper(
+  makeStore /* {
   debug: process.env.NODE_ENV === "development"
-});
+} */
+);
 
 export default wrapper;

@@ -19,8 +19,10 @@ import {
 } from "../../features/specificUserSlice";
 import { searchActions } from "../../features/searchSlice";
 import authFunctions from "../../lib/authFunctions";
+import HtmlHead from "../../components/Layout/HtmlHead";
+import { FRONTEND_URL } from "../../lib/constValue";
 
-function Profile() {
+function Profile({ error }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const { userId } = router.query;
@@ -40,11 +42,11 @@ function Profile() {
 
   const [loading, setLoading] = useState(false);
   const [activeItem, setActiveItem] = useState("tweets");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(error);
 
   useEffect(() => {
     if (userId) {
-      getSpecificUser(userId);
+      // getSpecificUser(userId);
       getTweets(userId);
       setActiveItem("tweets");
     }
@@ -58,17 +60,6 @@ function Profile() {
       setErrorMessage("");
     };
   }, [userId]);
-
-  async function getSpecificUser(userId) {
-    try {
-      const user = await userFunctions.getSpecificUser(userId);
-      dispatch(specificUserActions.setUser(user));
-      dispatch(specificUserActions.changeTotalTweetCount(user.tweets.length));
-    } catch (error) {
-      console.error(error.response.data || error);
-      setErrorMessage(error.response.data);
-    }
-  }
 
   const handleItemClick = useCallback(
     async (e, { name }) => {
@@ -164,72 +155,85 @@ function Profile() {
   }
 
   return (
-    <Grid stackable padded relaxed>
-      <Grid.Column tablet={6} computer={6}>
-        {currentUser && currentUser?.id !== specificUser?.id && (
-          <ProfileCard currentUser={currentUser} />
-        )}
+    <>
+      {specificUser && (
+        <HtmlHead
+          title={`'${specificUser.nickname}'님 상세정보`}
+          description={`'${specificUser.nickname}'님 상세정보`}
+          image={specificUser.avatarURL}
+          url={`${FRONTEND_URL}/users/${userId}`}
+        />
+      )}
 
-        <Trends />
-      </Grid.Column>
-      <Grid.Column tablet={10} computer={10}>
-        {specificUser && (
-          <>
-            <ProfileHeader
-              setLoading={setLoading}
-              handleItemClick={handleItemClick}
-              activeItem={activeItem}
-            />
-            <ProfileMenu
-              setLoading={setLoading}
-              handleItemClick={handleItemClick}
-              activeItem={activeItem}
-            />
-          </>
-        )}
+      <Grid stackable padded relaxed>
+        <Grid.Column tablet={6} computer={6}>
+          {currentUser && currentUser?.id !== specificUser?.id && (
+            <ProfileCard currentUser={currentUser} />
+          )}
 
-        {/* 팔로워 */}
-        {activeItem === "followers" &&
-          specificUsersFollowers.map(user => (
-            <UserCard key={user.id} user={user} />
-          ))}
+          <Trends />
+        </Grid.Column>
+        <Grid.Column tablet={10} computer={10}>
+          {specificUser && (
+            <>
+              <ProfileHeader
+                setLoading={setLoading}
+                handleItemClick={handleItemClick}
+                activeItem={activeItem}
+              />
+              <ProfileMenu
+                setLoading={setLoading}
+                handleItemClick={handleItemClick}
+                activeItem={activeItem}
+              />
+            </>
+          )}
 
-        {/* 팔로잉 */}
-        {activeItem === "followings" &&
-          specificUsersFollowings.map(user => (
-            <UserCard key={user.id} user={user} />
-          ))}
+          {/* 팔로워 */}
+          {activeItem === "followers" &&
+            specificUsersFollowers.map(user => (
+              <UserCard key={user.id} user={user} />
+            ))}
 
-        {/* 트윗들  */}
-        {activeItem === "tweets" && <ShowTweets tweets={specificUsersTweets} />}
+          {/* 팔로잉 */}
+          {activeItem === "followings" &&
+            specificUsersFollowings.map(user => (
+              <UserCard key={user.id} user={user} />
+            ))}
 
-        {/* 댓글들 */}
-        {activeItem === "comments" && (
-          <ShowTweets tweets={specificUsersComments} />
-        )}
+          {/* 트윗들  */}
+          {activeItem === "tweets" && (
+            <ShowTweets tweets={specificUsersTweets} />
+          )}
 
-        {/* 미디어 트윗들 */}
-        {activeItem === "medias" && (
-          <ShowTweets tweets={specificUsersMediaTweets} />
-        )}
+          {/* 댓글들 */}
+          {activeItem === "comments" && (
+            <ShowTweets tweets={specificUsersComments} />
+          )}
 
-        {/* 좋아요 누른 트윗들 */}
-        {activeItem === "favoriteTweets" && (
-          <ShowTweets tweets={specificUsersFavorites} />
-        )}
+          {/* 미디어 트윗들 */}
+          {activeItem === "medias" && (
+            <ShowTweets tweets={specificUsersMediaTweets} />
+          )}
 
-        {/* 해당 유저가 없을 경우 */}
-        {errorMessage && <Message size="huge" error header={errorMessage} />}
+          {/* 좋아요 누른 트윗들 */}
+          {activeItem === "favoriteTweets" && (
+            <ShowTweets tweets={specificUsersFavorites} />
+          )}
 
-        <Loader size="small" active={loading} />
-      </Grid.Column>
-    </Grid>
+          {/* 해당 유저가 없을 경우 */}
+          {errorMessage && <Message size="huge" error header={errorMessage} />}
+
+          <Loader size="small" active={loading} />
+        </Grid.Column>
+      </Grid>
+    </>
   );
 }
 
 /* 서버사이드 렌더링 */
 export const getServerSideProps = wrapper.getServerSideProps(
-  async ({ store, req }) => {
+  async ({ store, req, query }) => {
     // 프론트 서버에서 백엔드에 쿠키 전달
     const cookie = req ? req.headers.cookie : "";
     axios.defaults.headers.Cookie = "";
@@ -238,11 +242,20 @@ export const getServerSideProps = wrapper.getServerSideProps(
       axios.defaults.headers.Cookie = cookie; // 로그인 정보가 백엔드 서버로 넘어감
     }
 
+    const { userId } = query;
+
     try {
       const user = await authFunctions.getLoginUserInfo();
+      const specificUser = await userFunctions.getSpecificUser(userId);
+
       store.dispatch(userActions.setCurrentUser(user));
+      store.dispatch(specificUserActions.setUser(specificUser));
+      store.dispatch(
+        specificUserActions.changeTotalTweetCount(specificUser.tweets.length)
+      );
     } catch (error) {
       console.error(error);
+      return { props: { error: error.response.data || error } };
     }
   }
 );

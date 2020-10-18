@@ -11,6 +11,7 @@ module.exports = {
     const newConfig = {
       ...config,
       mode: prod ? "production" : "development",
+      devtool: "inline-source-map",
       plugins: [
         ...config.plugins,
         new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /^\.\/ko$/)
