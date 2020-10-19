@@ -34,8 +34,10 @@
   "scripts": {
     "dev": "next -p 3003",
     "dev-detail": "cross-env NODE_ENV=production next -p 3003",
-    "start": "cross-env NODE_ENV=production next start -p 3003",
+    "start": "cross-env NODE_ENV=production next start -p 80",
     "build": "cross-env NODE_ENV=production next build",
+    "build-test": "next build",
+    "start-test": "next start -p 3003",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
