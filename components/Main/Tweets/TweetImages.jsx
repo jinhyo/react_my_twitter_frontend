@@ -5,7 +5,7 @@ import axios from "axios";
 import ImageZoomModal from "./ImageZoomModal";
 
 // in <TweetCard />, <PureRetweetCard />, <QuotedTweetCard />
-function TweetImages({ images }) {
+function TweetImages({ tweet, images }) {
   const [modal, setModal] = useState(false);
 
   const closeModal = useCallback(() => {
@@ -16,21 +16,23 @@ function TweetImages({ images }) {
     setModal(true);
   }, []);
 
-  const setSrc = useCallback(async src => {
-    const ext = src.split(".")[src.split(".").length - 1];
+  const setSrc = useCallback(
+    async src => {
+      const ext = src.split(".")[src.split(".").length - 1];
 
-    if (ext === "gif") {
-      return src;
-    } else {
-      // 방금 추가된 트윗의 경우 리사이징 되기 전 이미지를 사용
-      const result = await axios.get(src);
-      if (result) {
-        return src.replace("/images/", "/thumb/");
-      } else {
+      if (ext === "gif") {
         return src;
+      } else {
+        // 방금 추가된 트윗의 경우 리사이징 되기 전 이미지를 사용
+        if (tweet.newlyAdded) {
+          return src;
+        } else {
+          return src.replace("/images/", "/thumb/");
+        }
       }
-    }
-  }, []);
+    },
+    [tweet]
+  );
 
   return (
     <>
