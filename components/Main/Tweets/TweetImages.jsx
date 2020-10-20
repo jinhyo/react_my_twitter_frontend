@@ -15,23 +15,20 @@ function TweetImages({ tweet, images }) {
     setModal(true);
   }, []);
 
-  const setSrc = useCallback(
-    async src => {
-      const ext = src.split(".")[src.split(".").length - 1];
+  const setSrc = useCallback((src, newlyAdded) => {
+    const ext = src.split(".")[src.split(".").length - 1];
 
-      if (ext === "gif") {
+    if (ext === "gif") {
+      return src;
+    } else {
+      // 방금 추가된 트윗의 경우 리사이징 되기 전 이미지를 사용
+      if (newlyAdded) {
         return src;
       } else {
-        // 방금 추가된 트윗의 경우 리사이징 되기 전 이미지를 사용
-        if (tweet.newlyAdded) {
-          return src;
-        } else {
-          return src.replace("/images/", "/thumb/");
-        }
+        return src.replace("/images/", "/thumb/");
       }
-    },
-    [tweet]
-  );
+    }
+  }, []);
 
   return (
     <>
@@ -39,7 +36,7 @@ function TweetImages({ tweet, images }) {
         {images.map((image, index) => (
           <Image
             key={index}
-            src={setSrc(image.src)}
+            src={setSrc(image.src, tweet.newlyAdded)}
             width={200}
             height={200}
             bordered
