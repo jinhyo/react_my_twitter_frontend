@@ -218,7 +218,9 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus, commentStatus }) {
       <Card.Content>
         <Card.Description>
           <TweetContents contents={retweet.contents} />
-          {retweet.hasMedia && <TweetImages images={retweet.images} />}
+          {retweet.hasMedia && (
+            <TweetImages tweet={retweet} images={retweet.images} />
+          )}
 
           {/* 인용 트윗을 리트윗하는 경우 */}
           {retweet.quotedOriginId && (

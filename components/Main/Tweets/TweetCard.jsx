@@ -209,7 +209,9 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
             <TweetContents contents={tweet.contents} />
 
             {/* 트윗 이미지 */}
-            {tweet.hasMedia && <TweetImages images={tweet.images} />}
+            {tweet.hasMedia && (
+              <TweetImages tweet={tweet} images={tweet.images} />
+            )}
 
             {/* 인용 트윗인 경우 */}
             {tweet.quotedOriginId && (

@@ -49,7 +49,9 @@ function QuotedTweetCard({ tweet }) {
       <Card.Content>
         <Card.Description>
           <TweetContents contents={tweet.contents} />
-          {tweet.hasMedia && <TweetImages images={tweet.images} />}
+          {tweet.hasMedia && (
+            <TweetImages tweet={tweet} images={tweet.images} />
+          )}
         </Card.Description>
       </Card.Content>
     </Card>

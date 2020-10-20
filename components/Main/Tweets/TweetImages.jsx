@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from "react";
 import { Image } from "semantic-ui-react";
-import axios from "axios";
 
 import ImageZoomModal from "./ImageZoomModal";
 
