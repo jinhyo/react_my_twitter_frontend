@@ -4,7 +4,7 @@ import { Card, Button, Icon, Feed, Image } from "semantic-ui-react";
 import moment from "moment";
 import Link from "next/link";
 
-import  tweet={tweet} from "./ tweet={tweet}";
+import TweetImages from "./TweetImages";
 import TweetContents from "./TweetContents";
 import tweetFunctions from "../../../lib/tweetFunctions";
 import { userActions, userSelector } from "../../../features/userSlice";
@@ -209,7 +209,7 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
             <TweetContents contents={tweet.contents} />
 
             {/* 트윗 이미지 */}
-            {tweet.hasMedia && <TweetImages tweet={tweet} images={tweet.images} />}
+            {tweet.hasMedia && <TweetImages images={tweet.images} />}
 
             {/* 인용 트윗인 경우 */}
             {tweet.quotedOriginId && (
