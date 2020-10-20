@@ -168,7 +168,7 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
                       floated="left"
                       width={50}
                       height={50}
-                      src={tweet.user.avatarURL}
+                      src={tweet.user.avatarURL.replace("/images/", "/thumb/")}
                       className="picture__circle"
                     />
                   </a>

@@ -3,7 +3,7 @@ import { Image } from "semantic-ui-react";
 
 import ImageZoomModal from "./ImageZoomModal";
 
-// in <TweetCard />
+// in <TweetCard />, <PureRetweetCard />, <QuotedTweetCard />
 function TweetImages({ images }) {
   const [modal, setModal] = useState(false);
 
@@ -21,7 +21,7 @@ function TweetImages({ images }) {
         {images.map((image, index) => (
           <Image
             key={index}
-            src={image.src}
+            src={image.src.replace("/images/", "/thumb/")}
             width={200}
             height={200}
             bordered

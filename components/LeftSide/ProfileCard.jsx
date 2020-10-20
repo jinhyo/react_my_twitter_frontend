@@ -13,7 +13,7 @@ function ProfileCard({ currentUser }) {
                 floated="left"
                 width={80}
                 height={80}
-                src={currentUser.avatarURL}
+                src={currentUser.avatarURL.replace("/images/", "/thumb/")}
                 className="picture__circle"
               />
             </a>
