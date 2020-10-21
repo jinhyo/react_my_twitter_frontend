@@ -140,21 +140,24 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus, commentStatus }) {
 
   // 댓글일 경우 표시
   const renderCommentStatus = useCallback(() => {
-    if (tweet.commentedOriginId && !tweet.commentedOrigin) {
+    if (
+      tweet.retweetOrigin.commentedOriginId &&
+      !tweet.retweetOrigin.commentedOrigin
+    ) {
       return <Feed.Summary>댓글이 달린 트윗이 삭제되었습니다.</Feed.Summary>;
-    } else if (tweet.commentedOriginId) {
+    } else if (tweet.retweetOrigin.commentedOriginId) {
       return (
         <Feed.Summary>
           <Link
             href={`/users/[userId]`}
-            as={`/users/${tweet.commentedOrigin.user.id}`}
+            as={`/users/${tweet.retweetOrigin.commentedOrigin.user.id}`}
           >
-            <a>@{tweet.commentedOrigin.user.nickname}</a>
+            <a>@{tweet.retweetOrigin.commentedOrigin.user.nickname}</a>
           </Link>
           님의
           <Link
             href={`/tweets/[tweetId]`}
-            as={`/tweets/${tweet.commentedOriginId}`}
+            as={`/tweets/${tweet.retweetOrigin.commentedOriginId}`}
           >
             <a>트윗</a>
           </Link>
@@ -230,7 +233,7 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus, commentStatus }) {
       </Card.Content>
       <Card.Content extra>
         {/* 리트윗 버튼 */}
-        <RetweetButton tweet={tweet.retweetOrigin} cancelPopup={cancelPopup} />
+        <RetweetButton tweet={tweet} cancelPopup={cancelPopup} />
         <span ref={afterClickRef}></span>
 
         {/* 좋아요 버튼 */}
