@@ -164,6 +164,15 @@ const specificUserSlice = createSlice({
         }
       });
     },
+    increaseCommentCount: (
+      state,
+      { payload: { commentTweetId, currentTweetId } }
+    ) => {
+      const currentTweet = state.specificUser.tweets.find(
+        tweet => tweet.id === currentTweetId
+      );
+      currentTweet.comments.push({ id: commentTweetId });
+    },
     addComment: (
       state,
       {

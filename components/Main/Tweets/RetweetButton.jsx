@@ -60,14 +60,20 @@ function RetweetButton({ tweet, cancelPopup }) {
         tweet.retweetOriginId || tweet.id // 원본을 리트윗 || 리트윗한 트윗을 리트윗
       );
 
-      if (specificUserId) {
-        // specificUser에게 적용
+      if (specificUserId && specificUserId === currentUserId) {
+        // specificUser에게 적용 (내 프로필인 경우)
         dispatch(
           specificUserActions.increaseRetweetCount(
             tweet.retweetOriginId || tweet.id
           )
         );
         dispatch(specificUserActions.addTweet(newTweet));
+      } else if (specificUserId && specificUserId !== currentUserId) {
+        dispatch(
+          specificUserActions.increaseRetweetCount(
+            tweet.retweetOriginId || tweet.id
+          )
+        );
       } else {
         // currentUser에게 적용
         dispatch(
@@ -112,14 +118,20 @@ function RetweetButton({ tweet, cancelPopup }) {
         retweetOriginId
       );
 
-      if (specificUserId) {
-        // specificUser에게 적용
+      if (specificUserId && specificUserId === currentUserId) {
+        // specificUser에게 적용 (내 프로필인 경우)
         dispatch(
           specificUserActions.decreaseRetweetCount(
             tweet.retweetOriginId || tweet.id
           )
         );
         dispatch(specificUserActions.cancelRetweet(tweet.id));
+      } else if (specificUserId && specificUserId !== currentUserId) {
+        dispatch(
+          specificUserActions.decreaseRetweetCount(
+            tweet.retweetOriginId || tweet.id
+          )
+        );
       } else {
         // currentUser에게 적용
 

@@ -26,6 +26,7 @@ function QuotationForm({ quotedTweet, closeModal }) {
   const fileRef = useRef();
 
   const currentUser = useSelector(userSelector.currentUser);
+  const currentUserId = useSelector(userSelector.currentUserId);
   const specificUserId = useSelector(specificUserSelector.userId);
   const specificTweetId = useSelector(specificTweetSelector.specificTweetId);
   const tweets = useSelector(tweetSelector.tweets);
@@ -92,10 +93,13 @@ function QuotationForm({ quotedTweet, closeModal }) {
         dispatch(specificTweetActions.addQuotation(tweetWithOthers.id));
       }
 
-      if (specificUserId) {
-        // specificUser에게 적용
+      if (specificUserId && specificUserId === currentUserId) {
+        // specificUser에게 적용 (내 프로필인 경우)
         dispatch(specificUserActions.increaseRetweetCount(quotedTweet.id));
         dispatch(specificUserActions.addTweet(tweetWithOthers));
+      } else if (specificUserId && specificUserId !== currentUserId) {
+        // specificUser에게 적용 (다른 사람의 프로필인 경우)
+        dispatch(specificUserActions.increaseRetweetCount(quotedTweet.id));
       } else {
         // currentUser에게 적용
         dispatch(tweetActions.increaseRetweetCount(quotedTweet.id));
@@ -108,7 +112,7 @@ function QuotationForm({ quotedTweet, closeModal }) {
       setUploadLoading(false);
       closeModal();
     }
-  }, [text, previewImages, currentUser, tweets]);
+  }, [text, previewImages, currentUser, tweets, currentUserId, specificUserId]);
 
   //// 이모티콘 입력
   const handleAddEmoji = useCallback(emoji => {

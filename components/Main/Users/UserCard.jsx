@@ -60,11 +60,14 @@ function UserCard({ user }) {
     try {
       await userFunctions.followUser(user.id);
       dispatch(userActions.addFollowing(user.id));
-      dispatch(specificUserActions.addFollowing(user.id));
+
+      if (isMe(user.id, currentUserId)) {
+        dispatch(specificUserActions.addFollowing(user.id));
+      }
     } catch (error) {
       console.error(error);
     }
-  }, [user]);
+  }, [user, currentUserId]);
 
   /*  언팔로우 */
   const handleUnfollowUser = useCallback(async () => {
@@ -74,11 +77,14 @@ function UserCard({ user }) {
     try {
       await userFunctions.unfollowUser(user.id);
       dispatch(userActions.removeFollowing(user.id));
-      dispatch(specificUserActions.removeFollowing(user.id));
+
+      if (isMe(user.id, currentUserId)) {
+        dispatch(specificUserActions.removeFollowing(user.id));
+      }
     } catch (error) {
       console.error(error);
     }
-  }, [user]);
+  }, [user, currentUserId]);
 
   return (
     <>

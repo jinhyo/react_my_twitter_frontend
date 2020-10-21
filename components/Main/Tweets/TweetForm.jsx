@@ -25,6 +25,7 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
   const fileRef = useRef();
 
   const currentUser = useSelector(userSelector.currentUser);
+  const currentUserId = useSelector(userSelector.currentUserId);
   const tweets = useSelector(tweetSelector.tweets);
   const specificUserId = useSelector(specificUserSelector.userId);
   const specificTweetId = useSelector(specificTweetSelector.specificTweetId);
@@ -86,14 +87,22 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
           })
         );
 
-        if (specificUserId) {
-          // specificUser에게 적용
+        if (specificUserId && specificUserId === currentUserId) {
+          // specificUser에게 적용 (내 프로필인 경우)
           dispatch(
             specificUserActions.addComment({
               currentRetweetId,
               commentedOriginId: commentedTweetId,
               commentTweetId: tweetWithOthers.id,
               tweet: tweetWithOthers
+            })
+          );
+        } else if (specificUserId && specificUserId !== currentUserId) {
+          // specificUser에게 적용 (다른 유저의 프로필인 경우)
+          dispatch(
+            specificUserActions.increaseCommentCount({
+              commentTweetId: tweetWithOthers.id,
+              currentTweetId: commentedTweetId
             })
           );
         } else {
@@ -144,7 +153,15 @@ function TweetForm({ commentedTweetId, setCommentInput, currentRetweetId }) {
         setCommentInput(false); // 댓글 입력창 닫기
       }
     }
-  }, [text, previewImages, currentUser, tweets]);
+  }, [
+    text,
+    previewImages,
+    currentUser,
+    tweets,
+    currentUserId,
+    specificUserId,
+    commentedTweetId
+  ]);
 
   /*  이모티콘 입력 */
   const handleAddEmoji = useCallback(

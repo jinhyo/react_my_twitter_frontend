@@ -111,10 +111,14 @@ function ProfileHeader({ handleItemClick, activeItem }) {
     } catch (error) {
       console.error(error);
     }
-  }, [specificUser]);
+  }, [specificUser, currentUserId]);
 
   /*  언팔로우 */
   const handleUnfollowUser = useCallback(async () => {
+    if (!currentUserId) {
+      return alert("로그인이 필요합니다.");
+    }
+
     try {
       await userFunctions.unfollowUser(specificUser.id);
       dispatch(userActions.removeFollowing(specificUser.id));
@@ -122,7 +126,7 @@ function ProfileHeader({ handleItemClick, activeItem }) {
     } catch (error) {
       console.error(error);
     }
-  }, [specificUser]);
+  }, [specificUser, currentUserId]);
 
   return (
     <>
