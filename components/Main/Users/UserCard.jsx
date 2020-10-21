@@ -5,7 +5,10 @@ import Link from "next/link";
 
 import { userSelector, userActions } from "../../../features/userSlice";
 import userFunctions from "../../../lib/userFunctions";
-import { specificUserActions } from "../../../features/specificUserSlice";
+import {
+  specificUserActions,
+  specificUserSelector
+} from "../../../features/specificUserSlice";
 
 // in <TweetInfoCard />, <Profile />
 function UserCard({ user }) {
@@ -13,6 +16,7 @@ function UserCard({ user }) {
 
   const followings = useSelector(userSelector.followings);
   const currentUserId = useSelector(userSelector.currentUserId);
+  const specificUserId = useSelector(specificUserSelector.userId);
 
   function didIFollow(userId, followings) {
     const index = followings.findIndex(following => following.id === userId);
@@ -61,13 +65,14 @@ function UserCard({ user }) {
       await userFunctions.followUser(user.id);
       dispatch(userActions.addFollowing(user.id));
 
-      if (isMe(user.id, currentUserId)) {
+      if (specificUserId === currentUserId) {
+        // 내 프로필일 경우
         dispatch(specificUserActions.addFollowing(user.id));
       }
     } catch (error) {
       console.error(error);
     }
-  }, [user, currentUserId]);
+  }, [user, currentUserId, specificUserId]);
 
   /*  언팔로우 */
   const handleUnfollowUser = useCallback(async () => {
@@ -78,13 +83,14 @@ function UserCard({ user }) {
       await userFunctions.unfollowUser(user.id);
       dispatch(userActions.removeFollowing(user.id));
 
-      if (isMe(user.id, currentUserId)) {
+      if (specificUserId === currentUserId) {
+        // 내 프로필일 경우
         dispatch(specificUserActions.removeFollowing(user.id));
       }
     } catch (error) {
       console.error(error);
     }
-  }, [user, currentUserId]);
+  }, [user, currentUserId, specificUserId]);
 
   return (
     <>
