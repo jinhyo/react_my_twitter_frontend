@@ -98,15 +98,6 @@ function Login() {
     }
   }, []);
 
-  // 네이버 로그인
-  const handleNaverLogin = useCallback(async () => {
-    try {
-      await authFunctions.naverLogin();
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
-
   if (currentUserId) return null;
 
   return (
@@ -161,13 +152,7 @@ function Login() {
           </Segment>
         </Form>
         <Divider />
-        <div className="ui three images">
-          <Image
-            circular
-            src="/naver.png"
-            className="button__login"
-            onClick={handleNaverLogin}
-          />
+        <div className="ui two images">
           <Image
             circular
             src="/google.png"
