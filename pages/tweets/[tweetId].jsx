@@ -39,6 +39,7 @@ function TweetStatus({ error }) {
 
   useEffect(() => {
     if (tweetId) {
+      dispatch(userActions.setNowWhere(''))
       dispatch(tweetActions.clearTweets());
     }
 
