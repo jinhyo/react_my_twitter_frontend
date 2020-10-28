@@ -6,7 +6,7 @@ import SearchResults from "./SearchResults";
 import { useRouter } from "next/router";
 import { searchSelector, searchActions } from "../../features/searchSlice";
 import userFunctions from "../../lib/userFunctions";
-import { toast } from 'react-toastify'
+import { toast } from "react-toastify";
 
 // in <BaseHeader />
 function SearchBar() {
@@ -26,7 +26,7 @@ function SearchBar() {
   }, [searchWord]);
 
   const handleInputChange = useCallback(
-    e => {
+    (e) => {
       if (!showSearchResults) {
         dispatch(searchActions.setShowSearchResults(true));
       }
@@ -50,20 +50,20 @@ function SearchBar() {
   }
 
   /* 검색결과 클릭 or 검색창에서 엔터 */
-  const handleSearchWord = useCallback(async text => {
+  const handleSearchWord = useCallback(async (text) => {
     dispatch(searchActions.setShowSearchResults(false));
-    console.log('text',text);
+    console.log("text", text);
     if (text[0] === "#") {
       // 해시태그 검색
       router.push(`/hashtags/${text.slice(1)}`);
     } else if (text[0] === "@") {
       // 유저 닉네임 검색
       try {
-       const userId = await userFunctions.findUserId(text.slice(1))
-       router.push(`/users/${userId}`);
+        const userId = await userFunctions.findUserId(text.slice(1));
+        router.push(`/users/${userId}`);
       } catch (error) {
         console.error(error);
-        toast.warn(error.response.data)
+        toast.warn(error.response.data);
       }
     } else {
       // 앞에 # 또는 @을 붙이지 않고 엔터를 누를 경우 기본적으로 해시태그를 검색
@@ -73,7 +73,7 @@ function SearchBar() {
   }, []);
 
   const handleInputKeyPress = useCallback(
-    e => {
+    (e) => {
       if (e.key === "Enter") {
         handleSearchWord(searchWord);
       }
@@ -88,7 +88,7 @@ function SearchBar() {
           name: "search",
           link: true,
           loading,
-          onClick: () => handleSearchWord(searchWord)
+          onClick: () => handleSearchWord(searchWord),
         }}
         onChange={handleInputChange}
         value={searchWord}

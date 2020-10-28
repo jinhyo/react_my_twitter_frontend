@@ -11,7 +11,7 @@ import tweetFunctions from "../../lib/tweetFunctions";
 import { tweetSelector, tweetActions } from "../../features/tweetSlice";
 import {
   specificTweetActions,
-  specificTweetSelector
+  specificTweetSelector,
 } from "../../features/specificTweetSlice";
 import TweetInfoMenu from "../../components/Main/Tweets/TweetInfoMenu";
 import ShowTweets from "../../components/Main/Tweets/ShowTweets";
@@ -39,7 +39,7 @@ function TweetStatus({ error }) {
 
   useEffect(() => {
     if (tweetId) {
-      dispatch(userActions.setNowWhere(''))
+      dispatch(userActions.setNowWhere(""));
       dispatch(tweetActions.clearTweets());
     }
 
@@ -99,14 +99,14 @@ function TweetStatus({ error }) {
 
           {/* 리트윗한 유저들 */}
           {activeItem === "retweetUsers" &&
-            retweetUsers.map(user => <UserCard key={user.id} user={user} />)}
+            retweetUsers.map((user) => <UserCard key={user.id} user={user} />)}
 
           {/* 인용한 트윗들 */}
           {activeItem === "quotations" && <ShowTweets tweets={tweets} />}
 
           {/* 좋아요 누른 유저들 */}
           {activeItem === "likers" &&
-            likers.map(user => <UserCard key={user.id} user={user} />)}
+            likers.map((user) => <UserCard key={user.id} user={user} />)}
 
           {/* 해당 트윗이 없을 경우 */}
           {errorMessage && <Message size="huge" error header={errorMessage} />}

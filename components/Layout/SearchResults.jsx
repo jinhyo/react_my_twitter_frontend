@@ -16,8 +16,10 @@ function SearchResults({ hashtags, users, handleSearchWord }) {
   }, []);
 
   const didIFollow = useCallback(
-    userId => {
-      const index = followings.findIndex(following => following.id === userId);
+    (userId) => {
+      const index = followings.findIndex(
+        (following) => following.id === userId
+      );
       return index !== -1;
     },
     [followings]
@@ -26,7 +28,7 @@ function SearchResults({ hashtags, users, handleSearchWord }) {
   return (
     <List divided selection verticalAlign="middle" className="searchResults">
       {/* 해시태그 검색 결과 */}
-      {hashtags.map(hashtag => (
+      {hashtags.map((hashtag) => (
         <List.Item
           key={hashtag.tag}
           onClick={() => handleClickLink(`#${hashtag.tag}`)}
@@ -42,7 +44,7 @@ function SearchResults({ hashtags, users, handleSearchWord }) {
       {hashtags.length > 0 && <Divider fitted />}
 
       {/* 유저 닉네임 검색 결과 */}
-      {users.map(user => (
+      {users.map((user) => (
         <List.Item
           key={user.id}
           onClick={() => handleClickLink(`@${user.nickname}`)}
