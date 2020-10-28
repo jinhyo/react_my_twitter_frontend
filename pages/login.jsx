@@ -153,18 +153,20 @@ function Login() {
         </Form>
         <Divider />
         <div className="ui two images">
+          <a href={`${BACKEND_URL}/auth/login/google`}>
           <Image
             circular
             src="/google.png"
             className="button__login"
-            onClick={handleGoogleLogin}
           />
+          </a>
+          <a href={`${BACKEND_URL}/auth/login/facebook`}>
           <Image
             circular
             src="/facebook.png"
             className="button__login"
-            onClick={handleFacebookLogin}
           />
+          </a>
         </div>
       </Grid.Column>
     </Grid>
