@@ -16,6 +16,7 @@ import axios from "axios";
 import authFunctions from "../lib/authFunctions";
 import { userActions, userSelector } from "../features/userSlice";
 import wrapper from "../store/configureStore";
+import { BACKEND_URL } from "../lib/constValue";
 
 const INITIAL_VALUE = { email: "", password: "" };
 
