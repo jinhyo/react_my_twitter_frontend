@@ -2,6 +2,7 @@ import React, { useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import userFunctions from "../../../lib/userFunctions";
+import { toast } from 'react-toastify'
 
 // in <TweetCard />
 function TweetContents({ contents }) {
@@ -14,6 +15,7 @@ function TweetContents({ contents }) {
        router.push(`/users/${userId}`);
       } catch (error) {
         console.error(error);
+        toast.warn(error.response.data);
       }
    
   }, []);

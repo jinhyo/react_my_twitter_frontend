@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Input, Icon } from "semantic-ui-react";
+import { Input } from "semantic-ui-react";
 import searchFunctions from "../../lib/searchFunctions";
 import SearchResults from "./SearchResults";
 import { useRouter } from "next/router";
 import { searchSelector, searchActions } from "../../features/searchSlice";
 import userFunctions from "../../lib/userFunctions";
+import { toast } from 'react-toastify'
 
 // in <BaseHeader />
 function SearchBar() {
@@ -62,6 +63,7 @@ function SearchBar() {
        router.push(`/users/${userId}`);
       } catch (error) {
         console.error(error);
+        toast.warn(error.response.data)
       }
     } else {
       // 앞에 # 또는 @을 붙이지 않고 엔터를 누를 경우 기본적으로 해시태그를 검색
