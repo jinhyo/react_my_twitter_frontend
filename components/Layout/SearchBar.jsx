@@ -5,6 +5,7 @@ import searchFunctions from "../../lib/searchFunctions";
 import SearchResults from "./SearchResults";
 import { useRouter } from "next/router";
 import { searchSelector, searchActions } from "../../features/searchSlice";
+import userFunctions from "../../lib/userFunctions";
 
 // in <BaseHeader />
 function SearchBar() {
@@ -48,15 +49,20 @@ function SearchBar() {
   }
 
   /* 검색결과 클릭 or 검색창에서 엔터 */
-  const handleSearchWord = useCallback(text => {
+  const handleSearchWord = useCallback(async text => {
     dispatch(searchActions.setShowSearchResults(false));
-
+    console.log('text',text);
     if (text[0] === "#") {
       // 해시태그 검색
       router.push(`/hashtags/${text.slice(1)}`);
     } else if (text[0] === "@") {
       // 유저 닉네임 검색
-      router.push(`/users/${text.slice(1)}`);
+      try {
+       const userId = await userFunctions.findUserId(text.slice(1))
+       router.push(`/users/${userId}`);
+      } catch (error) {
+        console.error(error);
+      }
     } else {
       // 앞에 # 또는 @을 붙이지 않고 엔터를 누를 경우 기본적으로 해시태그를 검색
       dispatch(searchActions.setSearchWord(`#${text}`));
