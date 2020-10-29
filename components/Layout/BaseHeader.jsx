@@ -9,6 +9,7 @@ import DropDownMenu from "./DropDownMenu";
 
 function BaseHeader() {
   const currentUserId = useSelector(userSelector.currentUserId);
+  const currentUserNickname = useSelector(userSelector.currentUserNickname);
 
   return (
     <Menu className="baseHeader">
@@ -23,8 +24,8 @@ function BaseHeader() {
         <>
           <Menu.Item>
             <Link
-              href={`/users/[userId]`}
-              as={`/users/${currentUserId}`}
+              href={`/users/[nickname]`}
+              as={`/users/${currentUserNickname}`}
               className="item"
             >
               <a>

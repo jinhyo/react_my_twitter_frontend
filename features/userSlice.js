@@ -4,13 +4,13 @@ const userSlice = createSlice({
   name: "userSlice",
   initialState: {
     currentUser: null,
-    nowWhere: "main"
+    nowWhere: "main",
   },
   reducers: {
     setCurrentUser: (state, { payload: user }) => {
       state.currentUser = user;
     },
-    clearCurrentUser: state => {
+    clearCurrentUser: (state) => {
       state.currentUser = null;
     },
     setNowWhere: (state, { payload: where }) => {
@@ -19,19 +19,24 @@ const userSlice = createSlice({
     addMyTweet: (
       state,
       {
-        payload: { tweetId, retweetOriginId, quotedOriginId, commentedOriginId }
+        payload: {
+          tweetId,
+          retweetOriginId,
+          quotedOriginId,
+          commentedOriginId,
+        },
       }
     ) => {
       state.currentUser.tweets.push({
         id: tweetId,
         retweetOriginId,
         quotedOriginId,
-        commentedOriginId
+        commentedOriginId,
       });
     },
     removeMyTweet: (state, { payload: deltedTweetIds }) => {
       state.currentUser.tweets = state.currentUser.tweets.filter(
-        tweet => !deltedTweetIds.includes(tweet.id)
+        (tweet) => !deltedTweetIds.includes(tweet.id)
       );
     },
     addFavoriteTweetsToMe: (state, { payload: tweetId }) => {
@@ -39,7 +44,7 @@ const userSlice = createSlice({
     },
     removeFavoriteTweetsFromMe: (state, { payload: tweetId }) => {
       state.currentUser.favorites = state.currentUser.favorites.filter(
-        tweet => tweet.id !== tweetId
+        (tweet) => tweet.id !== tweetId
       );
     },
     addFollowing: (state, { payload: userId }) => {
@@ -47,7 +52,7 @@ const userSlice = createSlice({
     },
     removeFollowing: (state, { payload: userId }) => {
       state.currentUser.followings = state.currentUser.followings.filter(
-        following => following.id !== userId
+        (following) => following.id !== userId
       );
     },
     addRetweetToMe: (state, { payload: tweetId }) => {
@@ -55,7 +60,7 @@ const userSlice = createSlice({
     },
     removeRtweetFromMe: (state, { payload: tweetId }) => {
       state.currentUser.retweets = state.currentUser.retweets.filter(
-        tweet => tweet.id !== tweetId
+        (tweet) => tweet.id !== tweetId
       );
     },
 
@@ -68,78 +73,85 @@ const userSlice = createSlice({
     },
     updateAvatarURL: (state, { payload: url }) => {
       state.currentUser.avatarURL = url;
-    }
-  }
+    },
+  },
 });
 
 const selectCurrentUser = createSelector(
-  state => state.currentUser,
+  (state) => state.currentUser,
 
-  currentUser => currentUser
+  (currentUser) => currentUser
 );
 
 const selectCurrentUserId = createSelector(
-  state => state.currentUser?.id,
+  (state) => state.currentUser?.id,
 
-  currentUserId => currentUserId
+  (currentUserId) => currentUserId
+);
+
+const selectCurrentUserNickname = createSelector(
+  (state) => state.currentUser?.nickname,
+
+  (nickname) => nickname
 );
 
 const selectFollowings = createSelector(
-  state => state.currentUser?.followings,
+  (state) => state.currentUser?.followings,
 
-  followings => (followings ? followings : [])
+  (followings) => (followings ? followings : [])
 );
 
 const selectRetweets = createSelector(
-  state => state.currentUser?.retweets,
+  (state) => state.currentUser?.retweets,
 
-  retweets => (retweets ? retweets : [])
+  (retweets) => (retweets ? retweets : [])
 );
 
 const selectFavoriteTweets = createSelector(
-  state => state.currentUser?.favorites,
+  (state) => state.currentUser?.favorites,
 
-  favorites => (favorites ? favorites : [])
+  (favorites) => (favorites ? favorites : [])
 );
 
 const selectMyTweets = createSelector(
-  state => state.currentUser?.tweets,
+  (state) => state.currentUser?.tweets,
 
-  tweets => (tweets ? tweets : [])
+  (tweets) => (tweets ? tweets : [])
 );
 
 const selectUserCardInfo = createSelector(
-  state => state.currentUser?.id,
-  state => state.currentUser?.nickname,
-  state => state.currentUser?.avatarURL,
-  state => state.currentUser?.selfIntro,
-  state => state.currentUser?.location,
+  (state) => state.currentUser?.id,
+  (state) => state.currentUser?.nickname,
+  (state) => state.currentUser?.avatarURL,
+  (state) => state.currentUser?.selfIntro,
+  (state) => state.currentUser?.location,
 
   (id, nickname, avatarURL, selfIntro, location) => ({
     id,
     nickname,
     avatarURL,
     selfIntro,
-    location
+    location,
   })
 );
 
 const selectNowWhere = createSelector(
-  state => state.nowWhere,
+  (state) => state.nowWhere,
 
-  nowWhere => nowWhere
+  (nowWhere) => nowWhere
 );
 
 export const userActions = userSlice.actions;
 export const userReducer = userSlice.reducer;
 export const USER = userSlice.name;
 export const userSelector = {
-  currentUser: state => selectCurrentUser(state[USER]),
-  favoriteTweets: state => selectFavoriteTweets(state[USER]),
-  currentUserId: state => selectCurrentUserId(state[USER]),
-  followings: state => selectFollowings(state[USER]),
-  myRetweets: state => selectRetweets(state[USER]),
-  myTweets: state => selectMyTweets(state[USER]),
-  userCardInfo: state => selectUserCardInfo(state[USER]),
-  nowWhere: state => selectNowWhere(state[USER])
+  currentUser: (state) => selectCurrentUser(state[USER]),
+  favoriteTweets: (state) => selectFavoriteTweets(state[USER]),
+  currentUserId: (state) => selectCurrentUserId(state[USER]),
+  currentUserNickname: (state) => selectCurrentUserNickname(state[USER]),
+  followings: (state) => selectFollowings(state[USER]),
+  myRetweets: (state) => selectRetweets(state[USER]),
+  myTweets: (state) => selectMyTweets(state[USER]),
+  userCardInfo: (state) => selectUserCardInfo(state[USER]),
+  nowWhere: (state) => selectNowWhere(state[USER]),
 };

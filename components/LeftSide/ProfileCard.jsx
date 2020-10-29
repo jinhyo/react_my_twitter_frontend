@@ -1,13 +1,17 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Card, Image, Button, Divider } from "semantic-ui-react";
 import Link from "next/link";
+import { userSelector } from "../../features/userSlice";
 
 function ProfileCard({ currentUser }) {
+  const currentUserNickname = useSelector(userSelector.currentUserNickname);
+
   return (
     <>
       <Card>
         <Card.Content>
-          <Link href={`/users/[userId]`} as={`/users/${currentUser.id}`}>
+          <Link href={`/users/[nickname]`} as={`/users/${currentUserNickname}`}>
             <a>
               <Image
                 floated="left"
@@ -18,7 +22,7 @@ function ProfileCard({ currentUser }) {
               />
             </a>
           </Link>
-          <Link href={`/users/[userId]`} as={`/users/${currentUser.id}`}>
+          <Link href={`/users/[nickname]`} as={`/users/${currentUserNickname}`}>
             <h3>
               <a>@{currentUser.nickname}</a>
             </h3>
@@ -29,7 +33,7 @@ function ProfileCard({ currentUser }) {
         </Card.Content>
 
         <Card.Content extra>
-          <Link href={`/users/[userId]`} as={`/users/${currentUser.id}`}>
+          <Link href={`/users/[nickname]`} as={`/users/${currentUserNickname}`}>
             <a>
               <div className="ui three buttons">
                 <Button basic color="green">

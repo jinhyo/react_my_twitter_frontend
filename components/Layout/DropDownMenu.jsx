@@ -13,7 +13,7 @@ function DropDownMenu() {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const currentUserId = useSelector(userSelector.currentUserId);
+  const currentUserNickname = useSelector(userSelector.currentUserNickname);
 
   const handleLogout = useCallback(async () => {
     try {
@@ -31,8 +31,8 @@ function DropDownMenu() {
       <Dropdown.Menu>
         <Dropdown.Item>
           <Link
-            href={`/users/[userId]`}
-            as={`/users/${currentUserId}`}
+            href={`/users/[nickname]`}
+            as={`/users/${currentUserNickname}`}
             className="item"
           >
             <a>

@@ -15,7 +15,7 @@ import ProfileCard from "../../components/LeftSide/ProfileCard";
 import ShowTweets from "../../components/Main/Tweets/ShowTweets";
 import {
   specificUserSelector,
-  specificUserActions
+  specificUserActions,
 } from "../../features/specificUserSlice";
 import { searchActions } from "../../features/searchSlice";
 import authFunctions from "../../lib/authFunctions";
@@ -25,10 +25,11 @@ import { FRONTEND_URL } from "../../lib/constValue";
 function Profile({ error }) {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { userId } = router.query;
+  const { nickname } = router.query;
 
   const currentUser = useSelector(userSelector.currentUser);
   const specificUser = useSelector(specificUserSelector.user);
+  console.log("specificUser", specificUser);
   const specificUsersFollowers = useSelector(specificUserSelector.followers);
   const specificUsersFollowings = useSelector(specificUserSelector.followings);
   const specificUsersTweets = useSelector(specificUserSelector.tweets);
@@ -42,41 +43,42 @@ function Profile({ error }) {
 
   const [loading, setLoading] = useState(false);
   const [activeItem, setActiveItem] = useState("tweets");
-  const [errorMessage, setErrorMessage] = useState(error);
 
   useEffect(() => {
-    if (userId) {
-      // getSpecificUser(userId);
-      getTweets(userId);
-      setActiveItem("tweets");
-    }
-
     return () => {
+      // setErrorMessage("");
+
       dispatch(specificUserActions.clearUserInfos());
       dispatch(specificUserActions.clearCounts());
       dispatch(searchActions.setSearchWord(""));
       dispatch(searchActions.setSearchResults(null));
-
-      setErrorMessage("");
     };
-  }, [userId]);
+  }, [nickname]);
+
+  useEffect(() => {
+    if (specificUser) {
+      getTweets(specificUser.id);
+      setActiveItem("tweets");
+    }
+  }, [specificUser]);
 
   const handleItemClick = useCallback(
     async (e, { name }) => {
       setActiveItem(name);
-
-      if (name === "tweets") {
-        getTweets(specificUser.id);
-      } else if (name === "comments") {
-        getComments(specificUser.id);
-      } else if (name === "medias") {
-        getMediaTweets(specificUser.id);
-      } else if (name === "followers") {
-        getFollowers(specificUser.id);
-      } else if (name === "followings") {
-        getFollowings(specificUser.id);
-      } else if (name === "favoriteTweets") {
-        getFavorites(specificUser.id);
+      if (specificUser) {
+        if (name === "tweets") {
+          getTweets(specificUser.id);
+        } else if (name === "comments") {
+          getComments(specificUser.id);
+        } else if (name === "medias") {
+          getMediaTweets(specificUser.id);
+        } else if (name === "followers") {
+          getFollowers(specificUser.id);
+        } else if (name === "followings") {
+          getFollowings(specificUser.id);
+        } else if (name === "favoriteTweets") {
+          getFavorites(specificUser.id);
+        }
       }
     },
     [specificUser]
@@ -161,7 +163,7 @@ function Profile({ error }) {
           title={`'${specificUser.nickname}'님 상세정보`}
           description={`'${specificUser.nickname}'님 상세정보`}
           image={specificUser.avatarURL}
-          url={`${FRONTEND_URL}/users/${userId}`}
+          url={`${FRONTEND_URL}/users/${nickname}`}
         />
       )}
 
@@ -191,13 +193,13 @@ function Profile({ error }) {
 
           {/* 팔로워 */}
           {activeItem === "followers" &&
-            specificUsersFollowers.map(user => (
+            specificUsersFollowers.map((user) => (
               <UserCard key={user.id} user={user} />
             ))}
 
           {/* 팔로잉 */}
           {activeItem === "followings" &&
-            specificUsersFollowings.map(user => (
+            specificUsersFollowings.map((user) => (
               <UserCard key={user.id} user={user} />
             ))}
 
@@ -222,7 +224,7 @@ function Profile({ error }) {
           )}
 
           {/* 해당 유저가 없을 경우 */}
-          {errorMessage && <Message size="huge" error header={errorMessage} />}
+          {error && <Message size="huge" error header={error} />}
 
           <Loader size="small" active={loading} />
         </Grid.Column>
@@ -242,11 +244,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
       axios.defaults.headers.Cookie = cookie; // 로그인 정보가 백엔드 서버로 넘어감
     }
 
-    const { userId } = query;
+    const { nickname } = query;
 
     try {
       const user = await authFunctions.getLoginUserInfo();
-      const specificUser = await userFunctions.getSpecificUser(userId);
+      const specificUser = await userFunctions.getSpecificUser(
+        encodeURIComponent(nickname)
+      );
 
       store.dispatch(userActions.setCurrentUser(user));
       store.dispatch(specificUserActions.setUser(specificUser));

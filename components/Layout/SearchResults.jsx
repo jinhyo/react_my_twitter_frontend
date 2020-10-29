@@ -9,8 +9,8 @@ function SearchResults({ hashtags, users, handleSearchWord }) {
   const dispatch = useDispatch();
   const followings = useSelector(userSelector.followings);
 
-  const handleClickLink = useCallback((searchWord, userNickname) => {
-    dispatch(searchActions.setSearchWord(userNickname || searchWord));
+  const handleClickLink = useCallback((searchWord) => {
+    dispatch(searchActions.setSearchWord(searchWord));
 
     handleSearchWord(searchWord);
   }, []);
@@ -47,7 +47,7 @@ function SearchResults({ hashtags, users, handleSearchWord }) {
       {users.map((user) => (
         <List.Item
           key={user.id}
-          onClick={() => handleClickLink(`@${user.id}`, `@${user.nickname}`)}
+          onClick={() => handleClickLink(`@${user.nickname}`)}
         >
           <Image avatar src={user.avatarURL} />
           <List.Content>

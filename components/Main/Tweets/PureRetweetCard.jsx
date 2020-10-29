@@ -14,7 +14,7 @@ import QuotedTweetCard from "./QuotedTweetCard";
 import Link from "next/link";
 import {
   specificUserSelector,
-  specificUserActions
+  specificUserActions,
 } from "../../../features/specificUserSlice";
 import TweetForm from "./TweetForm";
 
@@ -56,7 +56,7 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus, commentStatus }) {
         dispatch(
           specificUserActions.unlikeTweet({
             myId: currentUserId,
-            tweetId: retweet.id
+            tweetId: retweet.id,
           })
         );
         dispatch(userActions.removeFavoriteTweetsFromMe(retweet.id));
@@ -86,7 +86,7 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus, commentStatus }) {
         dispatch(
           specificUserActions.likeTweet({
             myId: currentUserId,
-            tweetId: retweet.id
+            tweetId: retweet.id,
           })
         );
         dispatch(userActions.addFavoriteTweetsToMe(retweet.id));
@@ -125,7 +125,7 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus, commentStatus }) {
   //// 내가 리트윗 했는지 확인
   function isMyRetweet(currentUserId, tweet, myRetweets) {
     const index = myRetweets.findIndex(
-      retweet => retweet.id === tweet.retweetOriginId
+      (retweet) => retweet.id === tweet.retweetOriginId
     );
 
     return currentUserId === tweet.user.id && index !== -1;
@@ -135,7 +135,7 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus, commentStatus }) {
     if (!currentUserId) {
       return alert("로그인이 필요합니다.");
     }
-    setCommentInput(prev => !prev);
+    setCommentInput((prev) => !prev);
   }, [commentInput]);
 
   // 댓글일 경우 표시
@@ -149,8 +149,8 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus, commentStatus }) {
       return (
         <Feed.Summary>
           <Link
-            href={`/users/[userId]`}
-            as={`/users/${tweet.retweetOrigin.commentedOrigin.user.id}`}
+            href={`/users/[nickname]`}
+            as={`/users/${tweet.retweetOrigin.commentedOrigin.user.nickname}`}
           >
             <a>@{tweet.retweetOrigin.commentedOrigin.user.nickname}</a>
           </Link>
@@ -177,7 +177,10 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus, commentStatus }) {
             {displayRetweetSign()}
 
             <Feed.Event>
-              <Link href={`/users/[userId]`} as={`/users/${retweet.user.id}`}>
+              <Link
+                href={`/users/[nickname]`}
+                as={`/users/${retweet.user.nickname}`}
+              >
                 <a>
                   <Image
                     floated="left"
@@ -191,8 +194,8 @@ function PureRetweetCard({ tweet, retweet, favoriteStatus, commentStatus }) {
               <Feed.Content>
                 <Feed.Summary>
                   <Link
-                    href={`/users/[userId]`}
-                    as={`/users/${retweet.user.id}`}
+                    href={`/users/[nickname]`}
+                    as={`/users/${retweet.user.nickname}`}
                   >
                     <a>@{retweet.user.nickname}</a>
                   </Link>

@@ -7,7 +7,7 @@ import { userSelector, userActions } from "../../../features/userSlice";
 import userFunctions from "../../../lib/userFunctions";
 import {
   specificUserActions,
-  specificUserSelector
+  specificUserSelector,
 } from "../../../features/specificUserSlice";
 
 // in <TweetInfoCard />, <Profile />
@@ -19,7 +19,7 @@ function UserCard({ user }) {
   const specificUserId = useSelector(specificUserSelector.userId);
 
   function didIFollow(userId, followings) {
-    const index = followings.findIndex(following => following.id === userId);
+    const index = followings.findIndex((following) => following.id === userId);
     return index !== -1;
   }
 
@@ -99,7 +99,7 @@ function UserCard({ user }) {
           <Card.Header>
             <Feed>
               <Feed.Event>
-                <Link href={`/users/[userId]`} as={`/users/${user.id}`}>
+                <Link href={`/users/[nickname]`} as={`/users/${user.nickname}`}>
                   <a>
                     <Image
                       floated="left"
@@ -112,7 +112,10 @@ function UserCard({ user }) {
                 </Link>
                 <Feed.Content>
                   <Feed.Summary>
-                    <Link href={`/users/[userId]`} as={`/users/${user.id}`}>
+                    <Link
+                      href={`/users/[nickname]`}
+                      as={`/users/${user.nickname}`}
+                    >
                       <a>@{user.nickname}</a>
                     </Link>
                     {displayFollowButton()}

@@ -1,24 +1,8 @@
 import React, { useCallback } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import userFunctions from "../../../lib/userFunctions";
-import { toast } from "react-toastify";
 
 // in <TweetCard />
 function TweetContents({ contents }) {
-  const router = useRouter();
-
-  /* 검색결과 클릭 or 검색창에서 엔터 */
-  const linkToUserInfo = useCallback(async (text) => {
-    try {
-      const userId = await userFunctions.findUserId(text.slice(1));
-      router.push(`/users/${userId}`);
-    } catch (error) {
-      console.error(error);
-      toast.warn(error.response.data);
-    }
-  }, []);
-
   return (
     <>
       {contents.split(/(#[^\s#]+|@[^\s@]+)/g).map((content, index) => {
@@ -34,9 +18,13 @@ function TweetContents({ contents }) {
           );
         } else if (content.match(/(@[^\s@]+)/g)) {
           return (
-            <span onClick={() => linkToUserInfo(content)}>
+            <Link
+              key={index}
+              href={`/users/[nickname]`}
+              as={`/users/${content.slice(1)}`}
+            >
               <a>{content}</a>
-            </span>
+            </Link>
           );
         }
         return content;

@@ -15,11 +15,11 @@ import QuotedTweetCard from "./QuotedTweetCard";
 import TweetForm from "./TweetForm";
 import {
   specificUserActions,
-  specificUserSelector
+  specificUserSelector,
 } from "../../../features/specificUserSlice";
 import {
   specificTweetActions,
-  specificTweetSelector
+  specificTweetSelector,
 } from "../../../features/specificTweetSlice";
 
 // in <ShowTweets />
@@ -62,7 +62,7 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
         dispatch(
           specificUserActions.unlikeTweet({
             myId: currentUserId,
-            tweetId: tweet.id
+            tweetId: tweet.id,
           })
         );
 
@@ -97,7 +97,7 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
         dispatch(
           specificUserActions.likeTweet({
             myId: currentUserId,
-            tweetId: tweet.id
+            tweetId: tweet.id,
           })
         );
 
@@ -124,7 +124,7 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
       return alert("로그인이 필요합니다.");
     }
 
-    setCommentInput(prev => !prev);
+    setCommentInput((prev) => !prev);
   }, [commentInput]);
 
   /*  댓글일 경우 표시 */
@@ -135,8 +135,8 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
       return (
         <Feed.Summary>
           <Link
-            href={`/users/[userId]`}
-            as={`/users/${tweet.commentedOrigin.user.id}`}
+            href={`/users/[nickname]`}
+            as={`/users/${tweet.commentedOrigin.user.nickname}`}
           >
             <a>@{tweet.commentedOrigin.user.nickname}</a>
           </Link>
@@ -162,7 +162,10 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
           <Card.Header>
             <Feed>
               <Feed.Event>
-                <Link href={`/users/[userId]`} as={`/users/${tweet.user.id}`}>
+                <Link
+                  href={`/users/[nickname]`}
+                  as={`/users/${tweet.user.nickname}`}
+                >
                   <a>
                     <Image
                       floated="left"
@@ -176,8 +179,8 @@ function TweetCard({ tweet, favoriteStatus, commentStatus }) {
                 <Feed.Content>
                   <Feed.Summary>
                     <Link
-                      href={`/users/[userId]`}
-                      as={`/users/${tweet.user.id}`}
+                      href={`/users/[nickname]`}
+                      as={`/users/${tweet.user.nickname}`}
                     >
                       <a>@{tweet.user.nickname}</a>
                     </Link>
