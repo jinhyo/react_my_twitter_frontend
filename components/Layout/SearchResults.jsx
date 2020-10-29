@@ -47,7 +47,7 @@ function SearchResults({ hashtags, users, handleSearchWord }) {
       {users.map((user) => (
         <List.Item
           key={user.id}
-          onClick={() => handleClickLink(`@${user.nickname}`)}
+          onClick={() => handleClickLink(`@${user.id}`, `@${user.nickname}`)}
         >
           <Image avatar src={user.avatarURL} />
           <List.Content>

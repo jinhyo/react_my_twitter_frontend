@@ -5,7 +5,6 @@ import searchFunctions from "../../lib/searchFunctions";
 import SearchResults from "./SearchResults";
 import { useRouter } from "next/router";
 import { searchSelector, searchActions } from "../../features/searchSlice";
-import userFunctions from "../../lib/userFunctions";
 import { toast } from "react-toastify";
 
 // in <BaseHeader />
@@ -58,13 +57,7 @@ function SearchBar() {
       router.push(`/hashtags/${text.slice(1)}`);
     } else if (text[0] === "@") {
       // 유저 닉네임 검색
-      try {
-        const userId = await userFunctions.findUserId(text.slice(1));
-        router.push(`/users/${userId}`);
-      } catch (error) {
-        console.error(error);
-        toast.warn(error.response.data);
-      }
+      router.push(`/users/${text.slice(1)}`);
     } else {
       // 앞에 # 또는 @을 붙이지 않고 엔터를 누를 경우 기본적으로 해시태그를 검색
       dispatch(searchActions.setSearchWord(`#${text}`));
