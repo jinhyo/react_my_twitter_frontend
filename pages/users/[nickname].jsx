@@ -29,7 +29,6 @@ function Profile({ error }) {
 
   const currentUser = useSelector(userSelector.currentUser);
   const specificUser = useSelector(specificUserSelector.user);
-  console.log("specificUser", specificUser);
   const specificUsersFollowers = useSelector(specificUserSelector.followers);
   const specificUsersFollowings = useSelector(specificUserSelector.followings);
   const specificUsersTweets = useSelector(specificUserSelector.tweets);
