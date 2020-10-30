@@ -61,10 +61,10 @@ function UserCard({ user }) {
     if (!currentUserId) {
       return alert("로그인이 필요합니다.");
     }
+
     try {
       await userFunctions.followUser(user.id);
       dispatch(userActions.addFollowing(user.id));
-
       if (specificUserId === currentUserId) {
         // 내 프로필일 경우
         dispatch(specificUserActions.addFollowing(user.id));
@@ -79,6 +79,7 @@ function UserCard({ user }) {
     if (!currentUserId) {
       return alert("로그인이 필요합니다.");
     }
+
     try {
       await userFunctions.unfollowUser(user.id);
       dispatch(userActions.removeFollowing(user.id));

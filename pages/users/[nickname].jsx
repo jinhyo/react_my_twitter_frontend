@@ -42,7 +42,7 @@ function Profile({ error }) {
 
   const [loading, setLoading] = useState(false);
   const [activeItem, setActiveItem] = useState("tweets");
-
+  console.log("activeItem", activeItem);
   useEffect(() => {
     return () => {
       // setErrorMessage("");
@@ -55,9 +55,12 @@ function Profile({ error }) {
   }, [nickname]);
 
   useEffect(() => {
+    setActiveItem("tweets");
+  }, []);
+
+  useEffect(() => {
     if (specificUser) {
       getTweets(specificUser.id);
-      setActiveItem("tweets");
     }
   }, [specificUser]);
 
