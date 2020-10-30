@@ -5,11 +5,11 @@ import { USER, userReducer } from "../features/userSlice";
 import { TWEET, tweetReducer } from "../features/tweetSlice";
 import {
   SPECIFIC_USER,
-  specificUserReducer
+  specificUserReducer,
 } from "../features/specificUserSlice";
 import {
   SPECIFIC_TWEET,
-  specificTweetReducer
+  specificTweetReducer,
 } from "../features/specificTweetSlice";
 import { SEARCH, searchReducer } from "../features/searchSlice";
 
@@ -52,7 +52,7 @@ const rootReducer = (state, action) => {
         [TWEET]: tweetReducer,
         [SPECIFIC_USER]: specificUserReducer,
         [SPECIFIC_TWEET]: specificTweetReducer,
-        [SEARCH]: searchReducer
+        [SEARCH]: searchReducer,
       });
       return combineReducer(state, action);
     }
@@ -61,10 +61,10 @@ const rootReducer = (state, action) => {
 
 console.log("process.env.NODE_ENV", process.env.NODE_ENV);
 
-const makeStore = context => {
+const makeStore = (context) => {
   const store = configureStore({
     reducer: rootReducer,
-    devTools: process.env.NODE_ENV !== "production"
+    devTools: process.env.NODE_ENV !== "production",
   });
 
   return store;

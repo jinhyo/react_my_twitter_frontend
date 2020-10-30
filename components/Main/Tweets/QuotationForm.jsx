@@ -12,11 +12,11 @@ import { tweetSelector, tweetActions } from "../../../features/tweetSlice";
 import QuotedTweet from "./QuotedTweet";
 import {
   specificUserActions,
-  specificUserSelector
+  specificUserSelector,
 } from "../../../features/specificUserSlice";
 import {
   specificTweetSelector,
-  specificTweetActions
+  specificTweetActions,
 } from "../../../features/specificTweetSlice";
 
 //  in <QuotedTweetModal />
@@ -40,10 +40,10 @@ function QuotationForm({ quotedTweet, closeModal }) {
   const [emoji, setEmoji] = useState(false);
 
   const handleEmojiToggle = useCallback(() => {
-    setEmoji(prev => !prev);
+    setEmoji((prev) => !prev);
   }, []);
 
-  const handleTextChange = useCallback(e => {
+  const handleTextChange = useCallback((e) => {
     setText(e.target.value);
   }, []);
 
@@ -60,7 +60,7 @@ function QuotationForm({ quotedTweet, closeModal }) {
 
     // 이미지 파일이 있을 경우
     if (previewImages.length > 0) {
-      previewImages.forEach(image => {
+      previewImages.forEach((image) => {
         tweetFormData.append("images", image);
       });
     }
@@ -76,12 +76,13 @@ function QuotationForm({ quotedTweet, closeModal }) {
           tweetId: tweetWithOthers.id,
           retweetOriginId: null,
           quotedOriginId: quotedTweet.id,
-          commentedOriginId: null
+          commentedOriginId: null,
         })
       );
 
       if (
-        (specificTweetId && currentMenuItem === "quotations") ||
+        (specificTweetId === quotedTweet.id &&
+          currentMenuItem === "quotations") ||
         nowWhere === "main"
       ) {
         // 트윗 상세보기의 댓글 매뉴에서는 인용트윗 추가 안함(인용한 트윗 매뉴에서만 추가)
@@ -115,8 +116,8 @@ function QuotationForm({ quotedTweet, closeModal }) {
   }, [text, previewImages, currentUser, tweets, currentUserId, specificUserId]);
 
   //// 이모티콘 입력
-  const handleAddEmoji = useCallback(emoji => {
-    setText(prev => prev + emoji.native);
+  const handleAddEmoji = useCallback((emoji) => {
+    setText((prev) => prev + emoji.native);
     if (inputRef.current) {
       inputRef.current.focus();
     }
@@ -130,14 +131,14 @@ function QuotationForm({ quotedTweet, closeModal }) {
   }, [fileRef]);
 
   //// 이미지 파일 선택
-  const handleFileInput = useCallback(e => {
+  const handleFileInput = useCallback((e) => {
     // 5개로 제한
     if (e.target.files.length > 5) {
       return toast.warn("최대 5개의 파일을 업로드 할 수 있습니다.");
     }
 
     let files = [];
-    [].forEach.call(e.target.files, file => {
+    [].forEach.call(e.target.files, (file) => {
       if (isAuthorized(file, imageTypes)) {
         files.push(file);
       }
@@ -151,8 +152,8 @@ function QuotationForm({ quotedTweet, closeModal }) {
     return imageTypes.includes(mime.lookup(file.name));
   }
 
-  const cancelPicture = useCallback(name => {
-    setPreviewImages(prev => prev.filter(image => image.name !== name));
+  const cancelPicture = useCallback((name) => {
+    setPreviewImages((prev) => prev.filter((image) => image.name !== name));
   }, []);
 
   const notAllowEmptyTweet = useCallback(
@@ -169,7 +170,7 @@ function QuotationForm({ quotedTweet, closeModal }) {
             position: "absolute",
             top: "200px",
             left: "50px",
-            zIndex: 10
+            zIndex: 10,
           }}
           onSelect={handleAddEmoji}
         />
@@ -214,7 +215,7 @@ function QuotationForm({ quotedTweet, closeModal }) {
         hidden
         ref={fileRef}
         onChange={handleFileInput}
-        onClick={e => {
+        onClick={(e) => {
           e.target.value = null;
         }} // 버그픽스 41
       />

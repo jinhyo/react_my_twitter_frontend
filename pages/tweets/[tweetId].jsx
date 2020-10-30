@@ -39,7 +39,6 @@ function TweetStatus({ error }) {
 
   useEffect(() => {
     if (tweetId) {
-      dispatch(userActions.setNowWhere(""));
       dispatch(tweetActions.clearTweets());
     }
 
@@ -48,7 +47,6 @@ function TweetStatus({ error }) {
       dispatch(specificTweetActions.clearTweet());
       dispatch(specificTweetActions.setCurrentMenuItem(null));
       dispatch(tweetActions.clearTweets());
-      dispatch(userActions.setNowWhere("main"));
       dispatch(searchActions.setSearchWord(""));
       dispatch(searchActions.setSearchResults(null));
 

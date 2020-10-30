@@ -8,11 +8,11 @@ import { userSelector, userActions } from "../../../features/userSlice";
 import QuotedTweetModal from "./QuotedTweetModal";
 import {
   specificUserActions,
-  specificUserSelector
+  specificUserSelector,
 } from "../../../features/specificUserSlice";
 import {
   specificTweetSelector,
-  specificTweetActions
+  specificTweetActions,
 } from "../../../features/specificTweetSlice";
 
 // in <TweetCard />, <PureRetweetCard />
@@ -39,11 +39,11 @@ function RetweetButton({ tweet, cancelPopup }) {
   //// 내가 리트윗 했는지 확인
   const didIRetweet = useCallback(() => {
     // 리트윗된 원본 트윗인지 확인
-    const index = myRetweets.findIndex(retweet => retweet.id === tweet.id);
+    const index = myRetweets.findIndex((retweet) => retweet.id === tweet.id);
 
     // 리트윗한 트윗인지 확인
     const index2 = myRetweets.findIndex(
-      retweet => retweet.id === tweet.retweetOriginId
+      (retweet) => retweet.id === tweet.retweetOriginId
     );
 
     return index !== -1 || index2 !== -1;
@@ -55,6 +55,7 @@ function RetweetButton({ tweet, cancelPopup }) {
       cancelPopup();
       return alert("로그인이 필요합니다.");
     }
+
     try {
       const newTweet = await tweetFunctions.retweet(
         tweet.retweetOriginId || tweet.id // 원본을 리트윗 || 리트윗한 트윗을 리트윗
@@ -85,7 +86,7 @@ function RetweetButton({ tweet, cancelPopup }) {
           dispatch(
             specificTweetActions.addRetweet({
               retweetId: newTweet.id,
-              userInfo: userCardInfo
+              userInfo: userCardInfo,
             })
           );
         } else if (nowWhere === "main") {
@@ -93,14 +94,13 @@ function RetweetButton({ tweet, cancelPopup }) {
           dispatch(tweetActions.addTweet(newTweet));
         }
       }
-
       dispatch(userActions.addRetweetToMe(tweet.retweetOriginId || tweet.id));
       dispatch(
         userActions.addMyTweet({
           tweetId: newTweet.id,
           retweetOriginId: tweet.retweetOriginId || tweet.id,
           quotedOriginId: null,
-          commentedOriginId: null
+          commentedOriginId: null,
         })
       );
 
@@ -108,7 +108,7 @@ function RetweetButton({ tweet, cancelPopup }) {
     } catch (error) {
       console.error(error);
     }
-  }, [tweet]);
+  }, [tweet, nowWhere]);
 
   //// 리트윗 취소
   const handleCancelRetweet = useCallback(async () => {
@@ -140,10 +140,10 @@ function RetweetButton({ tweet, cancelPopup }) {
           dispatch(
             specificTweetActions.removeRetweet({
               retweetId: deletedTweetId,
-              userId: userCardInfo.id
+              userId: userCardInfo.id,
             })
           );
-        } else if (!specificTweetId) {
+        } else {
           dispatch(
             tweetActions.decreaseRetweetCount(tweet.retweetOriginId || tweet.id)
           );
@@ -158,7 +158,7 @@ function RetweetButton({ tweet, cancelPopup }) {
     } catch (error) {
       console.error(error);
     }
-  }, [tweet]);
+  }, [tweet, nowWhere]);
 
   //// 현재 트윗이 리트윗된 원본인지, 리트윗한 트윗인지 확인 후 원본 트윗 아이디 반환
   function selectRetweetOriginId(currentTweet) {

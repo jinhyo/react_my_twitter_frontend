@@ -28,7 +28,6 @@ function Index() {
     }
 
     return () => {
-      dispatch(userActions.setNowWhere(null));
       dispatch(tweetActions.clearTweets());
     };
   }, [nowWhere]);
@@ -63,6 +62,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     }
 
     try {
+      store.dispatch(userActions.setNowWhere("main"));
       const user = await authFunctions.getLoginUserInfo();
       store.dispatch(userActions.setCurrentUser(user));
     } catch (error) {
