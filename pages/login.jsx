@@ -7,7 +7,7 @@ import {
   Button,
   Message,
   Divider,
-  Image
+  Image,
 } from "semantic-ui-react";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
@@ -37,12 +37,12 @@ function Login() {
     }
   }, []);
 
-  const handleInputChange = useCallback(e => {
+  const handleInputChange = useCallback((e) => {
     e.persist();
     setError("");
-    setInitialState(prev => ({
+    setInitialState((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }));
   }, []);
 
@@ -68,7 +68,7 @@ function Login() {
       setLoginLoading(true);
       const currentUser = await authFunctions.localLogin({
         email: initialState.email,
-        password: initialState.password
+        password: initialState.password,
       });
       dispatch(userActions.setCurrentUser(currentUser.data));
       router.push("/");
@@ -80,24 +80,6 @@ function Login() {
       setLoginLoading(false);
     }
   }, [initialState]);
-
-  // 구글 로그인
-  const handleGoogleLogin = useCallback(async () => {
-    try {
-      await authFunctions.googleLogin();
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
-
-  // 페북 로그인
-  const handleFacebookLogin = useCallback(async () => {
-    try {
-      await authFunctions.facebookLogin();
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
 
   if (currentUserId) return null;
 
@@ -155,18 +137,10 @@ function Login() {
         <Divider />
         <div className="ui two images">
           <a href={`${BACKEND_URL}/auth/login/google`}>
-          <Image
-            circular
-            src="/google.png"
-            className="button__login"
-          />
+            <Image circular src="/google.png" className="button__login" />
           </a>
           <a href={`${BACKEND_URL}/auth/login/facebook`}>
-          <Image
-            circular
-            src="/facebook.png"
-            className="button__login"
-          />
+            <Image circular src="/facebook.png" className="button__login" />
           </a>
         </div>
       </Grid.Column>
